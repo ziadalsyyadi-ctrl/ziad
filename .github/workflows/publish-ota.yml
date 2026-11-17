@@ -1,0 +1,131 @@
+name: Build and publish Bank AlDam Qataba OTA
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - feat/ota-live-updates-from-v73
+      - fix/offline-cache-ota-v95
+      - fix/account-recovery-v105
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    if: github.repository == 'ziadalsyyadi-ctrl/ziadalsyyadi635' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout OTA branch
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build web application
+        run: npm run build
+
+      - name: Create and sign OTA ZIP
+        env:
+          OTA_PRIVATE_KEY: ${{ secrets.OTA_PRIVATE_KEY }}
+          BUNDLE_ID: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${OTA_PRIVATE_KEY:-}" ]; then
+            echo "::error::Missing repository secret OTA_PRIVATE_KEY."
+            exit 1
+          fi
+
+          mkdir -p .ota-work ota-dist/bundles
+          printf '%s\n' "$OTA_PRIVATE_KEY" > .ota-work/private.pem
+          chmod 600 .ota-work/private.pem
+
+          # Refuse to sign if the private key is not the pair of the public key embedded in the APK.
+          openssl pkey -in .ota-work/private.pem -pubout -out .ota-work/derived-public.pem
+          node <<'NODE'
+          const fs = require('fs');
+          const config = JSON.parse(fs.readFileSync('capacitor.config.json', 'utf8'));
+          const expected = config.plugins?.LiveUpdate?.publicKey;
+          if (typeof expected !== 'string' || !expected.includes('BEGIN PUBLIC KEY')) {
+            throw new Error('LiveUpdate publicKey is missing from capacitor.config.json');
+          }
+          const normalized = value => value.replace(/\s/g, '');
+          const derived = fs.readFileSync('.ota-work/derived-public.pem', 'utf8');
+          if (normalized(expected) !== normalized(derived)) {
+            throw new Error('OTA_PRIVATE_KEY does not match the public key embedded in capacitor.config.json');
+          }
+          console.log('OTA signing key pair verified.');
+          NODE
+
+          ZIP_PATH="$GITHUB_WORKSPACE/ota-dist/bundles/${BUNDLE_ID}.zip"
+          (cd dist && zip -qr "$ZIP_PATH" .)
+
+          CHECKSUM="$(sha256sum "$ZIP_PATH" | awk '{print $1}')"
+          openssl dgst -sha256 -sign .ota-work/private.pem -out .ota-work/signature.bin "$ZIP_PATH"
+          SIGNATURE="$(base64 -w 0 .ota-work/signature.bin)"
+          echo "CHECKSUM=$CHECKSUM" >> "$GITHUB_ENV"
+          echo "SIGNATURE=$SIGNATURE" >> "$GITHUB_ENV"
+          echo "BUNDLE_ID=$BUNDLE_ID" >> "$GITHUB_ENV"
+
+      - name: Verify GitHub release token
+        env:
+          GH_RELEASE_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_RELEASE_TOKEN:-}" ] && [ "${GITHUB_REPOSITORY}" != "ziadalsyyadi-ctrl/ziadalsyyadi635" ]; then
+            echo "::error::Missing repository secret GH_RELEASE_TOKEN for cross-repository release upload."
+            exit 1
+          fi
+
+      - name: Publish OTA ZIP to public GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          repository: ziadalsyyadi-ctrl/ziadalsyyadi635
+          token: ${{ secrets.GH_RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          tag_name: ota-${{ github.sha }}
+          name: Bank AlDam OTA ${{ github.sha }}
+          target_commitish: main
+          files: ota-dist/bundles/${{ github.sha }}.zip
+          overwrite_files: true
+          fail_on_unmatched_files: true
+          make_latest: false
+
+      - name: Create OTA manifest
+        env:
+          BUNDLE_ID: ${{ github.sha }}
+          CHECKSUM: ${{ env.CHECKSUM }}
+          SIGNATURE: ${{ env.SIGNATURE }}
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const bundleId = process.env.BUNDLE_ID;
+          const manifest = {
+            bundleId,
+            url: `https://github.com/ziadalsyyadi-ctrl/ziadalsyyadi635/releases/download/ota-${bundleId}/${bundleId}.zip`,
+            checksum: process.env.CHECKSUM,
+            signature: process.env.SIGNATURE
+          };
+          fs.writeFileSync('ota-dist/manifest.json', JSON.stringify(manifest, null, 2) + '\n');
+          NODE
+
+      - name: Publish OTA manifest to Bank AlDam Downloads release
+        uses: softprops/action-gh-release@v2
+        with:
+          repository: ziadalsyyadi-ctrl/ziadalsyyadi635
+          token: ${{ secrets.GH_RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          tag_name: ota-latest
+          name: Bank AlDam OTA manifest (latest)
+          target_commitish: main
+          files: ota-dist/manifest.json
+          overwrite_files: true
+          fail_on_unmatched_files: true
+          make_latest: false

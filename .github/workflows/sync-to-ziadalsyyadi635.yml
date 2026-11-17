@@ -1,0 +1,41 @@
+name: "Sync Code to ziadalsyyadi635"
+
+"on":
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  sync-to-primary-repo:
+    name: "Mirror main branch to ziadalsyyadi-ctrl/ziadalsyyadi635"
+    if: github.repository != 'ziadalsyyadi-ctrl/ziadalsyyadi635'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout full repository history"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "Push code to ziadalsyyadi-ctrl/ziadalsyyadi635"
+        env:
+          GH_RELEASE_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_RELEASE_TOKEN:-}" ]; then
+            echo "::error::Missing repository secret GH_RELEASE_TOKEN. Create a Classic Personal Access Token with 'repo' and 'workflow' scopes on account ziadalsyyadi-ctrl and add it as GH_RELEASE_TOKEN in this repository."
+            exit 1
+          fi
+
+          AUTH_HEADER=$(printf 'x-access-token:%s' "$GH_RELEASE_TOKEN" | base64 -w 0)
+          echo "::add-mask::$AUTH_HEADER"
+
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${AUTH_HEADER}" \
+            push --force "https://github.com/ziadalsyyadi-ctrl/ziadalsyyadi635.git" "HEAD:refs/heads/main"
+
+          echo "Successfully synced main branch to ziadalsyyadi-ctrl/ziadalsyyadi635."

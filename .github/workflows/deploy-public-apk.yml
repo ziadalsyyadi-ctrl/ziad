@@ -1,0 +1,82 @@
+name: Publish public APK download to Firebase Hosting
+
+on:
+  workflow_dispatch:
+    inputs:
+      apk_run_id:
+        description: "Successful Android build run ID"
+        required: true
+        default: "43263880445"
+  push:
+    branches:
+      - feat/ota-live-updates-from-v73
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  publish-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download APK artifact from Android build
+        uses: actions/download-artifact@v4
+        with:
+          name: Bank_AlDam_Qataba_APK
+          path: downloaded-apk
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.apk_run_id || '43263880445' }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prepare Firebase Hosting release without removing OTA files
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK="$(find downloaded-apk -type f -name '*.apk' -print -quit)"
+          if [ -z "$APK" ]; then
+            echo "::error::APK file was not found in the selected build artifact."
+            exit 1
+          fi
+
+          mkdir -p ota-dist/bundles
+          cp "$APK" ota-dist/Bank_AlDam_Qataba.apk
+
+          curl --fail --silent --show-error \
+            https://bankaldam-ota.web.app/manifest.json \
+            -o ota-dist/manifest.json
+
+          BUNDLE_URL="$(node -e "const m=require('./ota-dist/manifest.json'); if(!m.url) process.exit(2); process.stdout.write(m.url)")"
+          BUNDLE_NAME="${BUNDLE_URL##*/}"
+          curl --fail --silent --show-error "$BUNDLE_URL" \
+            -o "ota-dist/bundles/$BUNDLE_NAME"
+
+          test -s ota-dist/Bank_AlDam_Qataba.apk
+          test -s ota-dist/manifest.json
+          test -s "ota-dist/bundles/$BUNDLE_NAME"
+
+      - name: Deploy APK and preserve current OTA bundle
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${FIREBASE_TOKEN:-}" ]; then
+            echo "::error::Missing FIREBASE_TOKEN repository secret."
+            exit 1
+          fi
+          npx --yes firebase-tools deploy --only hosting:ota --project a-drop-of-blood-saves-a-life --non-interactive
+
+      - name: Verify public APK URL
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://bankaldam-ota.web.app/Bank_AlDam_Qataba.apk"
+          STATUS="$(curl -L -sS -o /dev/null -w '%{http_code}' "$URL")"
+          if [ "$STATUS" != "200" ]; then
+            echo "::error::APK URL returned HTTP $STATUS"
+            exit 1
+          fi
+          echo "Public APK URL verified: $URL"

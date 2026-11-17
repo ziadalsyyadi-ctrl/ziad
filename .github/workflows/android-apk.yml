@@ -1,0 +1,241 @@
+name: "Build Android Packages - Bank AlDam Qataba"
+
+"on":
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - feat/ota-live-updates-from-v73
+      - test/official-package-id-v91
+      - fix/build94-six-notes
+      - fix/offline-cache-ota-v95
+      - fix/account-recovery-v105
+
+permissions:
+  contents: write
+
+jobs:
+  build-android:
+    name: "Build AAB and APK with original release key"
+    if: github.repository == 'ziadalsyyadi-ctrl/ziadalsyyadi635' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: account-recovery
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Set up Java 21"
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: "Set up Node.js 22"
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: "Install dependencies"
+        run: npm install --legacy-peer-deps
+
+      - name: "Build web assets"
+        run: npm run build
+
+      - name: "Prepare Android platform"
+        run: |
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
+          npx cap sync android
+          # Android's official Firebase configuration belongs in android/app/.
+          # Accept a root copy only as a recovery source when the official file is absent.
+          if [ ! -s "android/app/google-services.json" ] && [ -s "google-services.json" ]; then
+            cp google-services.json android/app/google-services.json
+          fi
+
+      - name: "Verify Firebase Android configuration"
+        run: |
+          set -euo pipefail
+          CONFIG="android/app/google-services.json"
+          if [ ! -s "$CONFIG" ]; then
+            echo "::error::Missing $CONFIG. Restore the Firebase Android configuration."
+            exit 1
+          fi
+          node <<'NODE'
+          const fs = require('fs');
+          const config = JSON.parse(fs.readFileSync('android/app/google-services.json', 'utf8'));
+          const expectedProject = 'a-drop-of-blood-saves-a-life';
+          const expectedPackage = 'com.qatrahayat.app';
+          const packages = (config.client || []).map(
+            item => item.client_info?.android_client_info?.package_name
+          );
+          if (config.project_info?.project_id !== expectedProject) {
+            throw new Error('Firebase project_id does not match the production project.');
+          }
+          if (!packages.includes(expectedPackage)) {
+            throw new Error('google-services.json does not contain package ' + expectedPackage);
+          }
+          console.log('Firebase project and Android package verified: ' + expectedPackage);
+          NODE
+
+      - name: "Verify original release keystore"
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for secret_name in KEYSTORE_BASE64 KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
+            if [ -z "${!secret_name:-}" ]; then
+              echo "::error::Missing GitHub Actions secret: ${secret_name}"
+              exit 1
+            fi
+          done
+
+          KEYSTORE_PATH="$GITHUB_WORKSPACE/android/app/release-keystore.jks"
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE_PATH"
+
+          if [ ! -s "$KEYSTORE_PATH" ]; then
+            echo "::error::The decoded release keystore is empty."
+            exit 1
+          fi
+
+          if ! keytool -list -keystore "$KEYSTORE_PATH" -storepass "$KEYSTORE_PASSWORD" -alias "$KEY_ALIAS" >/dev/null 2>&1; then
+            echo "::error::Could not open the release keystore with the configured password and alias."
+            exit 1
+          fi
+
+          {
+            echo "KEYSTORE_FILE=$KEYSTORE_PATH"
+            echo "KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD"
+            echo "KEY_ALIAS=$KEY_ALIAS"
+            echo "KEY_PASSWORD=$KEY_PASSWORD"
+          } >> "$GITHUB_ENV"
+
+          mkdir -p release_files
+          keytool -list -v -keystore "$KEYSTORE_PATH" -storepass "$KEYSTORE_PASSWORD" -alias "$KEY_ALIAS" > cert_info.txt
+          SHA1_VAL=$(awk -F': ' '/SHA1:/{print $2; exit}' cert_info.txt | tr -d ':' | tr '[:upper:]' '[:lower:]')
+          SHA256_VAL=$(awk -F': ' '/SHA256:/{print $2; exit}' cert_info.txt | tr -d ':' | tr '[:upper:]' '[:lower:]')
+
+          EXPECTED_SHA1="d14a722dfda8c6988f3dc4c63af0c77ecec76316"
+          EXPECTED_SHA256="9781c01d5f682a35a2d02936ce13f3fca8e88df53c5ade79fca0290f25ade0ba"
+
+          if [ -z "$SHA1_VAL" ] || [ -z "$SHA256_VAL" ]; then
+            echo "::error::Could not read the release certificate fingerprints."
+            exit 1
+          fi
+
+          if [ "$SHA1_VAL" != "$EXPECTED_SHA1" ] || [ "$SHA256_VAL" != "$EXPECTED_SHA256" ]; then
+            echo "::error::Keystore mismatch! Expected SHA1: ${EXPECTED_SHA1}, but got: ${SHA1_VAL}. Expected SHA256: ${EXPECTED_SHA256}, but got: ${SHA256_VAL}"
+            exit 1
+          fi
+
+          {
+            echo "Bank AlDam Qataba release certificate"
+            echo "Package ID: com.qatrahayat.app"
+            echo
+            echo "SHA-1: $SHA1_VAL"
+            echo "SHA-256: $SHA256_VAL"
+          } > release_files/CERTIFICATE_FINGERPRINTS.txt
+
+          rm -f cert_info.txt
+          echo "Original release keystore and both certificate fingerprints verified."
+
+      - name: "Build Google Play AAB"
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew bundleRelease --no-daemon
+          cd ..
+
+      - name: "Build release APK"
+        run: |
+          cd android
+          ./gradlew assembleRelease --no-daemon
+          cd ..
+
+      - name: "Collect release files"
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release_files
+          AAB_FILE=$(find android/app/build/outputs/bundle -type f -name "*.aab" -print -quit)
+          APK_FILE=$(find android/app/build/outputs/apk -type f -name "*.apk" -print -quit)
+
+          if [ -z "$AAB_FILE" ] || [ -z "$APK_FILE" ]; then
+            echo "::error::AAB or APK output was not found."
+            exit 1
+          fi
+
+          cp "$AAB_FILE" release_files/Bank_AlDam_Qataba.aab
+          cp "$APK_FILE" release_files/Bank_AlDam_Qataba.apk
+
+          # Never include signing keys, local environment files, or generated build outputs in the source archive.
+          zip -r release_files/Bank_AlDam_Qataba.zip . \
+            -x "node_modules/*" "dist/*" ".git/*" "android/.gradle/*" \
+               "android/app/build/*" "release_files/*" \
+               "*.jks" "**/*.jks" "*.keystore" "**/*.keystore" \
+               "*.p12" "**/*.p12" "*.pem" "**/*.pem" "*.key" "**/*.key" \
+               ".env" ".env.*" "**/.env" "**/.env.*" "cert_info.txt"
+          zip -j release_files/Bank_AlDam_Qataba.zip \
+            release_files/Bank_AlDam_Qataba.apk \
+            release_files/CERTIFICATE_FINGERPRINTS.txt
+
+      - name: "Upload Google Play AAB"
+        uses: actions/upload-artifact@v4
+        with:
+          name: Bank_AlDam_Qataba_GooglePlay_AAB
+          path: release_files/Bank_AlDam_Qataba.aab
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: "Upload APK"
+        uses: actions/upload-artifact@v4
+        with:
+          name: Bank_AlDam_Qataba_APK
+          path: release_files/Bank_AlDam_Qataba.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: "Upload project ZIP"
+        uses: actions/upload-artifact@v4
+        with:
+          name: Bank_AlDam_Qataba_Project_ZIP
+          path: release_files/Bank_AlDam_Qataba.zip
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: "Check GitHub release token availability"
+        env:
+          GH_RELEASE_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+        shell: bash
+        run: |
+          if [ -n "${GH_RELEASE_TOKEN:-}" ] || [ "${GITHUB_REPOSITORY}" = "ziadalsyyadi-ctrl/ziadalsyyadi635" ]; then
+            echo "CAN_PUBLISH_RELEASE=true" >> "$GITHUB_ENV"
+          else
+            echo "CAN_PUBLISH_RELEASE=false" >> "$GITHUB_ENV"
+            echo "::warning::GH_RELEASE_TOKEN secret is not set; skipping release upload to ziadalsyyadi-ctrl/ziadalsyyadi635."
+          fi
+
+      - name: "Publish APK and AAB to Bank AlDam Downloads release"
+        if: env.CAN_PUBLISH_RELEASE == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          repository: ziadalsyyadi-ctrl/ziadalsyyadi635
+          token: ${{ secrets.GH_RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          tag_name: android-latest
+          name: Bank AlDam Qataba Android APK & AAB (latest)
+          target_commitish: main
+          files: |
+            release_files/Bank_AlDam_Qataba.apk
+            release_files/Bank_AlDam_Qataba.aab
+            release_files/Bank_AlDam_Qataba.zip
+            release_files/CERTIFICATE_FINGERPRINTS.txt
+          overwrite_files: true
+          fail_on_unmatched_files: true
+          make_latest: true

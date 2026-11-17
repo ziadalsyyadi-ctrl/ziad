@@ -1,0 +1,114 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace = "com.qatrahayat.app"
+    compileSdk = rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "com.qatrahayat.app"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 82
+        versionName "82"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+            cruncherEnabled = true
+        }
+    }
+    signingConfigs {
+        release {
+            // لا يُطلب مفتاح النشر عند بناء debug محلياً، لكن أي بناء Release
+            // يتطلب الأسرار الأربعة ومفتاح النشر الأصلي دون أي بديل احتياطي.
+            def releaseRequested = gradle.startParameter.taskNames.any {
+                it.toLowerCase().contains("release")
+            }
+            def keystorePath = System.getenv("KEYSTORE_FILE")
+            def storePass = System.getenv("KEYSTORE_PASSWORD")
+            def aliasName = System.getenv("KEY_ALIAS")
+            def keyPass = System.getenv("KEY_PASSWORD")
+
+            if (releaseRequested) {
+                def missing = []
+                if (!keystorePath) missing.add("KEYSTORE_FILE")
+                if (!storePass) missing.add("KEYSTORE_PASSWORD")
+                if (!aliasName) missing.add("KEY_ALIAS")
+                if (!keyPass) missing.add("KEY_PASSWORD")
+                if (!missing.isEmpty()) {
+                    throw new GradleException("Release signing configuration is incomplete. Missing: " + missing.join(", "))
+                }
+
+                def releaseKeystore = file(keystorePath)
+                if (!releaseKeystore.exists() || !releaseKeystore.isFile()) {
+                    throw new GradleException("Release keystore file does not exist: " + keystorePath)
+                }
+
+                storeFile releaseKeystore
+                storePassword storePass
+                keyAlias aliasName
+                keyPassword keyPass
+            }
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            shrinkResources false
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        resources {
+            excludes += [
+                'META-INF/LICENSE',
+                'META-INF/NOTICE',
+                'META-INF/DEPENDENCIES',
+                'META-INF/versions/9/OSGI-INF/MANIFEST.MF'
+            ]
+        }
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            if (outputFileName != null && outputFileName.endsWith('.apk')) {
+                outputFileName = "Bank_AlDam_Qataba.apk"
+            }
+        }
+    }
+}
+
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation project(':capacitor-android')
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+}
+
+apply from: 'capacitor.build.gradle'
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception e) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}
