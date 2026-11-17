@@ -44,15 +44,27 @@ jobs:
         run: npm run build
 
       - name: "Prepare Android platform"
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
           if [ ! -d "android" ]; then
             npx cap add android
           fi
           npx cap sync android
           # Android's official Firebase configuration belongs in android/app/.
-          # Accept a root copy only as a recovery source when the official file is absent.
+          # Accept a root copy, uploaded asset copy, or GOOGLE_SERVICES_JSON secret when absent.
           if [ ! -s "android/app/google-services.json" ] && [ -s "google-services.json" ]; then
             cp google-services.json android/app/google-services.json
+          fi
+          if [ ! -s "android/app/google-services.json" ] && [ -s "public/assets/aistudio/google-services_05d71302.json" ]; then
+            cp public/assets/aistudio/google-services_05d71302.json android/app/google-services.json
+          fi
+          if [ ! -s "android/app/google-services.json" ] && [ -n "${GOOGLE_SERVICES_JSON:-}" ]; then
+            if printf '%s' "$GOOGLE_SERVICES_JSON" | grep -q '"project_info"'; then
+              printf '%s' "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+            else
+              printf '%s' "$GOOGLE_SERVICES_JSON" | base64 --decode > android/app/google-services.json
+            fi
           fi
 
       - name: "Verify Firebase Android configuration"
@@ -60,7 +72,7 @@ jobs:
           set -euo pipefail
           CONFIG="android/app/google-services.json"
           if [ ! -s "$CONFIG" ]; then
-            echo "::error::Missing $CONFIG. Restore the Firebase Android configuration."
+            echo "::error::Missing $CONFIG. Upload android/app/google-services.json or set the GOOGLE_SERVICES_JSON GitHub Actions secret."
             exit 1
           fi
           node <<'NODE'

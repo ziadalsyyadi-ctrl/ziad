@@ -25,6 +25,7 @@ jobs:
       - name: "Push code to ziadalsyyadi-ctrl/ziadalsyyadi635"
         env:
           GH_RELEASE_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         shell: bash
         run: |
           set -euo pipefail
@@ -50,8 +51,33 @@ jobs:
           printf '#!/bin/sh\ncase "$1" in\n  *Username*) printf "%%s\\n" "x-access-token" ;;\n  *Password*) printf "%%s\\n" "$GH_RELEASE_TOKEN" ;;\nesac\n' > "$ASKPASS_SCRIPT"
           chmod 700 "$ASKPASS_SCRIPT"
 
+          TARGET_URL="https://github.com/ziadalsyyadi-ctrl/ziadalsyyadi635.git"
+
+          # Preserve android/app/google-services.json when AI Studio sync omits it
+          if [ ! -s "android/app/google-services.json" ]; then
+            if [ -s "public/assets/aistudio/google-services_05d71302.json" ]; then
+              cp public/assets/aistudio/google-services_05d71302.json android/app/google-services.json
+            elif [ -n "${GOOGLE_SERVICES_JSON:-}" ]; then
+              if printf '%s' "$GOOGLE_SERVICES_JSON" | grep -q '"project_info"'; then
+                printf '%s' "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+              else
+                printf '%s' "$GOOGLE_SERVICES_JSON" | base64 --decode > android/app/google-services.json
+              fi
+            elif GIT_TERMINAL_PROMPT=0 GIT_ASKPASS="$ASKPASS_SCRIPT" git fetch --depth=1 "$TARGET_URL" main && \
+                 git cat-file -e FETCH_HEAD:android/app/google-services.json 2>/dev/null; then
+              git show FETCH_HEAD:android/app/google-services.json > android/app/google-services.json
+            fi
+
+            if [ -s "android/app/google-services.json" ]; then
+              git config user.name "github-actions[bot]"
+              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              git add android/app/google-services.json
+              git commit -m "ci: preserve android/app/google-services.json"
+            fi
+          fi
+
           if ! GIT_TERMINAL_PROMPT=0 GIT_ASKPASS="$ASKPASS_SCRIPT" git push --force \
-            "https://github.com/ziadalsyyadi-ctrl/ziadalsyyadi635.git" "HEAD:refs/heads/main"; then
+            "$TARGET_URL" "HEAD:refs/heads/main"; then
             echo "::error::git push to ziadalsyyadi-ctrl/ziadalsyyadi635 failed. Ensure GH_RELEASE_TOKEN has BOTH 'repo' AND 'workflow' scopes (required to update .github/workflows/*)."
             exit 1
           fi
