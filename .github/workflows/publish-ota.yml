@@ -90,7 +90,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           repository: ziadalsyyadi-ctrl/ziadalsyyadi635
-          token: ${{ secrets.GH_RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ github.repository == 'ziadalsyyadi-ctrl/ziadalsyyadi635' && secrets.GITHUB_TOKEN || secrets.GH_RELEASE_TOKEN }}
           tag_name: ota-${{ github.sha }}
           name: Bank AlDam OTA ${{ github.sha }}
           target_commitish: main
@@ -121,7 +121,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           repository: ziadalsyyadi-ctrl/ziadalsyyadi635
-          token: ${{ secrets.GH_RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ github.repository == 'ziadalsyyadi-ctrl/ziadalsyyadi635' && secrets.GITHUB_TOKEN || secrets.GH_RELEASE_TOKEN }}
           tag_name: ota-latest
           name: Bank AlDam OTA manifest (latest)
           target_commitish: main

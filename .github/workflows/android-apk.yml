@@ -239,7 +239,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           repository: ziadalsyyadi-ctrl/ziadalsyyadi635
-          token: ${{ secrets.GH_RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ github.repository == 'ziadalsyyadi-ctrl/ziadalsyyadi635' && secrets.GITHUB_TOKEN || secrets.GH_RELEASE_TOKEN }}
           tag_name: android-latest
           name: Bank AlDam Qataba Android APK & AAB (latest)
           target_commitish: main
