@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/web-BH7VzpnU.js","assets/firebase-vendor-YILmzwxr.js"])))=>i.map(i=>d[i]);
-import { n as __exportAll, r as __toESM } from "./rolldown-runtime-SbdDWaPq.js";
-import { n as require_client, t as require_jsx_runtime } from "./react-vendor-Cik_FFZo.js";
-import { $ as CircleUser, A as Mail, B as HardDriveDownload, C as Phone, D as Menu, E as MessageCircle, F as Info, G as EyeOff, H as FileText, I as House, J as Database, K as ExternalLink, L as Hospital, M as LogIn, N as Lock, O as Megaphone, P as KeyRound, Q as CircleX, R as Heart, S as Plus, T as MessageSquare, U as FileSpreadsheet, V as FolderOpen, W as Eye, X as Compass, Y as Copy, Z as Clock, _ as Share2, a as User, at as Check, b as Search, c as Upload, ct as BellRing, d as Target, dt as ArrowLeft, et as CirclePlus, f as Sparkles, ft as require_react, g as ShieldAlert, h as ShieldCheck, i as Users, it as ChevronLeft, j as LogOut, k as MapPin, l as TriangleAlert, lt as Award, m as Shield, n as VolumeX, nt as CircleAlert, o as UserPlus, ot as Calendar, p as Smartphone, q as Droplet, r as Volume2, rt as ChevronRight, s as UserCheck, st as Bell, t as X, tt as CircleCheck, u as Trash2, ut as ArrowRight, v as Settings, w as PenLine, x as RefreshCw, y as Send, z as HeartHandshake } from "./icons-vendor-otYgn5TF.js";
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/web-4DKRim6a.js","assets/firebase-vendor-YILmzwxr.js"])))=>i.map(i=>d[i]);
+import { n as __toESM } from "./rolldown-runtime-CO0Nlsmt.js";
+import { n as require_client, t as require_jsx_runtime } from "./react-vendor-DqmI8VDC.js";
+import { $ as CircleUser, A as Mail, B as HardDriveDownload, C as Phone, D as Menu, E as MessageCircle, F as Info, G as EyeOff, H as FileText, I as House, J as Database, K as ExternalLink, L as Hospital, M as LogIn, N as Lock, O as Megaphone, P as KeyRound, Q as CircleX, R as Heart, S as Plus, T as MessageSquare, U as FileSpreadsheet, V as FolderOpen, W as Eye, X as Compass, Y as Copy, Z as Clock, _ as Share2, a as User, at as Check, b as Search, c as Upload, ct as BellRing, d as Target, dt as ArrowLeft, et as CirclePlus, f as Sparkles, ft as require_react, g as ShieldAlert, h as ShieldCheck, i as Users, it as ChevronLeft, j as LogOut, k as MapPin, l as TriangleAlert, lt as Award, m as Shield, n as VolumeX, nt as CircleAlert, o as UserPlus, ot as Calendar, p as Smartphone, q as Droplet, r as Volume2, rt as ChevronRight, s as UserCheck, st as Bell, t as X, tt as CircleCheck, u as Trash2, ut as ArrowRight, v as Settings, w as PenLine, x as RefreshCw, y as Send, z as HeartHandshake } from "./icons-vendor-B7FEDE-A.js";
 import { $ as deleteDoc, A as onAuthStateChanged, K as signOut, Q as addDoc, V as signInWithEmailAndPassword, W as signInWithPopup, X as updateProfile, Y as updatePassword, _ as createUserWithEmailAndPassword, _t as getFirestore, at as orderBy, bt as serverTimestamp, ct as query, dt as updateDoc, et as getDoc, ft as where, gt as doc, ht as collection, i as EmailAuthProvider, it as onSnapshot, j as reauthenticateWithCredential, lt as runTransaction, mt as arrayUnion, n as initializeAppCheck, nt as getDocs, ot as persistentLocalCache, pt as writeBatch, r as getFunctions, rt as limit, s as GoogleAuthProvider, st as persistentMultipleTabManager, t as ReCaptchaV3Provider, tt as getDocFromServer, ut as setDoc, v as deleteUser, vt as increment, x as getAuth, xt as initializeApp, yt as initializeFirestore, z as signInWithCredential } from "./firebase-vendor-YILmzwxr.js";
 // \0vite/modulepreload-polyfill.js
 (function polyfill() {
@@ -33,82 +33,9 @@ import { $ as deleteDoc, A as onAuthStateChanged, K as signOut, Q as addDoc, V a
 		fetch(link.href, fetchOpts);
 	}
 })();
-// firebase-applet-config.json
+// node_modules/@capacitor/core/dist/index.js
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var import_client = require_client();
-var firebase_applet_config_default = {
-	projectId: "a-drop-of-blood-saves-a-life",
-	appId: "1:303623115940:web:61ea0e61a3531f836f8231",
-	apiKey: "AIzaSyCcxj8UP8kRfSB-fUkBMgltXN8Fk8GBQTo",
-	authDomain: "a-drop-of-blood-saves-a-life.firebaseapp.com",
-	firestoreDatabaseId: "ai-studio-remixremixremix-797cdaa7-fcd3-4ecd-a13f-0cffe9a43f72",
-	storageBucket: "a-drop-of-blood-saves-a-life.firebasestorage.app",
-	messagingSenderId: "303623115940",
-	measurementId: "G-7EH8RBDCMH",
-	oAuthClientId: "303623115940-2veemdmqto16oa6n2jeo16umdi6t3eoc.apps.googleusercontent.com",
-	recaptchaSiteKey: ""
-};
-// src/firebase.ts
-if (typeof window !== "undefined") self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-var app = initializeApp(firebase_applet_config_default);
-if (typeof window !== "undefined" && firebase_applet_config_default.recaptchaSiteKey) try {
-	initializeAppCheck(app, {
-		provider: new ReCaptchaV3Provider(firebase_applet_config_default.recaptchaSiteKey),
-		isTokenAutoRefreshEnabled: true
-	});
-} catch (appCheckErr) {
-	console.warn("App Check initialization note:", appCheckErr);
-}
-var firestoreDb;
-try {
-	firestoreDb = initializeFirestore(app, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) }, firebase_applet_config_default.firestoreDatabaseId);
-} catch (persistenceError) {
-	console.warn("Persistent Firestore cache unavailable; using standard cache:", persistenceError);
-	firestoreDb = getFirestore(app, firebase_applet_config_default.firestoreDatabaseId);
-}
-var db = firestoreDb;
-var auth = getAuth(app);
-getFunctions(app, "us-central1");
-var OperationType = /* @__PURE__ */ function(OperationType) {
-	OperationType["CREATE"] = "create";
-	OperationType["UPDATE"] = "update";
-	OperationType["DELETE"] = "delete";
-	OperationType["LIST"] = "list";
-	OperationType["GET"] = "get";
-	OperationType["WRITE"] = "write";
-	return OperationType;
-}({});
-function handleFirestoreError(error, operationType, path) {
-	const errInfo = {
-		error: error instanceof Error ? error.message : String(error),
-		authInfo: {
-			userId: auth.currentUser?.uid,
-			email: auth.currentUser?.email,
-			emailVerified: auth.currentUser?.emailVerified,
-			isAnonymous: auth.currentUser?.isAnonymous,
-			tenantId: auth.currentUser?.tenantId,
-			providerInfo: auth.currentUser?.providerData?.map((provider) => ({
-				providerId: provider.providerId,
-				email: provider.email
-			})) || []
-		},
-		operationType,
-		path
-	};
-	console.error("Firestore Error: ", JSON.stringify(errInfo));
-	throw new Error(JSON.stringify(errInfo));
-}
-async function testConnection() {
-	try {
-		await getDocFromServer(doc(db, "test", "connection"));
-		return true;
-	} catch (error) {
-		if (error instanceof Error && error.message.includes("the client is offline")) console.warn("Firebase client is offline or pending network sync.");
-		return false;
-	}
-}
-testConnection();
-// node_modules/@capacitor/core/dist/index.js
 /*! Capacitor: https://capacitorjs.com/ - MIT License */
 var ExceptionCode;
 (function(ExceptionCode) {
@@ -617,6 +544,78 @@ var SystemBarsPluginWeb = class extends WebPlugin {
 	}
 };
 registerPlugin("SystemBars", { web: () => new SystemBarsPluginWeb() });
+var firebase_applet_config_default = {
+	projectId: "a-drop-of-blood-saves-a-life",
+	appId: "1:303623115940:web:61ea0e61a3531f836f8231",
+	apiKey: "AIzaSyCcxj8UP8kRfSB-fUkBMgltXN8Fk8GBQTo",
+	authDomain: "a-drop-of-blood-saves-a-life.firebaseapp.com",
+	firestoreDatabaseId: "ai-studio-remixremixremix-797cdaa7-fcd3-4ecd-a13f-0cffe9a43f72",
+	storageBucket: "a-drop-of-blood-saves-a-life.firebasestorage.app",
+	messagingSenderId: "303623115940",
+	measurementId: "G-7EH8RBDCMH",
+	oAuthClientId: "303623115940-2veemdmqto16oa6n2jeo16umdi6t3eoc.apps.googleusercontent.com",
+	recaptchaSiteKey: ""
+};
+// src/firebase.ts
+if (typeof window !== "undefined") self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+var app = initializeApp(firebase_applet_config_default);
+if (typeof window !== "undefined" && firebase_applet_config_default.recaptchaSiteKey) try {
+	initializeAppCheck(app, {
+		provider: new ReCaptchaV3Provider(firebase_applet_config_default.recaptchaSiteKey),
+		isTokenAutoRefreshEnabled: true
+	});
+} catch (appCheckErr) {
+	console.warn("App Check initialization note:", appCheckErr);
+}
+var firestoreDb;
+try {
+	firestoreDb = initializeFirestore(app, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) }, firebase_applet_config_default.firestoreDatabaseId);
+} catch (persistenceError) {
+	console.warn("Persistent Firestore cache unavailable; using standard cache:", persistenceError);
+	firestoreDb = getFirestore(app, firebase_applet_config_default.firestoreDatabaseId);
+}
+var db = firestoreDb;
+var auth = getAuth(app);
+getFunctions(app, "us-central1");
+var OperationType = /* @__PURE__ */ function(OperationType) {
+	OperationType["CREATE"] = "create";
+	OperationType["UPDATE"] = "update";
+	OperationType["DELETE"] = "delete";
+	OperationType["LIST"] = "list";
+	OperationType["GET"] = "get";
+	OperationType["WRITE"] = "write";
+	return OperationType;
+}({});
+function handleFirestoreError(error, operationType, path) {
+	const errInfo = {
+		error: error instanceof Error ? error.message : String(error),
+		authInfo: {
+			userId: auth.currentUser?.uid,
+			email: auth.currentUser?.email,
+			emailVerified: auth.currentUser?.emailVerified,
+			isAnonymous: auth.currentUser?.isAnonymous,
+			tenantId: auth.currentUser?.tenantId,
+			providerInfo: auth.currentUser?.providerData?.map((provider) => ({
+				providerId: provider.providerId,
+				email: provider.email
+			})) || []
+		},
+		operationType,
+		path
+	};
+	console.error("Firestore Error: ", JSON.stringify(errInfo));
+	throw new Error(JSON.stringify(errInfo));
+}
+async function testConnection() {
+	try {
+		await getDocFromServer(doc(db, "test", "connection"));
+		return true;
+	} catch (error) {
+		if (error instanceof Error && error.message.includes("the client is offline")) console.warn("Firebase client is offline or pending network sync.");
+		return false;
+	}
+}
+testConnection();
 // \0vite/preload-helper.js
 var scriptRel = "modulepreload";
 var assetsURL = function(dep) {
@@ -712,7 +711,7 @@ var __vitePreload = function preload(baseModule, deps, importerUrl) {
 	});
 };
 // node_modules/@capawesome/capacitor-live-update/dist/esm/index.js
-var LiveUpdate = registerPlugin("LiveUpdate", { web: () => __vitePreload(() => import("./web-DA44ZYq8.js").then((m) => new m.LiveUpdateWeb()), []) });
+var LiveUpdate = registerPlugin("LiveUpdate", { web: () => __vitePreload(() => import("./web-BkEgnVug.js").then((m) => new m.LiveUpdateWeb()), []) });
 // src/live-update.ts
 var MANIFEST_URL = "https://github.com/ziadalsyyadi-ctrl/ziadalsyyadi635/releases/download/ota-latest/manifest.json";
 var BUNDLE_BASE_URL = "https://github.com/ziadalsyyadi-ctrl/ziadalsyyadi635/releases/download/";
@@ -880,7 +879,7 @@ var ProviderId;
 	ProviderId["PHONE"] = "phone";
 })(ProviderId || (ProviderId = {}));
 // node_modules/@capacitor-firebase/authentication/dist/esm/index.js
-var FirebaseAuthentication = registerPlugin("FirebaseAuthentication", { web: () => __vitePreload(() => import("./web-BH7VzpnU.js").then((m) => new m.FirebaseAuthenticationWeb()), __vite__mapDeps([0,1])) });
+var FirebaseAuthentication = registerPlugin("FirebaseAuthentication", { web: () => __vitePreload(() => import("./web-4DKRim6a.js").then((m) => new m.FirebaseAuthenticationWeb()), __vite__mapDeps([0,1])) });
 // src/services/phoneVerificationService.ts
 function sanitizePhone(phone) {
 	const digits = phone.trim().replace(/\D/g, "");
@@ -2840,8 +2839,10 @@ var PrivacyPolicyModal = ({ isOpen, onClose }) => {
 		})
 	});
 };
+// src/version.ts
+var APP_VERSION = ("1.2.0".trim(), "1.2.0".trim());
 // node_modules/@capacitor/share/dist/esm/index.js
-var Share = registerPlugin("Share", { web: () => __vitePreload(() => import("./web-zjDRB3km.js").then((m) => new m.ShareWeb()), []) });
+var Share = registerPlugin("Share", { web: () => __vitePreload(() => import("./web-DhI0AxaA.js").then((m) => new m.ShareWeb()), []) });
 // src/utils/shareUtils.ts
 /**
 * The permanent official distribution link for Bank AlDam Qataba.
@@ -3430,9 +3431,9 @@ var Sidebar = ({ isOpen, onClose, donors, onOpenExitConfirm, onOpenChat }) => {
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center justify-center gap-1.5 text-[11px] font-black text-slate-800",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Heart, { className: "w-3 h-3 text-red-500 fill-red-500" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "قطرة دم تنقذ حياة إنسان" })]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 						className: "text-[10px] text-slate-400 font-bold",
-						children: "مديرية قعطبة • الإصدار 1.2.0"
+						children: ["مديرية قعطبة • الإصدار ", APP_VERSION]
 					})]
 				})
 			]
@@ -7414,7 +7415,7 @@ var Encoding;
 	Encoding["UTF16"] = "utf16";
 })(Encoding || (Encoding = {}));
 // node_modules/@capacitor/filesystem/dist/esm/index.js
-var Filesystem = registerPlugin("Filesystem", { web: () => __vitePreload(() => import("./web-DCoStDH6.js").then((m) => new m.FilesystemWeb()), []) });
+var Filesystem = registerPlugin("Filesystem", { web: () => __vitePreload(() => import("./web-BEE279sx.js").then((m) => new m.FilesystemWeb()), []) });
 f();
 -(Math.pow(10, 8) * 24 * 60 * 60 * 1e3);
 /**
@@ -14024,23 +14025,8 @@ var Weekday;
 	Weekday[Weekday["Saturday"] = 7] = "Saturday";
 })(Weekday || (Weekday = {}));
 // node_modules/@capacitor/local-notifications/dist/esm/index.js
-var LocalNotifications = registerPlugin("LocalNotifications", { web: () => __vitePreload(() => import("./web-CHFzif3D.js").then((m) => new m.LocalNotificationsWeb()), []) });
+var LocalNotifications = registerPlugin("LocalNotifications", { web: () => __vitePreload(() => import("./web-CfFeQJEL.js").then((m) => new m.LocalNotificationsWeb()), []) });
 // src/services/notificationService.ts
-var notificationService_exports = /* @__PURE__ */ __exportAll({
-	dispatchUrgentAlert: () => dispatchUrgentAlert,
-	getAlertPermissionStatus: () => getAlertPermissionStatus,
-	hasSeenAlertId: () => hasSeenAlertId,
-	initializePushNotifications: () => initializePushNotifications,
-	installAudioUnlockListeners: () => installAudioUnlockListeners,
-	isAlertSoundEnabled: () => isAlertSoundEnabled,
-	markAlertIdSeen: () => markAlertIdSeen,
-	playUrgentAlertSound: () => playUrgentAlertSound,
-	requestAlertPermission: () => requestAlertPermission,
-	sendSystemAlertNotification: () => sendSystemAlertNotification,
-	setAlertSoundEnabled: () => setAlertSoundEnabled,
-	setNotificationTapHandler: () => setNotificationTapHandler,
-	triggerAlertVibration: () => triggerAlertVibration
-});
 var SOUND_PREF_KEY = "qataba_alert_sound_enabled_v1";
 var SEEN_ALERTS_KEY = "qataba_seen_alerts_v1";
 var ANDROID_URGENT_CHANNEL_ID = "urgent_blood_alerts";
@@ -15070,7 +15056,7 @@ function AppContent() {
 		try {
 			setIsRefreshing(true);
 			setToastMessage(null);
-			if ("serviceWorker" in navigator) try {
+			if (!Capacitor.isNativePlatform() && "serviceWorker" in navigator) try {
 				const regs = await navigator.serviceWorker.getRegistrations();
 				for (const reg of regs) await reg.update();
 			} catch {}
@@ -15091,12 +15077,7 @@ function AppContent() {
 		if (rawDonors.length === 0 && currentUser) seedInitialCommunityData(currentUser.uid);
 	}, [rawDonors.length, currentUser]);
 	(0, import_react.useEffect)(() => {
-		if (currentUser) __vitePreload(async () => {
-			const { initializePushNotifications } = await Promise.resolve().then(() => notificationService_exports);
-			return { initializePushNotifications };
-		}, void 0).then(({ initializePushNotifications }) => {
-			initializePushNotifications(currentUser.uid);
-		});
+		if (currentUser) initializePushNotifications(currentUser.uid);
 	}, [currentUser]);
 	(0, import_react.useEffect)(() => {
 		if (!currentUser || currentUser.isAnonymous) return;

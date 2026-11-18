@@ -24,6 +24,7 @@ import { updateDonorProfile } from '../services/donorService';
 import { subscribeToConversation } from '../services/chatService';
 import { AboutUsModal } from './AboutUsModal';
 import { PrivacyPolicyModal } from './PrivacyPolicyModal';
+import { APP_VERSION } from '../version';
 import { getWhatsAppUrl, openWhatsAppChat } from '../utils/whatsapp';
 import { shareData } from '../utils/shareUtils';
 
@@ -582,7 +583,7 @@ export const Sidebar: React.FC<SidebarProps & { onOpenChat: () => void }> = ({
             <Heart className="w-3 h-3 text-red-500 fill-red-500" />
             <span>قطرة دم تنقذ حياة إنسان</span>
           </div>
-          <p className="text-[10px] text-slate-400 font-bold">مديرية قعطبة • الإصدار 1.2.0</p>
+          <p className="text-[10px] text-slate-400 font-bold">مديرية قعطبة • الإصدار {APP_VERSION}</p>
         </div>
       </div>
 

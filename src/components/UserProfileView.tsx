@@ -28,6 +28,7 @@ import { useAuth } from '../context/AuthContext';
 import { Donor, UrgentRequest, BLOOD_TYPES, BloodType } from '../types';
 import { updateRequestStatus, saveDonorProfile, deleteDonorProfile } from '../services/donorService';
 import { RoleSelectionModal } from './RoleSelectionModal';
+import { APP_VERSION } from '../version';
 import { getWhatsAppUrl, openWhatsAppChat } from '../utils/whatsapp';
 import { AboutUsModal } from './AboutUsModal';
 
@@ -662,7 +663,7 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({
           </button>
         )}
         <p className="text-[10px] text-slate-400 text-center mt-2.5 font-bold">
-          قطرة دم تنقذ حياة • مديرية قعطبة • الإصدار 1.2.0
+          قطرة دم تنقذ حياة • مديرية قعطبة • الإصدار {APP_VERSION}
         </p>
       </div>
 

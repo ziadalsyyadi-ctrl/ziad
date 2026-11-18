@@ -29,6 +29,45 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
+      - name: Resolve sequential OTA version
+        env:
+          GH_TOKEN: ${{ github.repository == 'ziadalsyyadi-ctrl/ziadalsyyadi635' && secrets.GITHUB_TOKEN || secrets.GH_RELEASE_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          PUBLISHED_PATCH=-1
+
+          AUTH_ARGS=()
+          if [ -n "${GH_TOKEN:-}" ]; then
+            AUTH_ARGS=(-H "Authorization: Bearer ${GH_TOKEN}")
+          fi
+
+          OTA_JSON="$(curl -sS -H "Accept: application/vnd.github+json" "${AUTH_ARGS[@]}" \
+            "https://api.github.com/repos/ziadalsyyadi-ctrl/ziadalsyyadi635/releases/tags/ota-latest" || true)"
+
+          if echo "$OTA_JSON" | grep -q '"tag_name"'; then
+            PUBLISHED_PATCH=0
+            BODY_PATCH="$(echo "$OTA_JSON" | node -e '
+              let d=""; process.stdin.on("data",c=>d+=c); process.stdin.on("end",()=>{
+                try {
+                  const j = JSON.parse(d);
+                  const m = String(j.body || "").match(/App Version:\s*1\.2\.(\d+)/i);
+                  if (m) console.log(m[1]);
+                } catch {}
+              });
+            ')"
+            if [ -n "$BODY_PATCH" ] && [ "$BODY_PATCH" -gt "$PUBLISHED_PATCH" ]; then
+              PUBLISHED_PATCH="$BODY_PATCH"
+            fi
+            NEXT_PATCH=$(( PUBLISHED_PATCH + 1 ))
+          else
+            NEXT_PATCH=$(( GITHUB_RUN_NUMBER > 7 ? GITHUB_RUN_NUMBER - 7 : 0 ))
+          fi
+
+          APP_VER="1.2.${NEXT_PATCH}"
+          echo "VITE_APP_VERSION=${APP_VER}" >> "$GITHUB_ENV"
+          echo "Resolved sequential OTA appVersion=${APP_VER}"
+
       - name: Build web application
         run: npm run build
 
@@ -123,7 +162,10 @@ jobs:
           repository: ziadalsyyadi-ctrl/ziadalsyyadi635
           token: ${{ github.repository == 'ziadalsyyadi-ctrl/ziadalsyyadi635' && secrets.GITHUB_TOKEN || secrets.GH_RELEASE_TOKEN }}
           tag_name: ota-latest
-          name: Bank AlDam OTA manifest (latest)
+          name: Bank AlDam OTA manifest v${{ env.VITE_APP_VERSION }} (latest)
+          body: |
+            App Version: ${{ env.VITE_APP_VERSION }}
+            Bundle ID: ${{ github.sha }}
           target_commitish: main
           files: ota-dist/manifest.json
           overwrite_files: true

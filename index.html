@@ -29,11 +29,32 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      if ('serviceWorker' in navigator) {
+      (function() {
+        var isNative = !!(window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform());
+        if (!('serviceWorker' in navigator)) return;
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/sw.js').catch(function() {});
+          if (isNative) {
+            navigator.serviceWorker.getRegistrations().then(function(regs) {
+              var hadController = !!navigator.serviceWorker.controller;
+              return Promise.all(regs.map(function(r) { return r.unregister(); })).then(function(results) {
+                if ('caches' in window) {
+                  return caches.keys().then(function(keys) {
+                    return Promise.all(keys.map(function(k) { return caches.delete(k); }));
+                  }).then(function() { return results; });
+                }
+                return results;
+              }).then(function(results) {
+                if (hadController && results.some(Boolean) && !sessionStorage.getItem('cap_sw_cleaned')) {
+                  sessionStorage.setItem('cap_sw_cleaned', '1');
+                  window.location.reload();
+                }
+              });
+            }).catch(function() {});
+          } else {
+            navigator.serviceWorker.register('/sw.js').catch(function() {});
+          }
         });
-      }
+      })();
     </script>
   </body>
 </html>

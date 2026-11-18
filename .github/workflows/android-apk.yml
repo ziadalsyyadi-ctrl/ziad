@@ -40,6 +40,58 @@ jobs:
       - name: "Install dependencies"
         run: npm install --legacy-peer-deps
 
+      - name: "Resolve sequential Android version"
+        env:
+          GH_TOKEN: ${{ github.repository == 'ziadalsyyadi-ctrl/ziadalsyyadi635' && secrets.GITHUB_TOKEN || secrets.GH_RELEASE_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE_CODE=82
+          PUBLISHED_CODE=0
+
+          AUTH_ARGS=()
+          if [ -n "${GH_TOKEN:-}" ]; then
+            AUTH_ARGS=(-H "Authorization: Bearer ${GH_TOKEN}")
+          fi
+
+          RELEASE_JSON="$(curl -sS -H "Accept: application/vnd.github+json" "${AUTH_ARGS[@]}" \
+            "https://api.github.com/repos/ziadalsyyadi-ctrl/ziadalsyyadi635/releases/tags/android-latest" || true)"
+
+          if echo "$RELEASE_JSON" | grep -q '"tag_name"'; then
+            PUBLISHED_CODE="$BASE_CODE"
+            BODY_CODE="$(echo "$RELEASE_JSON" | node -e '
+              let d=""; process.stdin.on("data",c=>d+=c); process.stdin.on("end",()=>{
+                try {
+                  const j = JSON.parse(d);
+                  const m = String(j.body || "").match(/Version Code:\s*(\d+)/i);
+                  if (m) console.log(m[1]);
+                } catch {}
+              });
+            ')"
+            if [ -n "$BODY_CODE" ] && [ "$BODY_CODE" -gt "$PUBLISHED_CODE" ]; then
+              PUBLISHED_CODE="$BODY_CODE"
+            fi
+            NEXT_CODE=$(( PUBLISHED_CODE + 1 ))
+          else
+            DELTA=$(( GITHUB_RUN_NUMBER > 7 ? GITHUB_RUN_NUMBER - 7 : 0 ))
+            NEXT_CODE=$(( BASE_CODE + DELTA ))
+          fi
+
+          if [ "$NEXT_CODE" -lt "$BASE_CODE" ]; then
+            NEXT_CODE="$BASE_CODE"
+          fi
+
+          PATCH_NUM=$(( NEXT_CODE - 82 ))
+          APP_VER="1.2.${PATCH_NUM}"
+
+          {
+            echo "ANDROID_VERSION_CODE=${NEXT_CODE}"
+            echo "ANDROID_VERSION_NAME=${NEXT_CODE}"
+            echo "VITE_APP_VERSION=${APP_VER}"
+          } >> "$GITHUB_ENV"
+
+          echo "Resolved sequential Android build -> versionCode=${NEXT_CODE}, appVersion=${APP_VER}"
+
       - name: "Build web assets"
         run: npm run build
 
@@ -150,6 +202,8 @@ jobs:
           {
             echo "Bank AlDam Qataba release certificate"
             echo "Package ID: com.qatrahayat.app"
+            echo "Version Code: ${ANDROID_VERSION_CODE}"
+            echo "App Version: ${VITE_APP_VERSION}"
             echo
             echo "SHA-1: $SHA1_VAL"
             echo "SHA-256: $SHA256_VAL"
@@ -241,7 +295,11 @@ jobs:
           repository: ziadalsyyadi-ctrl/ziadalsyyadi635
           token: ${{ github.repository == 'ziadalsyyadi-ctrl/ziadalsyyadi635' && secrets.GITHUB_TOKEN || secrets.GH_RELEASE_TOKEN }}
           tag_name: android-latest
-          name: Bank AlDam Qataba Android APK & AAB (latest)
+          name: Bank AlDam Qataba Android v${{ env.VITE_APP_VERSION }} (build ${{ env.ANDROID_VERSION_CODE }})
+          body: |
+            Version Code: ${{ env.ANDROID_VERSION_CODE }}
+            App Version: ${{ env.VITE_APP_VERSION }}
+            Package ID: com.qatrahayat.app
           target_commitish: main
           files: |
             release_files/Bank_AlDam_Qataba.apk

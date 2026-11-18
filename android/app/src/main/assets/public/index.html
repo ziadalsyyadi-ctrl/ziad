@@ -24,21 +24,42 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-fl9DGzQ3.js"></script>
-    <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-SbdDWaPq.js">
-    <link rel="modulepreload" crossorigin href="/assets/icons-vendor-otYgn5TF.js">
-    <link rel="modulepreload" crossorigin href="/assets/react-vendor-Cik_FFZo.js">
+    <script type="module" crossorigin src="/assets/index-CPj-j6ZL.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-CO0Nlsmt.js">
+    <link rel="modulepreload" crossorigin href="/assets/icons-vendor-B7FEDE-A.js">
+    <link rel="modulepreload" crossorigin href="/assets/react-vendor-DqmI8VDC.js">
     <link rel="modulepreload" crossorigin href="/assets/firebase-vendor-YILmzwxr.js">
     <link rel="stylesheet" crossorigin href="/assets/index-CEkX0vUz.css">
   <link rel="manifest" href="/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script></head>
   <body class="bg-slate-50 text-slate-800 antialiased font-['Cairo',sans-serif] select-none">
     <div id="root"></div>
     <script>
-      if ('serviceWorker' in navigator) {
+      (function() {
+        var isNative = !!(window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform());
+        if (!('serviceWorker' in navigator)) return;
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/sw.js').catch(function() {});
+          if (isNative) {
+            navigator.serviceWorker.getRegistrations().then(function(regs) {
+              var hadController = !!navigator.serviceWorker.controller;
+              return Promise.all(regs.map(function(r) { return r.unregister(); })).then(function(results) {
+                if ('caches' in window) {
+                  return caches.keys().then(function(keys) {
+                    return Promise.all(keys.map(function(k) { return caches.delete(k); }));
+                  }).then(function() { return results; });
+                }
+                return results;
+              }).then(function(results) {
+                if (hadController && results.some(Boolean) && !sessionStorage.getItem('cap_sw_cleaned')) {
+                  sessionStorage.setItem('cap_sw_cleaned', '1');
+                  window.location.reload();
+                }
+              });
+            }).catch(function() {});
+          } else {
+            navigator.serviceWorker.register('/sw.js').catch(function() {});
+          }
         });
-      }
+      })();
     </script>
   </body>
 </html>

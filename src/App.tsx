@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   X,
 } from 'lucide-react';
+import { Capacitor } from '@capacitor/core';
 import { doc, onSnapshot, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
 import { checkForLiveUpdate } from './live-update';
@@ -61,6 +62,7 @@ import {
   setAlertSoundEnabled,
   installAudioUnlockListeners,
   setNotificationTapHandler,
+  initializePushNotifications,
 } from './services/notificationService';
 
 function AppContent() {
@@ -549,7 +551,7 @@ function AppContent() {
     try {
       setIsRefreshing(true);
       setToastMessage(null);
-      if ('serviceWorker' in navigator) {
+      if (!Capacitor.isNativePlatform() && 'serviceWorker' in navigator) {
         try {
           const regs = await navigator.serviceWorker.getRegistrations();
           for (const reg of regs) await reg.update();
@@ -583,9 +585,7 @@ function AppContent() {
 
   useEffect(() => {
     if (currentUser) {
-      import('./services/notificationService').then(({ initializePushNotifications }) => {
-        initializePushNotifications(currentUser.uid);
-      });
+      void initializePushNotifications(currentUser.uid);
     }
   }, [currentUser]);
 
