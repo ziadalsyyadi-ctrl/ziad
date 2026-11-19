@@ -16,7 +16,8 @@ import {
   Droplet,
   Info,
   Mail,
-  ShieldCheck
+  ShieldCheck,
+  ExternalLink
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Donor, DonationRecord, Conversation } from '../types';
@@ -33,6 +34,7 @@ interface SidebarProps {
   onClose: () => void;
   donors: Donor[];
   onOpenExitConfirm: () => void;
+  onOpenWebsite?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps & { onOpenChat: () => void }> = ({
@@ -40,7 +42,8 @@ export const Sidebar: React.FC<SidebarProps & { onOpenChat: () => void }> = ({
   onClose,
   donors,
   onOpenExitConfirm,
-  onOpenChat
+  onOpenChat,
+  onOpenWebsite
 }) => {
   const { currentUser, userProfile, logout, deleteAccount } = useAuth();
   const [isEditing, setIsSidebarEditing] = useState(false);
@@ -335,6 +338,28 @@ export const Sidebar: React.FC<SidebarProps & { onOpenChat: () => void }> = ({
                 <span className="text-[10px] text-emerald-700 font-bold block">حماية بيانات المتبرعين وحذف الحساب</span>
               </div>
             </button>
+
+            {onOpenWebsite && (
+              <button
+                type="button"
+                onClick={() => {
+                  onOpenWebsite();
+                  onClose();
+                }}
+                className="w-full flex items-center justify-between gap-3 p-3 bg-sky-50 border border-sky-200 rounded-2xl shadow-2xs hover:bg-sky-100/80 transition-colors text-right cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-sky-600 text-white flex items-center justify-center text-sm shrink-0">
+                    <span aria-hidden="true">🌐</span>
+                  </div>
+                  <div>
+                    <span className="text-xs font-black text-sky-950 block">🌐 موقع بنك الدم – قعطبة</span>
+                    <span className="text-[10px] text-sky-700 font-bold block">فتح في متصفح الهاتف الخارجي</span>
+                  </div>
+                </div>
+                <ExternalLink className="w-4 h-4 text-sky-700 shrink-0" />
+              </button>
+            )}
 
             <button 
               onClick={handleShareApp}

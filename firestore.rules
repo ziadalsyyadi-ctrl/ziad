@@ -104,6 +104,16 @@ service cloud.firestore {
         getAfter(/databases/$(database)/documents/recovery_grants/$(grantId)).data.claimedByUid == request.auth.uid;
     }
 
+    function isValidWebsiteConfig(data) {
+      return data.keys().hasAll(['websiteUrl']) &&
+        data.keys().hasOnly(['websiteUrl', 'updatedAt', 'updatedBy']) &&
+        data.websiteUrl is string &&
+        data.websiteUrl.size() >= 10 &&
+        data.websiteUrl.size() <= 500 &&
+        data.websiteUrl.matches('^https?://[^\\s]+$') &&
+        (!('updatedBy' in data) || (data.updatedBy is string && data.updatedBy.size() <= 128));
+    }
+
     // Donors Collection
     match /donors/{donorId} {
       allow read: if true;
@@ -288,6 +298,21 @@ service cloud.firestore {
     match /settings/{settingId} {
       allow read: if true;
       allow write: if isAdmin() && isValidId(settingId);
+    }
+
+    // Remote App Configuration (e.g. appConfig/websiteUrl)
+    match /appConfig/{configId} {
+      allow read: if true;
+      allow create: if isAdmin() &&
+        isValidId(configId) &&
+        isValidWebsiteConfig(incoming()) &&
+        incoming().updatedAt == request.time;
+      allow update: if isAdmin() &&
+        isValidId(configId) &&
+        isValidWebsiteConfig(incoming()) &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['websiteUrl', 'updatedAt', 'updatedBy']) &&
+        incoming().updatedAt == request.time;
+      allow delete: if isAdmin() && isValidId(configId);
     }
 
     // Hospitals Directory

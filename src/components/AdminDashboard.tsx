@@ -25,7 +25,8 @@ import {
   UserPlus,
   KeyRound,
   Copy,
-  MessageCircle
+  MessageCircle,
+  Globe
 } from 'lucide-react';
 import { doc, getDoc, setDoc, deleteDoc, serverTimestamp, collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -51,6 +52,17 @@ import {
   RecoveryRequest,
   IssuedRecoveryResult,
 } from '../services/accountRecoveryService';
+import {
+  DEFAULT_WEBSITE_URL,
+  WEBSITE_CONFIG_PATH,
+  WebsiteConfigState,
+  ensureWebsiteConfigSeededForAdmin,
+  getInitialWebsiteConfig,
+  openWebsiteInExternalBrowser,
+  saveRemoteWebsiteUrl,
+  subscribeToWebsiteConfig,
+  validateWebsiteUrl,
+} from '../services/websiteConfigService';
 
 interface AdminDashboardProps {
   onBack: () => void;
@@ -135,6 +147,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [showLocationsSection, setShowLocationsSection] = useState(false);
   const [editingLocationId, setEditingLocationId] = useState<string | null>(null);
   const [locationNameInput, setLocationLocationNameInput] = useState('');
+
+  // Remote official website URL states
+  const [websiteConfig, setWebsiteConfig] = useState<WebsiteConfigState>(() => getInitialWebsiteConfig());
+  const [websiteUrlInput, setWebsiteUrlInput] = useState<string>(() => getInitialWebsiteConfig().url);
+  const [websiteInputDirty, setWebsiteInputDirty] = useState(false);
+  const [isSavingWebsiteUrl, setIsSavingWebsiteUrl] = useState(false);
+  const [websiteSaveResult, setWebsiteSaveResult] = useState<{ success: boolean; message: string } | null>(null);
 
   const fetchUserStats = async () => {
     try {
@@ -312,6 +331,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     };
     fetchSettings();
   }, []);
+
+  React.useEffect(() => {
+    const unsub = subscribeToWebsiteConfig((nextConfig) => {
+      setWebsiteConfig(nextConfig);
+      if (!websiteInputDirty) {
+        setWebsiteUrlInput(nextConfig.url);
+      }
+    });
+    return () => unsub();
+  }, [websiteInputDirty]);
+
+  React.useEffect(() => {
+    const isAdminAccount =
+      userProfile?.role === 'admin' ||
+      currentUser?.email === 'ziadalsyyadi@gmail.com' ||
+      currentUser?.email === 'user_967773633918_v1@qataba-blood.app';
+    if (isAdminAccount) {
+      void ensureWebsiteConfigSeededForAdmin();
+    }
+  }, [currentUser, userProfile?.role]);
 
   const handlePinLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -509,6 +548,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       setResult({ success: false, message: `فشل المسح: ${err.message}` });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSaveWebsiteUrl = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setWebsiteSaveResult(null);
+    const valid = validateWebsiteUrl(websiteUrlInput);
+    if (!valid) {
+      setWebsiteSaveResult({
+        success: false,
+        message: 'الرابط غير صالح. تأكد أنه يبدأ بـ https:// أو http:// ولا يحتوي على مسافات.',
+      });
+      return;
+    }
+
+    setIsSavingWebsiteUrl(true);
+    try {
+      const savedUrl = await saveRemoteWebsiteUrl(valid);
+      setWebsiteUrlInput(savedUrl);
+      setWebsiteInputDirty(false);
+      setWebsiteSaveResult({
+        success: true,
+        message: 'تم حفظ وتحديث رابط الموقع في Firebase بنجاح وسيتحدث تلقائياً لدى جميع المستخدمين! ✓',
+      });
+    } catch (err: any) {
+      setWebsiteSaveResult({
+        success: false,
+        message: `تعذر تحديث رابط الموقع في Firebase: ${err?.message || 'خطأ غير متوقع'}`,
+      });
+    } finally {
+      setIsSavingWebsiteUrl(false);
     }
   };
 
@@ -955,6 +1025,111 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Remote Website URL Card (appConfig/websiteUrl) */}
+        <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-slate-900">
+              <Globe className="w-5 h-5 text-sky-600" />
+              <h2 className="text-sm font-black">🌐 موقع بنك الدم – قعطبة (عن بُعد)</h2>
+            </div>
+            <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
+              websiteConfig.source === 'firebase'
+                ? 'bg-emerald-100 text-emerald-800'
+                : websiteConfig.source === 'cache'
+                ? 'bg-amber-100 text-amber-800'
+                : 'bg-slate-100 text-slate-700'
+            }`}>
+              {websiteConfig.source === 'firebase'
+                ? 'متزامن مع Firebase ✓'
+                : websiteConfig.source === 'cache'
+                ? 'نسخة محفوظة محلياً'
+                : 'الرابط الافتراضي'}
+            </span>
+          </div>
+
+          <p className="text-xs text-slate-600 leading-relaxed">
+            حدّث رابط الموقع الرسمي من هنا أو من لوحة Firebase في المسار{' '}
+            <code className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-mono text-[10px]" dir="ltr">
+              {WEBSITE_CONFIG_PATH}
+            </code>{' '}
+            ليصل التغيير لجميع المستخدمين تلقائياً دون الحاجة لإصدار APK أو AAB جديد.
+          </p>
+
+          <form onSubmit={handleSaveWebsiteUrl} className="space-y-2.5">
+            <div>
+              <label className="block text-[10px] font-bold text-slate-500 mb-1">
+                رابط الموقع الحالي (Field: websiteUrl):
+              </label>
+              <input
+                type="url"
+                dir="ltr"
+                value={websiteUrlInput}
+                onChange={(e) => {
+                  setWebsiteUrlInput(e.target.value);
+                  setWebsiteInputDirty(true);
+                  setWebsiteSaveResult(null);
+                }}
+                placeholder={DEFAULT_WEBSITE_URL}
+                className="w-full p-2.5 rounded-xl border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 outline-hidden text-xs font-mono font-bold text-left bg-slate-50"
+                required
+              />
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="submit"
+                disabled={isSavingWebsiteUrl}
+                className="flex-1 py-2.5 px-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-black text-xs shadow-md shadow-sky-100 transition-all flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer"
+              >
+                <Globe className="w-4 h-4" />
+                <span>{isSavingWebsiteUrl ? 'جارٍ الحفظ في Firebase...' : 'حفظ وتحديث الرابط للجميع'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const res = openWebsiteInExternalBrowser(websiteUrlInput);
+                  if (!res.opened) {
+                    setWebsiteSaveResult({
+                      success: false,
+                      message: res.errorMessage || 'تعذر فتح الرابط للمعاينة.',
+                    });
+                  }
+                }}
+                className="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+                title="معاينة الرابط في المتصفح"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>معاينة</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setWebsiteUrlInput(DEFAULT_WEBSITE_URL);
+                  setWebsiteInputDirty(true);
+                  setWebsiteSaveResult(null);
+                }}
+                className="py-2.5 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-bold text-xs transition-colors cursor-pointer"
+                title="تعبئة الرابط الافتراضي"
+              >
+                الافتراضي
+              </button>
+            </div>
+
+            {websiteSaveResult && (
+              <div className={`p-2.5 rounded-xl flex items-center gap-2 text-xs font-bold ${
+                websiteSaveResult.success
+                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                  : 'bg-red-50 text-red-700 border border-red-100'
+              }`}>
+                {websiteSaveResult.success ? <CheckCircle2 className="w-4 h-4 shrink-0" /> : <AlertTriangle className="w-4 h-4 shrink-0" />}
+                <span>{websiteSaveResult.message}</span>
+              </div>
+            )}
+          </form>
         </div>
 
         {/* Message Center Card */}

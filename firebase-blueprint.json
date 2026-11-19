@@ -200,6 +200,29 @@
       },
       "required": ["announcement", "updatedAt"]
     },
+    "AppWebsiteConfig": {
+      "title": "AppWebsiteConfig",
+      "description": "Remote official website URL configuration controlled exclusively by admins",
+      "type": "object",
+      "properties": {
+        "websiteUrl": {
+          "type": "string",
+          "description": "Official Blood Bank website URL",
+          "minLength": 10,
+          "maxLength": 500,
+          "pattern": "^https?://[^\\s]+$"
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "UID of the admin who last updated the website URL"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["websiteUrl", "updatedAt"]
+    },
     "PhoneAuthRecord": {
       "title": "PhoneAuthRecord",
       "description": "Phone account lookup and credential version",
@@ -426,6 +449,12 @@
         "$ref": "#/entities/AppSettings"
       },
       "description": "Global app configuration controlled by admins"
+    },
+    "/appConfig/{configId}": {
+      "schema": {
+        "$ref": "#/entities/AppWebsiteConfig"
+      },
+      "description": "Remote application configuration (e.g. appConfig/websiteUrl)"
     },
     "/hospitals/{hospitalId}": {
       "schema": {

@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/web-4DKRim6a.js","assets/firebase-vendor-YILmzwxr.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/web-BzXtprQT.js","assets/firebase-vendor-YILmzwxr.js"])))=>i.map(i=>d[i]);
 import { n as __toESM } from "./rolldown-runtime-CO0Nlsmt.js";
-import { n as require_client, t as require_jsx_runtime } from "./react-vendor-DqmI8VDC.js";
-import { $ as CircleUser, A as Mail, B as HardDriveDownload, C as Phone, D as Menu, E as MessageCircle, F as Info, G as EyeOff, H as FileText, I as House, J as Database, K as ExternalLink, L as Hospital, M as LogIn, N as Lock, O as Megaphone, P as KeyRound, Q as CircleX, R as Heart, S as Plus, T as MessageSquare, U as FileSpreadsheet, V as FolderOpen, W as Eye, X as Compass, Y as Copy, Z as Clock, _ as Share2, a as User, at as Check, b as Search, c as Upload, ct as BellRing, d as Target, dt as ArrowLeft, et as CirclePlus, f as Sparkles, ft as require_react, g as ShieldAlert, h as ShieldCheck, i as Users, it as ChevronLeft, j as LogOut, k as MapPin, l as TriangleAlert, lt as Award, m as Shield, n as VolumeX, nt as CircleAlert, o as UserPlus, ot as Calendar, p as Smartphone, q as Droplet, r as Volume2, rt as ChevronRight, s as UserCheck, st as Bell, t as X, tt as CircleCheck, u as Trash2, ut as ArrowRight, v as Settings, w as PenLine, x as RefreshCw, y as Send, z as HeartHandshake } from "./icons-vendor-B7FEDE-A.js";
+import { n as require_client, t as require_jsx_runtime } from "./react-vendor-ArcY3iha.js";
+import { $ as CircleX, A as Mail, B as HardDriveDownload, C as Phone, D as Menu, E as MessageCircle, F as Info, G as Eye, H as FolderOpen, I as House, J as Droplet, K as EyeOff, L as Hospital, M as LogIn, N as Lock, O as Megaphone, P as KeyRound, Q as Clock, R as Heart, S as Plus, T as MessageSquare, U as FileText, V as Globe, W as FileSpreadsheet, X as Copy, Y as Database, Z as Compass, _ as Share2, a as User, at as ChevronLeft, b as Search, c as Upload, ct as Bell, d as Target, dt as ArrowRight, et as CircleUser, f as Sparkles, ft as ArrowLeft, g as ShieldAlert, h as ShieldCheck, i as Users, it as ChevronRight, j as LogOut, k as MapPin, l as TriangleAlert, lt as BellRing, m as Shield, n as VolumeX, nt as CircleCheck, o as UserPlus, ot as Check, p as Smartphone, pt as require_react, q as ExternalLink, r as Volume2, rt as CircleAlert, s as UserCheck, st as Calendar, t as X, tt as CirclePlus, u as Trash2, ut as Award, v as Settings, w as PenLine, x as RefreshCw, y as Send, z as HeartHandshake } from "./icons-vendor-daIO61Ve.js";
 import { $ as deleteDoc, A as onAuthStateChanged, K as signOut, Q as addDoc, V as signInWithEmailAndPassword, W as signInWithPopup, X as updateProfile, Y as updatePassword, _ as createUserWithEmailAndPassword, _t as getFirestore, at as orderBy, bt as serverTimestamp, ct as query, dt as updateDoc, et as getDoc, ft as where, gt as doc, ht as collection, i as EmailAuthProvider, it as onSnapshot, j as reauthenticateWithCredential, lt as runTransaction, mt as arrayUnion, n as initializeAppCheck, nt as getDocs, ot as persistentLocalCache, pt as writeBatch, r as getFunctions, rt as limit, s as GoogleAuthProvider, st as persistentMultipleTabManager, t as ReCaptchaV3Provider, tt as getDocFromServer, ut as setDoc, v as deleteUser, vt as increment, x as getAuth, xt as initializeApp, yt as initializeFirestore, z as signInWithCredential } from "./firebase-vendor-YILmzwxr.js";
 // \0vite/modulepreload-polyfill.js
 (function polyfill() {
@@ -711,7 +711,7 @@ var __vitePreload = function preload(baseModule, deps, importerUrl) {
 	});
 };
 // node_modules/@capawesome/capacitor-live-update/dist/esm/index.js
-var LiveUpdate = registerPlugin("LiveUpdate", { web: () => __vitePreload(() => import("./web-BkEgnVug.js").then((m) => new m.LiveUpdateWeb()), []) });
+var LiveUpdate = registerPlugin("LiveUpdate", { web: () => __vitePreload(() => import("./web-DEV1XNE_.js").then((m) => new m.LiveUpdateWeb()), []) });
 // src/live-update.ts
 var MANIFEST_URL = "https://github.com/ziadalsyyadi-ctrl/ziadalsyyadi635/releases/download/ota-latest/manifest.json";
 var BUNDLE_BASE_URL = "https://github.com/ziadalsyyadi-ctrl/ziadalsyyadi635/releases/download/";
@@ -879,7 +879,7 @@ var ProviderId;
 	ProviderId["PHONE"] = "phone";
 })(ProviderId || (ProviderId = {}));
 // node_modules/@capacitor-firebase/authentication/dist/esm/index.js
-var FirebaseAuthentication = registerPlugin("FirebaseAuthentication", { web: () => __vitePreload(() => import("./web-4DKRim6a.js").then((m) => new m.FirebaseAuthenticationWeb()), __vite__mapDeps([0,1])) });
+var FirebaseAuthentication = registerPlugin("FirebaseAuthentication", { web: () => __vitePreload(() => import("./web-BzXtprQT.js").then((m) => new m.FirebaseAuthenticationWeb()), __vite__mapDeps([0,1])) });
 // src/services/phoneVerificationService.ts
 function sanitizePhone(phone) {
 	const digits = phone.trim().replace(/\D/g, "");
@@ -2842,7 +2842,7 @@ var PrivacyPolicyModal = ({ isOpen, onClose }) => {
 // src/version.ts
 var APP_VERSION = ("1.2.0".trim(), "1.2.0".trim());
 // node_modules/@capacitor/share/dist/esm/index.js
-var Share = registerPlugin("Share", { web: () => __vitePreload(() => import("./web-DhI0AxaA.js").then((m) => new m.ShareWeb()), []) });
+var Share = registerPlugin("Share", { web: () => __vitePreload(() => import("./web-BESIbEQE.js").then((m) => new m.ShareWeb()), []) });
 // src/utils/shareUtils.ts
 /**
 * The permanent official distribution link for Bank AlDam Qataba.
@@ -2884,7 +2884,7 @@ var shareData = async (options) => {
 	}
 };
 // src/components/Sidebar.tsx
-var Sidebar = ({ isOpen, onClose, donors, onOpenExitConfirm, onOpenChat }) => {
+var Sidebar = ({ isOpen, onClose, donors, onOpenExitConfirm, onOpenChat, onOpenWebsite }) => {
 	const { currentUser, userProfile, logout, deleteAccount } = useAuth();
 	const [isEditing, setIsSidebarEditing] = (0, import_react.useState)(false);
 	const [editName, setEditName] = (0, import_react.useState)(userProfile?.displayName || "");
@@ -3171,6 +3171,30 @@ var Sidebar = ({ isOpen, onClose, donors, onOpenExitConfirm, onOpenChat }) => {
 										className: "text-[10px] text-emerald-700 font-bold block",
 										children: "حماية بيانات المتبرعين وحذف الحساب"
 									})] })]
+								}),
+								onOpenWebsite && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => {
+										onOpenWebsite();
+										onClose();
+									},
+									className: "w-full flex items-center justify-between gap-3 p-3 bg-sky-50 border border-sky-200 rounded-2xl shadow-2xs hover:bg-sky-100/80 transition-colors text-right cursor-pointer",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center gap-3",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "w-8 h-8 rounded-xl bg-sky-600 text-white flex items-center justify-center text-sm shrink-0",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												"aria-hidden": "true",
+												children: "🌐"
+											})
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-black text-sky-950 block",
+											children: "🌐 موقع بنك الدم – قعطبة"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-[10px] text-sky-700 font-bold block",
+											children: "فتح في متصفح الهاتف الخارجي"
+										})] })]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-4 h-4 text-sky-700 shrink-0" })]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 									onClick: handleShareApp,
@@ -3571,7 +3595,7 @@ var BloodDropBadge = ({ type, className = "w-11 h-13" }) => /* @__PURE__ */ (0, 
 		children: type
 	})]
 });
-var HeroBanner = ({ onNavigate, donors, urgentRequests, onOpenCompatibility }) => {
+var HeroBanner = ({ onNavigate, donors, urgentRequests, onOpenCompatibility, onOpenWebsite }) => {
 	const heroImagePath = regenerated_image_1793757211567_default;
 	const activeUrgentCount = urgentRequests.filter((r) => r.status === "open").length;
 	urgentRequests.filter((r) => r.status === "fulfilled").length;
@@ -3839,6 +3863,30 @@ var HeroBanner = ({ onNavigate, donors, urgentRequests, onOpenCompatibility }) =
 						className: "w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, { className: "w-4 h-4 sm:w-4.5 sm:h-4.5" })
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "إضافة متبرع" })]
+				})]
+			}),
+			onOpenWebsite && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+				type: "button",
+				onClick: onOpenWebsite,
+				className: "w-full flex items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-linear-to-r from-sky-600 via-blue-600 to-indigo-700 hover:from-sky-700 hover:to-indigo-800 text-white shadow-md shadow-blue-200/70 border border-sky-400/40 cursor-pointer transition-all active:scale-99 text-right",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-lg shadow-inner shrink-0",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							"aria-hidden": "true",
+							children: "🌐"
+						})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "text-xs sm:text-sm font-black tracking-tight",
+						children: "🌐 موقع بنك الدم – قعطبة"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "text-[10px] sm:text-[11px] text-sky-100 font-bold",
+						children: "فتح الموقع الرسمي في متصفح الهاتف الخارجي"
+					})] })]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center shrink-0",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-4 h-4 text-white" })
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -7415,7 +7463,7 @@ var Encoding;
 	Encoding["UTF16"] = "utf16";
 })(Encoding || (Encoding = {}));
 // node_modules/@capacitor/filesystem/dist/esm/index.js
-var Filesystem = registerPlugin("Filesystem", { web: () => __vitePreload(() => import("./web-BEE279sx.js").then((m) => new m.FilesystemWeb()), []) });
+var Filesystem = registerPlugin("Filesystem", { web: () => __vitePreload(() => import("./web-n9aPwXF-.js").then((m) => new m.FilesystemWeb()), []) });
 f();
 -(Math.pow(10, 8) * 24 * 60 * 60 * 1e3);
 /**
@@ -10707,6 +10755,242 @@ async function deleteAppUser(uid) {
 		throw error;
 	}
 }
+// src/services/websiteConfigService.ts
+var DEFAULT_WEBSITE_URL = "https://sites.google.com/view/bank-al-dam-qataba";
+var WEBSITE_CONFIG_PATH = "appConfig/websiteUrl";
+var WEBSITE_COLLECTION = "appConfig";
+var WEBSITE_DOC_ID = "websiteUrl";
+var LOCAL_WEBSITE_URL_KEY = "qataba_remote_website_url_v1";
+var LOCAL_WEBSITE_META_KEY = "qataba_remote_website_meta_v1";
+/**
+* Validates and normalizes a remote website URL.
+* Accepts only well-formed http/https URLs up to 500 characters without whitespace.
+*/
+function validateWebsiteUrl(rawUrl) {
+	if (typeof rawUrl !== "string") return null;
+	const trimmed = rawUrl.trim();
+	if (trimmed.length < 10 || trimmed.length > 500 || /\s/.test(trimmed)) return null;
+	try {
+		const parsed = new URL(trimmed);
+		if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return null;
+		if (!parsed.hostname || !parsed.hostname.includes(".")) return null;
+		return parsed.toString();
+	} catch {
+		return null;
+	}
+}
+function extractUrlFromDocData(data) {
+	if (!data) return null;
+	const candidates = [
+		data.websiteUrl,
+		data.url,
+		data.value
+	];
+	for (const candidate of candidates) {
+		const valid = validateWebsiteUrl(candidate);
+		if (valid) return valid;
+	}
+	return null;
+}
+function getCachedWebsiteUrl() {
+	if (typeof window === "undefined") return null;
+	try {
+		return validateWebsiteUrl(localStorage.getItem(LOCAL_WEBSITE_URL_KEY));
+	} catch {
+		return null;
+	}
+}
+function getInitialWebsiteConfig() {
+	const cached = getCachedWebsiteUrl();
+	if (cached) {
+		let updatedAt;
+		try {
+			const rawMeta = localStorage.getItem(LOCAL_WEBSITE_META_KEY);
+			if (rawMeta) updatedAt = JSON.parse(rawMeta).updatedAt;
+		} catch {}
+		return {
+			url: cached,
+			source: "cache",
+			updatedAt
+		};
+	}
+	return {
+		url: DEFAULT_WEBSITE_URL,
+		source: "default"
+	};
+}
+function saveCachedWebsiteUrl(validUrl, source) {
+	if (typeof window === "undefined") return;
+	try {
+		localStorage.setItem(LOCAL_WEBSITE_URL_KEY, validUrl);
+		localStorage.setItem(LOCAL_WEBSITE_META_KEY, JSON.stringify({
+			url: validUrl,
+			source,
+			updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+		}));
+	} catch {}
+}
+/**
+* Forces a fresh read from Firebase Firestore server (compatible with manual/OTA refresh).
+* Never throws: safely falls back to local cache or default URL on network/Firebase failure.
+*/
+async function refreshWebsiteConfigFromServer() {
+	const docRef = doc(db, WEBSITE_COLLECTION, WEBSITE_DOC_ID);
+	try {
+		const snap = await getDocFromServer(docRef);
+		if (snap.exists()) {
+			const remoteUrl = extractUrlFromDocData(snap.data());
+			if (remoteUrl) {
+				saveCachedWebsiteUrl(remoteUrl, "firebase");
+				return {
+					url: remoteUrl,
+					source: "firebase",
+					updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+				};
+			}
+			console.warn("[WebsiteConfig] Remote document appConfig/websiteUrl has an invalid URL; using fallback.");
+		}
+	} catch (err) {
+		console.warn("[WebsiteConfig] Could not fetch latest website URL from Firebase server; using fallback:", err);
+	}
+	return getInitialWebsiteConfig();
+}
+/**
+* Subscribes to live changes at Firestore appConfig/websiteUrl.
+* Guaranteed not to crash startup, login, or donor search if Firebase is unreachable.
+*/
+function subscribeToWebsiteConfig(onUpdate) {
+	try {
+		onUpdate(getInitialWebsiteConfig());
+	} catch {
+		onUpdate({
+			url: DEFAULT_WEBSITE_URL,
+			source: "default"
+		});
+	}
+	let unsub = null;
+	try {
+		const docRef = doc(db, WEBSITE_COLLECTION, WEBSITE_DOC_ID);
+		unsub = onSnapshot(docRef, (snap) => {
+			if (snap.exists()) {
+				const remoteUrl = extractUrlFromDocData(snap.data());
+				if (remoteUrl) {
+					saveCachedWebsiteUrl(remoteUrl, "firebase");
+					onUpdate({
+						url: remoteUrl,
+						source: "firebase",
+						updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+					});
+					return;
+				}
+				console.warn("[WebsiteConfig] Ignored invalid website URL from Firebase snapshot.");
+			}
+			onUpdate(getInitialWebsiteConfig());
+		}, (error) => {
+			console.warn("[WebsiteConfig] Live subscription fallback active:", error?.message || error);
+			onUpdate(getInitialWebsiteConfig());
+		});
+	} catch (err) {
+		console.warn("[WebsiteConfig] Failed to attach Firebase listener; continuing with fallback:", err);
+		onUpdate(getInitialWebsiteConfig());
+	}
+	return () => {
+		try {
+			if (unsub) unsub();
+		} catch {}
+	};
+}
+/**
+* Admin-only: saves/updates appConfig/websiteUrl in Firebase Firestore.
+*/
+async function saveRemoteWebsiteUrl(newUrl) {
+	const validUrl = validateWebsiteUrl(newUrl);
+	if (!validUrl) throw new Error("الرابط غير صالح. يجب أن يبدأ بـ https:// أو http:// ويكون عنوان موقع صحيحاً.");
+	const uid = auth.currentUser?.uid;
+	if (!uid) throw new Error("يجب تسجيل الدخول بحساب المسؤول لتحديث رابط الموقع.");
+	const docRef = doc(db, WEBSITE_COLLECTION, WEBSITE_DOC_ID);
+	try {
+		await setDoc(docRef, {
+			websiteUrl: validUrl,
+			updatedAt: serverTimestamp(),
+			updatedBy: uid
+		}, { merge: true });
+		saveCachedWebsiteUrl(validUrl, "firebase");
+		return validUrl;
+	} catch (error) {
+		handleFirestoreError(error, OperationType.WRITE, WEBSITE_CONFIG_PATH);
+	}
+}
+/**
+* Admin-only: seeds appConfig/websiteUrl once if the document does not exist yet in Firebase.
+*/
+async function ensureWebsiteConfigSeededForAdmin() {
+	const uid = auth.currentUser?.uid;
+	if (!uid) return;
+	const docRef = doc(db, WEBSITE_COLLECTION, WEBSITE_DOC_ID);
+	try {
+		if (!(await getDocFromServer(docRef)).exists()) {
+			await setDoc(docRef, {
+				websiteUrl: DEFAULT_WEBSITE_URL,
+				updatedAt: serverTimestamp(),
+				updatedBy: uid
+			});
+			saveCachedWebsiteUrl(DEFAULT_WEBSITE_URL, "firebase");
+		}
+	} catch (err) {
+		console.warn("[WebsiteConfig] Admin auto-seed skipped:", err);
+	}
+}
+/**
+* Validates and opens the official website in the external phone browser (Android)
+* or a new browser tab (Web).
+*/
+function openWebsiteInExternalBrowser(candidateUrl) {
+	let usedFallback = false;
+	let targetUrl = validateWebsiteUrl(candidateUrl);
+	if (!targetUrl) {
+		usedFallback = true;
+		targetUrl = getCachedWebsiteUrl() || validateWebsiteUrl("https://sites.google.com/view/bank-al-dam-qataba");
+	}
+	if (!targetUrl) return {
+		opened: false,
+		url: "",
+		usedFallback: true,
+		errorMessage: "رابط الموقع غير صالح حالياً. يرجى مراجعة إدارة التطبيق."
+	};
+	try {
+		if (typeof window === "undefined" || typeof document === "undefined") return {
+			opened: false,
+			url: targetUrl,
+			usedFallback,
+			errorMessage: "بيئة المتصفح غير متاحة."
+		};
+		if (Capacitor.isNativePlatform()) window.location.assign(targetUrl);
+		else {
+			const link = document.createElement("a");
+			link.href = targetUrl;
+			link.target = "_blank";
+			link.rel = "noopener noreferrer";
+			link.style.display = "none";
+			document.body.appendChild(link);
+			link.click();
+			link.remove();
+		}
+		return {
+			opened: true,
+			url: targetUrl,
+			usedFallback
+		};
+	} catch (err) {
+		console.error("[WebsiteConfig] Failed to launch external browser:", err);
+		return {
+			opened: false,
+			url: targetUrl,
+			usedFallback,
+			errorMessage: "تعذر فتح المتصفح الخارجي على هذا الجهاز."
+		};
+	}
+}
 // src/components/AdminDashboard.tsx
 var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGlobalRefresh, isRefreshing = false }) => {
 	const { userProfile, currentUser, activeRole, switchActiveRole, loginWithGoogle } = useAuth();
@@ -10764,6 +11048,11 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 	const [showLocationsSection, setShowLocationsSection] = (0, import_react.useState)(false);
 	const [editingLocationId, setEditingLocationId] = (0, import_react.useState)(null);
 	const [locationNameInput, setLocationLocationNameInput] = (0, import_react.useState)("");
+	const [websiteConfig, setWebsiteConfig] = (0, import_react.useState)(() => getInitialWebsiteConfig());
+	const [websiteUrlInput, setWebsiteUrlInput] = (0, import_react.useState)(() => getInitialWebsiteConfig().url);
+	const [websiteInputDirty, setWebsiteInputDirty] = (0, import_react.useState)(false);
+	const [isSavingWebsiteUrl, setIsSavingWebsiteUrl] = (0, import_react.useState)(false);
+	const [websiteSaveResult, setWebsiteSaveResult] = (0, import_react.useState)(null);
 	const fetchUserStats = async () => {
 		try {
 			let authUsers = [];
@@ -10958,6 +11247,16 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 		};
 		fetchSettings();
 	}, []);
+	import_react.useEffect(() => {
+		const unsub = subscribeToWebsiteConfig((nextConfig) => {
+			setWebsiteConfig(nextConfig);
+			if (!websiteInputDirty) setWebsiteUrlInput(nextConfig.url);
+		});
+		return () => unsub();
+	}, [websiteInputDirty]);
+	import_react.useEffect(() => {
+		if (userProfile?.role === "admin" || currentUser?.email === "ziadalsyyadi@gmail.com" || currentUser?.email === "user_967773633918_v1@qataba-blood.app") ensureWebsiteConfigSeededForAdmin();
+	}, [currentUser, userProfile?.role]);
 	const handleExportExcel = async () => {
 		setLoading(true);
 		setResult(null);
@@ -11155,6 +11454,35 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 			});
 		} finally {
 			setLoading(false);
+		}
+	};
+	const handleSaveWebsiteUrl = async (e) => {
+		e.preventDefault();
+		setWebsiteSaveResult(null);
+		const valid = validateWebsiteUrl(websiteUrlInput);
+		if (!valid) {
+			setWebsiteSaveResult({
+				success: false,
+				message: "الرابط غير صالح. تأكد أنه يبدأ بـ https:// أو http:// ولا يحتوي على مسافات."
+			});
+			return;
+		}
+		setIsSavingWebsiteUrl(true);
+		try {
+			const savedUrl = await saveRemoteWebsiteUrl(valid);
+			setWebsiteUrlInput(savedUrl);
+			setWebsiteInputDirty(false);
+			setWebsiteSaveResult({
+				success: true,
+				message: "تم حفظ وتحديث رابط الموقع في Firebase بنجاح وسيتحدث تلقائياً لدى جميع المستخدمين! ✓"
+			});
+		} catch (err) {
+			setWebsiteSaveResult({
+				success: false,
+				message: `تعذر تحديث رابط الموقع في Firebase: ${err?.message || "خطأ غير متوقع"}`
+			});
+		} finally {
+			setIsSavingWebsiteUrl(false);
 		}
 	};
 	const handleImport = async () => {
@@ -11616,6 +11944,99 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 										]
 									})]
 								})]
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center justify-between gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-2 text-slate-900",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Globe, { className: "w-5 h-5 text-sky-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+										className: "text-sm font-black",
+										children: "🌐 موقع بنك الدم – قعطبة (عن بُعد)"
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: `text-[10px] font-extrabold px-2 py-0.5 rounded-full ${websiteConfig.source === "firebase" ? "bg-emerald-100 text-emerald-800" : websiteConfig.source === "cache" ? "bg-amber-100 text-amber-800" : "bg-slate-100 text-slate-700"}`,
+									children: websiteConfig.source === "firebase" ? "متزامن مع Firebase ✓" : websiteConfig.source === "cache" ? "نسخة محفوظة محلياً" : "الرابط الافتراضي"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "text-xs text-slate-600 leading-relaxed",
+								children: [
+									"حدّث رابط الموقع الرسمي من هنا أو من لوحة Firebase في المسار",
+									" ",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", {
+										className: "px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-mono text-[10px]",
+										dir: "ltr",
+										children: WEBSITE_CONFIG_PATH
+									}),
+									" ",
+									"ليصل التغيير لجميع المستخدمين تلقائياً دون الحاجة لإصدار APK أو AAB جديد."
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+								onSubmit: handleSaveWebsiteUrl,
+								className: "space-y-2.5",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "block text-[10px] font-bold text-slate-500 mb-1",
+										children: "رابط الموقع الحالي (Field: websiteUrl):"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "url",
+										dir: "ltr",
+										value: websiteUrlInput,
+										onChange: (e) => {
+											setWebsiteUrlInput(e.target.value);
+											setWebsiteInputDirty(true);
+											setWebsiteSaveResult(null);
+										},
+										placeholder: DEFAULT_WEBSITE_URL,
+										className: "w-full p-2.5 rounded-xl border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 outline-hidden text-xs font-mono font-bold text-left bg-slate-50",
+										required: true
+									})] }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex flex-wrap gap-2",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												type: "submit",
+												disabled: isSavingWebsiteUrl,
+												className: "flex-1 py-2.5 px-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-black text-xs shadow-md shadow-sky-100 transition-all flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Globe, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isSavingWebsiteUrl ? "جارٍ الحفظ في Firebase..." : "حفظ وتحديث الرابط للجميع" })]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												type: "button",
+												onClick: () => {
+													const res = openWebsiteInExternalBrowser(websiteUrlInput);
+													if (!res.opened) setWebsiteSaveResult({
+														success: false,
+														message: res.errorMessage || "تعذر فتح الرابط للمعاينة."
+													});
+												},
+												className: "py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer",
+												title: "معاينة الرابط في المتصفح",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "معاينة" })]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: () => {
+													setWebsiteUrlInput(DEFAULT_WEBSITE_URL);
+													setWebsiteInputDirty(true);
+													setWebsiteSaveResult(null);
+												},
+												className: "py-2.5 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-bold text-xs transition-colors cursor-pointer",
+												title: "تعبئة الرابط الافتراضي",
+												children: "الافتراضي"
+											})
+										]
+									}),
+									websiteSaveResult && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: `p-2.5 rounded-xl flex items-center gap-2 text-xs font-bold ${websiteSaveResult.success ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : "bg-red-50 text-red-700 border border-red-100"}`,
+										children: [websiteSaveResult.success ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "w-4 h-4 shrink-0" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, { className: "w-4 h-4 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: websiteSaveResult.message })]
+									})
+								]
 							})
 						]
 					}),
@@ -14025,7 +14446,7 @@ var Weekday;
 	Weekday[Weekday["Saturday"] = 7] = "Saturday";
 })(Weekday || (Weekday = {}));
 // node_modules/@capacitor/local-notifications/dist/esm/index.js
-var LocalNotifications = registerPlugin("LocalNotifications", { web: () => __vitePreload(() => import("./web-CfFeQJEL.js").then((m) => new m.LocalNotificationsWeb()), []) });
+var LocalNotifications = registerPlugin("LocalNotifications", { web: () => __vitePreload(() => import("./web-CcHffJ2W.js").then((m) => new m.LocalNotificationsWeb()), []) });
 // src/services/notificationService.ts
 var SOUND_PREF_KEY = "qataba_alert_sound_enabled_v1";
 var SEEN_ALERTS_KEY = "qataba_seen_alerts_v1";
@@ -14697,6 +15118,7 @@ function AppContent() {
 	const knownUrgentIdsRef = (0, import_react.useRef)(new Set(getInstantLocalUrgentSync().map((r) => r.id)));
 	const hasInitialSettingsRef = (0, import_react.useRef)(false);
 	const justSavedAnnouncementAtRef = (0, import_react.useRef)(0);
+	const [websiteConfig, setWebsiteConfig] = (0, import_react.useState)(() => getInitialWebsiteConfig());
 	(0, import_react.useEffect)(() => {
 		activeTabRef.current = activeTab;
 	}, [activeTab]);
@@ -15038,6 +15460,9 @@ function AppContent() {
 				hasInitialSettingsRef.current = true;
 			}
 		});
+		const unsubWebsiteConfig = subscribeToWebsiteConfig((nextConfig) => {
+			if (active) setWebsiteConfig(nextConfig);
+		});
 		const intervalId = setInterval(() => {
 			loadSheetsDonors().then((sheetsList) => {
 				if (active && sheetsList.length > 0) mergeAndSaveDonors(firestoreDonorsRef.current, sheetsList);
@@ -15049,6 +15474,7 @@ function AppContent() {
 			unsubDonors();
 			unsubUrgent();
 			unsubSettings();
+			unsubWebsiteConfig();
 			clearInterval(intervalId);
 		};
 	}, []);
@@ -15060,7 +15486,12 @@ function AppContent() {
 				const regs = await navigator.serviceWorker.getRegistrations();
 				for (const reg of regs) await reg.update();
 			} catch {}
-			const [sheetsList, otaResult] = await Promise.all([loadSheetsDonors(), checkForLiveUpdate()]);
+			const [sheetsList, otaResult, latestWebsiteConfig] = await Promise.all([
+				loadSheetsDonors(),
+				checkForLiveUpdate(),
+				refreshWebsiteConfigFromServer()
+			]);
+			setWebsiteConfig(latestWebsiteConfig);
 			mergeAndSaveDonors(firestoreDonorsRef.current, sheetsList);
 			const count = donors.length;
 			if (otaResult.status === "downloaded" || otaResult.status === "pending") setToastMessage(`تم تحديث البيانات (${count} متبرع) وتجهيز تحديث جديد للتطبيق! أعد فتح التطبيق لتطبيقه.`);
@@ -15073,12 +15504,22 @@ function AppContent() {
 			setIsRefreshing(false);
 		}
 	};
+	const handleOpenOfficialWebsite = () => {
+		const launchResult = openWebsiteInExternalBrowser(websiteConfig.url);
+		if (!launchResult.opened) {
+			setToastMessage(launchResult.errorMessage || "تعذر فتح موقع بنك الدم حالياً.");
+			setTimeout(() => setToastMessage(null), 3500);
+		}
+	};
 	(0, import_react.useEffect)(() => {
 		if (rawDonors.length === 0 && currentUser) seedInitialCommunityData(currentUser.uid);
 	}, [rawDonors.length, currentUser]);
 	(0, import_react.useEffect)(() => {
-		if (currentUser) initializePushNotifications(currentUser.uid);
-	}, [currentUser]);
+		if (currentUser) {
+			initializePushNotifications(currentUser.uid);
+			if (userProfile?.role === "admin" || currentUser.email === "ziadalsyyadi@gmail.com" || currentUser.email === "user_967773633918_v1@qataba-blood.app") ensureWebsiteConfigSeededForAdmin();
+		}
+	}, [currentUser, userProfile?.role]);
 	(0, import_react.useEffect)(() => {
 		if (!currentUser || currentUser.isAnonymous) return;
 		let active = true;
@@ -15160,7 +15601,8 @@ function AppContent() {
 				onClose: () => setIsSidebarOpen(false),
 				donors,
 				onOpenExitConfirm: () => setIsExitConfirmOpen(true),
-				onOpenChat: () => setActiveTab("chat")
+				onOpenChat: () => setActiveTab("chat"),
+				onOpenWebsite: handleOpenOfficialWebsite
 			}),
 			toastMessage && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "fixed top-16 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 bg-emerald-700 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-emerald-500/50 animate-in slide-in-from-top-3 duration-300",
@@ -15324,7 +15766,8 @@ function AppContent() {
 							onNavigate: handleHeroNavigate,
 							donors,
 							urgentRequests: activeUrgentRequests,
-							onOpenCompatibility: () => setIsCompatibilityOpen(true)
+							onOpenCompatibility: () => setIsCompatibilityOpen(true),
+							onOpenWebsite: handleOpenOfficialWebsite
 						})]
 					}),
 					activeTab === "search" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DonorSearch, {

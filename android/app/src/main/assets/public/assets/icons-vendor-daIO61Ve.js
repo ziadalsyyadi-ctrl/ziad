@@ -925,6 +925,28 @@ var FolderOpen = createLucideIcon("folder-open", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Globe = createLucideIcon("globe", [
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "10",
+		key: "1mglay"
+	}],
+	["path", {
+		d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20",
+		key: "13o1zl"
+	}],
+	["path", {
+		d: "M2 12h20",
+		key: "9i4pu4"
+	}]
+]);
+/**
+* @license lucide-react v0.546.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var HardDriveDownload = createLucideIcon("hard-drive-download", [
 	["path", {
 		d: "M12 2v8",
@@ -1678,4 +1700,4 @@ var X = createLucideIcon("x", [["path", {
 	d: "m6 6 12 12",
 	key: "d8bk6v"
 }]]);
-export { CircleUser as $, Mail as A, HardDriveDownload as B, Phone as C, Menu as D, MessageCircle as E, Info as F, EyeOff as G, FileText as H, House as I, Database as J, ExternalLink as K, Hospital as L, LogIn as M, Lock as N, Megaphone as O, KeyRound as P, CircleX as Q, Heart as R, Plus as S, MessageSquare as T, FileSpreadsheet as U, FolderOpen as V, Eye as W, Compass as X, Copy as Y, Clock as Z, Share2 as _, User as a, Check as at, Search as b, Upload as c, BellRing as ct, Target as d, ArrowLeft as dt, CirclePlus as et, Sparkles as f, require_react as ft, ShieldAlert as g, ShieldCheck as h, Users as i, ChevronLeft as it, LogOut as j, MapPin as k, TriangleAlert as l, Award as lt, Shield as m, VolumeX as n, CircleAlert as nt, UserPlus as o, Calendar as ot, Smartphone as p, Droplet as q, Volume2 as r, ChevronRight as rt, UserCheck as s, Bell as st, X as t, CircleCheck as tt, Trash2 as u, ArrowRight as ut, Settings as v, PenLine as w, RefreshCw as x, Send as y, HeartHandshake as z };
+export { CircleX as $, Mail as A, HardDriveDownload as B, Phone as C, Menu as D, MessageCircle as E, Info as F, Eye as G, FolderOpen as H, House as I, Droplet as J, EyeOff as K, Hospital as L, LogIn as M, Lock as N, Megaphone as O, KeyRound as P, Clock as Q, Heart as R, Plus as S, MessageSquare as T, FileText as U, Globe as V, FileSpreadsheet as W, Copy as X, Database as Y, Compass as Z, Share2 as _, User as a, ChevronLeft as at, Search as b, Upload as c, Bell as ct, Target as d, ArrowRight as dt, CircleUser as et, Sparkles as f, ArrowLeft as ft, ShieldAlert as g, ShieldCheck as h, Users as i, ChevronRight as it, LogOut as j, MapPin as k, TriangleAlert as l, BellRing as lt, Shield as m, VolumeX as n, CircleCheck as nt, UserPlus as o, Check as ot, Smartphone as p, require_react as pt, ExternalLink as q, Volume2 as r, CircleAlert as rt, UserCheck as s, Calendar as st, X as t, CirclePlus as tt, Trash2 as u, Award as ut, Settings as v, PenLine as w, RefreshCw as x, Send as y, HeartHandshake as z };

@@ -64,6 +64,14 @@ import {
   setNotificationTapHandler,
   initializePushNotifications,
 } from './services/notificationService';
+import {
+  WebsiteConfigState,
+  ensureWebsiteConfigSeededForAdmin,
+  getInitialWebsiteConfig,
+  openWebsiteInExternalBrowser,
+  refreshWebsiteConfigFromServer,
+  subscribeToWebsiteConfig,
+} from './services/websiteConfigService';
 
 function AppContent() {
   const { currentUser, userProfile, activeRole, switchActiveRole, isLoading, logout, isGuest } = useAuth();
@@ -107,6 +115,7 @@ function AppContent() {
   const knownUrgentIdsRef = useRef<Set<string>>(new Set(getInstantLocalUrgentSync().map((r) => r.id)));
   const hasInitialSettingsRef = useRef(false);
   const justSavedAnnouncementAtRef = useRef(0);
+  const [websiteConfig, setWebsiteConfig] = useState<WebsiteConfigState>(() => getInitialWebsiteConfig());
 
   useEffect(() => {
     activeTabRef.current = activeTab;
@@ -529,6 +538,12 @@ function AppContent() {
       }
     });
 
+    const unsubWebsiteConfig = subscribeToWebsiteConfig((nextConfig) => {
+      if (active) {
+        setWebsiteConfig(nextConfig);
+      }
+    });
+
     const intervalId = setInterval(() => {
       loadSheetsDonors().then((sheetsList) => {
         if (active && sheetsList.length > 0) {
@@ -543,6 +558,7 @@ function AppContent() {
       unsubDonors();
       unsubUrgent();
       unsubSettings();
+      unsubWebsiteConfig();
       clearInterval(intervalId);
     };
   }, []);
@@ -557,10 +573,12 @@ function AppContent() {
           for (const reg of regs) await reg.update();
         } catch {}
       }
-      const [sheetsList, otaResult] = await Promise.all([
+      const [sheetsList, otaResult, latestWebsiteConfig] = await Promise.all([
         loadSheetsDonors(),
         checkForLiveUpdate(),
+        refreshWebsiteConfigFromServer(),
       ]);
+      setWebsiteConfig(latestWebsiteConfig);
       mergeAndSaveDonors(firestoreDonorsRef.current, sheetsList);
       const count = donors.length;
       if (otaResult.status === 'downloaded' || otaResult.status === 'pending') {
@@ -577,6 +595,14 @@ function AppContent() {
     }
   };
 
+  const handleOpenOfficialWebsite = () => {
+    const launchResult = openWebsiteInExternalBrowser(websiteConfig.url);
+    if (!launchResult.opened) {
+      setToastMessage(launchResult.errorMessage || 'تعذر فتح موقع بنك الدم حالياً.');
+      setTimeout(() => setToastMessage(null), 3500);
+    }
+  };
+
   useEffect(() => {
     if (rawDonors.length === 0 && currentUser) {
       seedInitialCommunityData(currentUser.uid);
@@ -586,8 +612,15 @@ function AppContent() {
   useEffect(() => {
     if (currentUser) {
       void initializePushNotifications(currentUser.uid);
+      const isAdminAccount =
+        userProfile?.role === 'admin' ||
+        currentUser.email === 'ziadalsyyadi@gmail.com' ||
+        currentUser.email === 'user_967773633918_v1@qataba-blood.app';
+      if (isAdminAccount) {
+        void ensureWebsiteConfigSeededForAdmin();
+      }
     }
-  }, [currentUser]);
+  }, [currentUser, userProfile?.role]);
 
   useEffect(() => {
     if (!currentUser || currentUser.isAnonymous) return;
@@ -675,6 +708,7 @@ function AppContent() {
         donors={donors}
         onOpenExitConfirm={() => setIsExitConfirmOpen(true)}
         onOpenChat={() => setActiveTab('chat')}
+        onOpenWebsite={handleOpenOfficialWebsite}
       />
 
       {toastMessage && (
@@ -859,6 +893,7 @@ function AppContent() {
                 donors={donors}
                 urgentRequests={activeUrgentRequests}
                 onOpenCompatibility={() => setIsCompatibilityOpen(true)}
+                onOpenWebsite={handleOpenOfficialWebsite}
               />
             </div>
           )}

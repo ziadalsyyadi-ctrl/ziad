@@ -11,7 +11,8 @@ import {
   Phone,
   Droplet,
   MessageCircle,
-  UserPlus
+  UserPlus,
+  ExternalLink
 } from 'lucide-react';
 import regeneratedHeroImage from '../assets/images/regenerated_image_1793757211567.jpg';
 import { ActiveTab, Donor, UrgentRequest, BloodType } from '../types';
@@ -21,6 +22,7 @@ interface HeroBannerProps {
   donors: Donor[];
   urgentRequests: UrgentRequest[];
   onOpenCompatibility: () => void;
+  onOpenWebsite?: () => void;
 }
 
 // Custom SVG Blood Droplet Badge matching the user's attached design
@@ -63,6 +65,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   donors,
   urgentRequests,
   onOpenCompatibility,
+  onOpenWebsite,
 }) => {
   const heroImagePath = regeneratedHeroImage;
   const WHATSAPP_NUMBER = '773633918';
@@ -315,6 +318,32 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
       </div>
 
 
+
+      {/* 7. Official Blood Bank Website Button (Remote OTA/Firebase URL) */}
+      {onOpenWebsite && (
+        <button
+          type="button"
+          onClick={onOpenWebsite}
+          className="w-full flex items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-linear-to-r from-sky-600 via-blue-600 to-indigo-700 hover:from-sky-700 hover:to-indigo-800 text-white shadow-md shadow-blue-200/70 border border-sky-400/40 cursor-pointer transition-all active:scale-99 text-right"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-lg shadow-inner shrink-0">
+              <span aria-hidden="true">🌐</span>
+            </div>
+            <div>
+              <div className="text-xs sm:text-sm font-black tracking-tight">
+                🌐 موقع بنك الدم – قعطبة
+              </div>
+              <div className="text-[10px] sm:text-[11px] text-sky-100 font-bold">
+                فتح الموقع الرسمي في متصفح الهاتف الخارجي
+              </div>
+            </div>
+          </div>
+          <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+            <ExternalLink className="w-4 h-4 text-white" />
+          </div>
+        </button>
+      )}
 
       {/* 8. ABO Compatibility Quick Guide Link */}
       <div 
