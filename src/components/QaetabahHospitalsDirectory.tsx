@@ -15,6 +15,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { subscribeToHospitals, saveHospital, deleteHospital, seedHospitals } from '../services/hospitalService';
 import { Hospital } from '../types';
+import { useRegisterBackHandler } from '../utils/backNavigation';
 
 interface QaetabahHospitalsDirectoryProps {
   isOpen: boolean;
@@ -46,6 +47,8 @@ export const QaetabahHospitalsDirectory: React.FC<QaetabahHospitalsDirectoryProp
   });
   const [hospitalLoading, setHospitalLoading] = useState(false);
   const [adminFeedback, setAdminFeedback] = useState<string | null>(null);
+
+  useRegisterBackHandler(isFormOpen, () => setIsFormOpen(false));
 
   useEffect(() => {
     if (!isOpen) return;

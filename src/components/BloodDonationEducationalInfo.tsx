@@ -1,12 +1,25 @@
 import React from 'react';
 import { Heart, Sparkles, Award } from 'lucide-react';
+import { SubpageBackBar } from './SubpageBackBar';
 
-export const BloodDonationEducationalInfo: React.FC = () => {
+interface BloodDonationEducationalInfoProps {
+  onBack?: () => void;
+}
+
+export const BloodDonationEducationalInfo: React.FC<BloodDonationEducationalInfoProps> = ({
+  onBack,
+}) => {
   const posterImagePath = '/assets/images/blood_benefits_poster.jpg';
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-4 text-right font-['Cairo',sans-serif] select-none">
-      
+      {onBack && (
+        <SubpageBackBar
+          title="فوائد وتعليمات التبرع بالدم"
+          onBack={onBack}
+        />
+      )}
+
       {/* 1. Main Poster Image Container - Static & Fixed at the top */}
       <div className="bg-white rounded-3xl p-2 sm:p-3 border border-slate-200/90 shadow-sm relative overflow-hidden">
         <div className="relative rounded-2xl overflow-hidden bg-slate-50 flex items-center justify-center border border-slate-100">

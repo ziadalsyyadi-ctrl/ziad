@@ -24,8 +24,12 @@ import { sanitizePhone } from '../services/phoneVerificationService';
 import { YemenPhoneInput } from './YemenPhoneInput';
 import { syncDonorToGoogleSheets, GOOGLE_SHEETS_CONFIG } from '../services/googleSheetsService';
 import { subscribeToLocations, saveLocation, seedInitialLocations } from '../services/locationService';
+import { logAdminAction } from '../services/supervisorService';
+import { SubpageBackBar } from './SubpageBackBar';
+import { useRegisterBackHandler } from '../utils/backNavigation';
 
 interface DonorRegistrationProps {
+  onBack?: () => void;
   onSuccessNavigate: () => void;
   donors: Donor[];
   onOpenAuth: () => void;
@@ -34,14 +38,16 @@ interface DonorRegistrationProps {
 }
 
 export const DonorRegistration: React.FC<DonorRegistrationProps> = ({
+  onBack,
   onSuccessNavigate,
   donors,
   onOpenAuth,
   editingDonorId,
   onDeleteDonor,
 }) => {
-  const { currentUser, userProfile, activeRole } = useAuth();
-  const isAdmin = activeRole === 'admin';
+  const { currentUser, userProfile, activeRole, adminPermissions, adminLevel } = useAuth();
+  const isAdmin = activeRole === 'admin' && adminPermissions.manageDonors;
+  const canManageLocations = activeRole === 'admin' && adminPermissions.manageLocations;
 
   // Find the specific donor profile being edited or the first one if none specified
   const existingDonor = editingDonorId
@@ -61,6 +67,13 @@ export const DonorRegistration: React.FC<DonorRegistrationProps> = ({
   const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  useRegisterBackHandler(confirmDeleteModal, () => {
+    if (!isDeleting) {
+      setConfirmDeleteModal(false);
+      setDeleteError(null);
+    }
+  });
 
   const [fullName, setFullName] = useState('');
   const [bloodType, setBloodType] = useState<BloodType>('O+');
@@ -219,6 +232,18 @@ export const DonorRegistration: React.FC<DonorRegistrationProps> = ({
         (!isCreatingNew && existingDonor) ? existingDonor.id : undefined
       );
 
+      if (isAdmin && currentUser?.uid && (!isOwner || (existingDonor && !isCreatingNew))) {
+        void logAdminAction({
+          actorUid: currentUser.uid,
+          actorName: userProfile?.displayName || currentUser.displayName || 'مشرف المتبرعين',
+          actorLevel: adminLevel || 'donor_admin',
+          actionType: existingDonor && !isCreatingNew ? 'تعديل بيانات متبرع' : 'إضافة متبرع بواسطة المشرف',
+          targetId: savedDonorId || undefined,
+          targetLabel: `${cleanName} (${bloodType})`,
+          details: `المنطقة: ${cleanResidence}`,
+        });
+      }
+
       setSuccessMessage(
         existingDonor && !isCreatingNew
           ? (isAdmin 
@@ -275,6 +300,12 @@ export const DonorRegistration: React.FC<DonorRegistrationProps> = ({
   if (editingDonorId && existingDonor && !canEdit && !isCreatingNew) {
     return (
       <div className="max-w-xl mx-auto p-4 sm:p-6 text-center space-y-4">
+        {onBack && (
+          <SubpageBackBar
+            title="التسجيل في بنك الدم"
+            onBack={onBack}
+          />
+        )}
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-amber-200 shadow-xl space-y-4">
           <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto shadow-inner">
             <AlertTriangle className="w-8 h-8" />
@@ -318,6 +349,13 @@ export const DonorRegistration: React.FC<DonorRegistrationProps> = ({
 
   return (
     <div className="max-w-2xl mx-auto space-y-4">
+      {onBack && (
+        <SubpageBackBar
+          title={(!isCreatingNew && existingDonor) ? 'تعديل بيانات المتبرع' : 'التسجيل في بنك الدم'}
+          onBack={onBack}
+        />
+      )}
+
       {/* Header Banner */}
       <div className="bg-linear-to-r from-red-600 to-rose-700 text-white rounded-2xl p-4 sm:p-5 shadow-md shadow-red-200">
         <div className="flex items-center gap-3">
@@ -483,7 +521,7 @@ export const DonorRegistration: React.FC<DonorRegistrationProps> = ({
               <label className="block text-xs sm:text-sm font-bold text-slate-800">
                 السكن الحالي (المنطقة / القرية) <span className="text-red-500">*</span>
               </label>
-              {isAdmin && (
+              {canManageLocations && (
                 <button
                   type="button"
                   onClick={() => setShowLocationAddInput(!showLocationAddInput)}
@@ -496,7 +534,7 @@ export const DonorRegistration: React.FC<DonorRegistrationProps> = ({
             </div>
 
             {/* Admin Add Location Bar */}
-            {isAdmin && showLocationAddInput && (
+            {canManageLocations && showLocationAddInput && (
               <div className="mb-3 p-3 bg-amber-50 border border-amber-200 rounded-2xl space-y-2 animate-in fade-in">
                 <span className="text-xs font-black text-amber-900 block">إضافة منطقة جديدة لقائمة قعطبة:</span>
                 <div className="flex gap-2">
@@ -747,6 +785,17 @@ export const DonorRegistration: React.FC<DonorRegistrationProps> = ({
                   setDeleteError(null);
                   try {
                     await onDeleteDonor(existingDonor.id, existingDonor.phone);
+                    if (isAdmin && currentUser?.uid) {
+                      void logAdminAction({
+                        actorUid: currentUser.uid,
+                        actorName: userProfile?.displayName || currentUser.displayName || 'مشرف المتبرعين',
+                        actorLevel: adminLevel || 'donor_admin',
+                        actionType: 'حذف متبرع',
+                        targetId: existingDonor.id,
+                        targetLabel: `${existingDonor.fullName} (${existingDonor.bloodType})`,
+                        details: `الهاتف: ${existingDonor.phone}`,
+                      });
+                    }
                     setConfirmDeleteModal(false);
                     onSuccessNavigate();
                   } catch (err: any) {

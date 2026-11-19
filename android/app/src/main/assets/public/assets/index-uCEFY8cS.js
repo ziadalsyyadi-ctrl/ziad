@@ -1,8 +1,8 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/web-BzXtprQT.js","assets/firebase-vendor-YILmzwxr.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/web-DWkPrNKT.js","assets/firebase-vendor-8-_2fNqt.js"])))=>i.map(i=>d[i]);
 import { n as __toESM } from "./rolldown-runtime-CO0Nlsmt.js";
-import { n as require_client, t as require_jsx_runtime } from "./react-vendor-ArcY3iha.js";
-import { $ as CircleX, A as Mail, B as HardDriveDownload, C as Phone, D as Menu, E as MessageCircle, F as Info, G as Eye, H as FolderOpen, I as House, J as Droplet, K as EyeOff, L as Hospital, M as LogIn, N as Lock, O as Megaphone, P as KeyRound, Q as Clock, R as Heart, S as Plus, T as MessageSquare, U as FileText, V as Globe, W as FileSpreadsheet, X as Copy, Y as Database, Z as Compass, _ as Share2, a as User, at as ChevronLeft, b as Search, c as Upload, ct as Bell, d as Target, dt as ArrowRight, et as CircleUser, f as Sparkles, ft as ArrowLeft, g as ShieldAlert, h as ShieldCheck, i as Users, it as ChevronRight, j as LogOut, k as MapPin, l as TriangleAlert, lt as BellRing, m as Shield, n as VolumeX, nt as CircleCheck, o as UserPlus, ot as Check, p as Smartphone, pt as require_react, q as ExternalLink, r as Volume2, rt as CircleAlert, s as UserCheck, st as Calendar, t as X, tt as CirclePlus, u as Trash2, ut as Award, v as Settings, w as PenLine, x as RefreshCw, y as Send, z as HeartHandshake } from "./icons-vendor-daIO61Ve.js";
-import { $ as deleteDoc, A as onAuthStateChanged, K as signOut, Q as addDoc, V as signInWithEmailAndPassword, W as signInWithPopup, X as updateProfile, Y as updatePassword, _ as createUserWithEmailAndPassword, _t as getFirestore, at as orderBy, bt as serverTimestamp, ct as query, dt as updateDoc, et as getDoc, ft as where, gt as doc, ht as collection, i as EmailAuthProvider, it as onSnapshot, j as reauthenticateWithCredential, lt as runTransaction, mt as arrayUnion, n as initializeAppCheck, nt as getDocs, ot as persistentLocalCache, pt as writeBatch, r as getFunctions, rt as limit, s as GoogleAuthProvider, st as persistentMultipleTabManager, t as ReCaptchaV3Provider, tt as getDocFromServer, ut as setDoc, v as deleteUser, vt as increment, x as getAuth, xt as initializeApp, yt as initializeFirestore, z as signInWithCredential } from "./firebase-vendor-YILmzwxr.js";
+import { n as require_client, t as require_jsx_runtime } from "./react-vendor-CiCdSyVB.js";
+import { $ as Compass, A as MapPin, B as Heart, C as Plus, D as MessageCircle, E as MessageSquare, F as KeyRound, G as FileText, H as HardDriveDownload, I as Info, J as EyeOff, K as FileSpreadsheet, L as House, M as LogOut, N as LogIn, O as Menu, P as Lock, Q as Copy, R as Hospital, S as Power, T as PenLine, U as Globe, V as HeartHandshake, W as FolderOpen, X as Droplet, Y as ExternalLink, Z as Database, _ as Share2, a as User, at as CircleAlert, b as Search, c as Upload, ct as Check, d as Target, dt as BellRing, et as Clock, f as Sparkles, ft as Award, g as ShieldAlert, gt as require_react, h as ShieldCheck, ht as Activity, i as Users, it as CircleCheck, j as Mail, k as Megaphone, l as TriangleAlert, lt as Calendar, m as Shield, mt as ArrowLeft, n as VolumeX, nt as CircleUser, o as UserPlus, ot as ChevronRight, p as Smartphone, pt as ArrowRight, q as Eye, r as Volume2, rt as CirclePlus, s as UserCheck, st as ChevronLeft, t as X, tt as CircleX, u as Trash2, ut as Bell, v as Settings, w as Phone, x as RefreshCw, y as Send, z as History } from "./icons-vendor-D2wl1dG9.js";
+import { $ as addDoc, B as signInWithCredential, G as signInWithPopup, H as signInWithEmailAndPassword, M as reauthenticateWithCredential, S as getAuth, St as initializeApp, X as updatePassword, Z as updateProfile, _t as doc, a as EmailAuthProvider, at as onSnapshot, bt as initializeFirestore, c as GoogleAuthProvider, ct as persistentMultipleTabManager, dt as setDoc, et as deleteDoc, ft as updateDoc, gt as collection, ht as arrayUnion, i as httpsCallable, it as limit, j as onAuthStateChanged, lt as query, mt as writeBatch, n as initializeAppCheck, nt as getDocFromServer, ot as orderBy, pt as where, q as signOut, r as getFunctions, rt as getDocs, st as persistentLocalCache, t as ReCaptchaV3Provider, tt as getDoc, ut as runTransaction, v as createUserWithEmailAndPassword, vt as getFirestore, xt as serverTimestamp, y as deleteUser, yt as increment } from "./firebase-vendor-8-_2fNqt.js";
 // \0vite/modulepreload-polyfill.js
 (function polyfill() {
 	const relList = document.createElement("link").relList;
@@ -576,7 +576,7 @@ try {
 }
 var db = firestoreDb;
 var auth = getAuth(app);
-getFunctions(app, "us-central1");
+var functions = getFunctions(app, "us-central1");
 var OperationType = /* @__PURE__ */ function(OperationType) {
 	OperationType["CREATE"] = "create";
 	OperationType["UPDATE"] = "update";
@@ -711,7 +711,7 @@ var __vitePreload = function preload(baseModule, deps, importerUrl) {
 	});
 };
 // node_modules/@capawesome/capacitor-live-update/dist/esm/index.js
-var LiveUpdate = registerPlugin("LiveUpdate", { web: () => __vitePreload(() => import("./web-DEV1XNE_.js").then((m) => new m.LiveUpdateWeb()), []) });
+var LiveUpdate = registerPlugin("LiveUpdate", { web: () => __vitePreload(() => import("./web-8ZfnVE-c.js").then((m) => new m.LiveUpdateWeb()), []) });
 // src/live-update.ts
 var MANIFEST_URL = "https://github.com/ziadalsyyadi-ctrl/ziadalsyyadi635/releases/download/ota-latest/manifest.json";
 var BUNDLE_BASE_URL = "https://github.com/ziadalsyyadi-ctrl/ziadalsyyadi635/releases/download/";
@@ -879,13 +879,499 @@ var ProviderId;
 	ProviderId["PHONE"] = "phone";
 })(ProviderId || (ProviderId = {}));
 // node_modules/@capacitor-firebase/authentication/dist/esm/index.js
-var FirebaseAuthentication = registerPlugin("FirebaseAuthentication", { web: () => __vitePreload(() => import("./web-BzXtprQT.js").then((m) => new m.FirebaseAuthenticationWeb()), __vite__mapDeps([0,1])) });
+var FirebaseAuthentication = registerPlugin("FirebaseAuthentication", { web: () => __vitePreload(() => import("./web-DWkPrNKT.js").then((m) => new m.FirebaseAuthenticationWeb()), __vite__mapDeps([0,1])) });
 // src/services/phoneVerificationService.ts
 function sanitizePhone(phone) {
 	const digits = phone.trim().replace(/\D/g, "");
 	if (digits.startsWith("967") && digits.length > 9) return digits.slice(3);
 	if (digits.startsWith("0") && digits.length === 10) return digits.slice(1);
 	return digits;
+}
+// src/services/supervisorService.ts
+var SUPERVISORS_COLLECTION = "supervisors";
+var AUDIT_LOGS_COLLECTION = "admin_audit_logs";
+var OWNER_EMAILS = /* @__PURE__ */ new Set(["ziadalsyyadi@gmail.com", "user_967773633918_v1@qataba-blood.app"]);
+function isOwnerEmail(email) {
+	if (!email) return false;
+	return OWNER_EMAILS.has(email.trim().toLowerCase());
+}
+var EMPTY_PERMISSIONS = {
+	manageDonors: false,
+	manageUrgentRequests: false,
+	manageSupportChat: false,
+	manageHospitals: false,
+	manageLocations: false,
+	manageSettings: false,
+	manageUsersRecovery: false,
+	manageSupervisors: false
+};
+var OWNER_PERMISSIONS = {
+	manageDonors: true,
+	manageUrgentRequests: true,
+	manageSupportChat: true,
+	manageHospitals: true,
+	manageLocations: true,
+	manageSettings: true,
+	manageUsersRecovery: true,
+	manageSupervisors: true
+};
+var SUPERVISOR_LEVEL_META = {
+	donor_admin: {
+		label: "مشرف المتبرعين",
+		shortLabel: "المتبرعون",
+		description: "إضافة وتعديل وإدارة بيانات وسجلات المتبرعين فقط",
+		defaultPermissions: {
+			...EMPTY_PERMISSIONS,
+			manageDonors: true
+		}
+	},
+	urgent_admin: {
+		label: "مشرف الطلبات العاجلة",
+		shortLabel: "الطلبات العاجلة",
+		description: "إدارة طلبات الدم العاجلة وإغلاقها أو حذفها فقط",
+		defaultPermissions: {
+			...EMPTY_PERMISSIONS,
+			manageUrgentRequests: true
+		}
+	},
+	support_admin: {
+		label: "مشرف الدعم",
+		shortLabel: "الدعم والبلاغات",
+		description: "متابعة رسائل الدعم الفني والبلاغات والرد عليها فقط",
+		defaultPermissions: {
+			...EMPTY_PERMISSIONS,
+			manageSupportChat: true
+		}
+	},
+	general_admin: {
+		label: "مشرف عام",
+		shortLabel: "مشرف عام",
+		description: "إدارة المتبرعين والطلبات والرسائل والمرافق دون إدارة المالك أو المشرفين",
+		defaultPermissions: {
+			manageDonors: true,
+			manageUrgentRequests: true,
+			manageSupportChat: true,
+			manageHospitals: true,
+			manageLocations: true,
+			manageSettings: true,
+			manageUsersRecovery: false,
+			manageSupervisors: false
+		}
+	}
+};
+var ALL_SUPERVISOR_LEVEL_LABELS = {
+	owner: "المالك",
+	donor_admin: "مشرف المتبرعين",
+	urgent_admin: "مشرف الطلبات العاجلة",
+	support_admin: "مشرف الدعم",
+	general_admin: "مشرف عام",
+	legacy_admin: "مشرف عام"
+};
+var PERMISSION_LABELS = [
+	{
+		key: "manageDonors",
+		label: "إدارة المتبرعين",
+		description: "إضافة وتعديل وحذف واستيراد وتصدير المتبرعين"
+	},
+	{
+		key: "manageUrgentRequests",
+		label: "إدارة الطلبات العاجلة",
+		description: "إغلاق وإعادة فتح وتعديل وحذف طلبات الدم العاجلة"
+	},
+	{
+		key: "manageSupportChat",
+		label: "متابعة الدعم والبلاغات",
+		description: "قراءة رسائل المستخدمين والرد عليها وتغيير حالتها"
+	},
+	{
+		key: "manageHospitals",
+		label: "إدارة المستشفيات والمراكز",
+		description: "إضافة وتعديل وحذف المرافق الطبية في الدليل"
+	},
+	{
+		key: "manageLocations",
+		label: "إدارة المناطق والعُزل",
+		description: "إضافة وتعديل وحذف أسماء المناطق المعتمدة"
+	},
+	{
+		key: "manageSettings",
+		label: "إدارة الإعلانات والتنبيهات",
+		description: "تحديث البانر التنبيهي والإعلان العام بالرئيسية"
+	},
+	{
+		key: "manageUsersRecovery",
+		label: "إدارة المستخدمين والاستعادة",
+		description: "مراجعة الحسابات وإصدار رموز استعادة الحساب (لا يشمل المالك أو المشرفين)"
+	}
+];
+function sanitizeSupervisorPermissions(input) {
+	return {
+		manageDonors: Boolean(input.manageDonors),
+		manageUrgentRequests: Boolean(input.manageUrgentRequests),
+		manageSupportChat: Boolean(input.manageSupportChat),
+		manageHospitals: Boolean(input.manageHospitals),
+		manageLocations: Boolean(input.manageLocations),
+		manageSettings: Boolean(input.manageSettings),
+		manageUsersRecovery: Boolean(input.manageUsersRecovery),
+		manageSupervisors: false
+	};
+}
+function createSafeDocId$1(prefix) {
+	const randomPart = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "").slice(0, 14) : Math.random().toString(36).slice(2, 12);
+	return `${prefix}_${Date.now()}_${randomPart}`;
+}
+/**
+* Resolves an ALREADY EXISTING user account in Firebase Authentication / Firestore
+* by phone number or email address. Never creates a new Auth user or changes passwords.
+*/
+async function resolveExistingUserForSupervisor(identifierInput) {
+	const raw = identifierInput.trim();
+	if (!raw) throw new Error("يرجى إدخال رقم هاتف المستخدم أو بريده الإلكتروني.");
+	let matchedUid = "";
+	let matchedName = "";
+	let matchedPhone = "";
+	let matchedEmail = "";
+	if (raw.includes("@")) {
+		const normalizedEmail = raw.toLowerCase();
+		if (isOwnerEmail(normalizedEmail)) throw new Error("هذا الحساب هو حساب المالك الأساسي ويملك كافة الصلاحيات بالفعل.");
+		const syntheticPhoneMatch = normalizedEmail.match(/^user_967(\d+)_v\d+@qataba-blood\.app$/);
+		if (syntheticPhoneMatch) matchedPhone = sanitizePhone(syntheticPhoneMatch[1]);
+		try {
+			const byEmailSnap = await getDocs(query(collection(db, "users"), where("email", "==", normalizedEmail), limit(5)));
+			if (!byEmailSnap.empty) {
+				const d = byEmailSnap.docs[0];
+				const data = d.data();
+				matchedUid = d.id;
+				matchedName = String(data.displayName || "");
+				matchedPhone = String(data.phone || matchedPhone || "");
+				matchedEmail = String(data.email || normalizedEmail);
+			}
+		} catch (e) {
+			console.warn("Users lookup by email failed:", e);
+		}
+		if (!matchedUid) try {
+			const found = (await getDocs(collection(db, "users"))).docs.find((d) => String(d.data()?.email || "").trim().toLowerCase() === normalizedEmail);
+			if (found) {
+				const data = found.data();
+				matchedUid = found.id;
+				matchedName = String(data.displayName || "");
+				matchedPhone = String(data.phone || matchedPhone || "");
+				matchedEmail = String(data.email || normalizedEmail);
+			}
+		} catch (e) {
+			console.warn("Users collection scan failed:", e);
+		}
+		if (!matchedUid && matchedPhone) try {
+			const phoneAuthSnap = await getDoc(doc(db, "phone_auth", matchedPhone));
+			if (phoneAuthSnap.exists()) matchedUid = String(phoneAuthSnap.data()?.userId || "");
+		} catch (e) {
+			console.warn("phone_auth lookup via synthetic email failed:", e);
+		}
+		if (!matchedUid) try {
+			const foundAuthUser = ((await httpsCallable(functions, "listAppUsers")()).data?.users || []).find((u) => String(u.email || "").trim().toLowerCase() === normalizedEmail);
+			if (foundAuthUser?.uid) {
+				matchedUid = String(foundAuthUser.uid);
+				matchedName = String(foundAuthUser.displayName || "");
+				matchedPhone = String(foundAuthUser.phone || matchedPhone || "");
+				matchedEmail = String(foundAuthUser.email || normalizedEmail);
+			}
+		} catch {}
+	} else {
+		const cleanPhone = sanitizePhone(raw);
+		if (!cleanPhone || cleanPhone.length < 7 || cleanPhone.length > 15) throw new Error("يرجى إدخال رقم هاتف صحيح أو بريد إلكتروني مسجل.");
+		if (cleanPhone === "773633918") throw new Error("هذا الرقم مرتبط بحساب المالك الأساسي ويملك كافة الصلاحيات بالفعل.");
+		matchedPhone = cleanPhone;
+		try {
+			const phoneAuthSnap = await getDoc(doc(db, "phone_auth", cleanPhone));
+			if (phoneAuthSnap.exists()) matchedUid = String(phoneAuthSnap.data()?.userId || "");
+		} catch (e) {
+			console.warn("phone_auth lookup failed:", e);
+		}
+		if (!matchedUid) try {
+			const byPhoneSnap = await getDocs(query(collection(db, "users"), where("phone", "==", cleanPhone), limit(5)));
+			if (!byPhoneSnap.empty) {
+				const d = byPhoneSnap.docs[0];
+				const data = d.data();
+				matchedUid = d.id;
+				matchedName = String(data.displayName || "");
+				matchedEmail = String(data.email || "");
+			}
+		} catch (e) {
+			console.warn("users phone lookup failed:", e);
+		}
+		if (!matchedUid) try {
+			const found = (await getDocs(collection(db, "users"))).docs.find((d) => {
+				return sanitizePhone(String(d.data()?.phone || "")) === cleanPhone;
+			});
+			if (found) {
+				const data = found.data();
+				matchedUid = found.id;
+				matchedName = String(data.displayName || "");
+				matchedEmail = String(data.email || "");
+			}
+		} catch (e) {
+			console.warn("users scan by phone failed:", e);
+		}
+		if (!matchedUid) try {
+			const foundAuthUser = ((await httpsCallable(functions, "listAppUsers")()).data?.users || []).find((u) => sanitizePhone(String(u.phone || "")) === cleanPhone);
+			if (foundAuthUser?.uid) {
+				matchedUid = String(foundAuthUser.uid);
+				matchedName = String(foundAuthUser.displayName || "");
+				matchedEmail = String(foundAuthUser.email || "");
+			}
+		} catch {}
+	}
+	if (!matchedUid) throw new Error("لم يتم العثور على حساب مسجل بهذا الرقم أو البريد في التطبيق. يجب أن يسجل المستخدم الدخول بحسابه أولاً ثم إضافته مشرفاً دون إنشاء حساب جديد.");
+	try {
+		const userDocSnap = await getDoc(doc(db, "users", matchedUid));
+		if (userDocSnap.exists()) {
+			const data = userDocSnap.data();
+			matchedName = matchedName || String(data.displayName || "");
+			matchedPhone = matchedPhone || String(data.phone || "");
+			matchedEmail = matchedEmail || String(data.email || "");
+		}
+	} catch (e) {
+		console.warn("Could not hydrate resolved user profile:", e);
+	}
+	if (isOwnerEmail(matchedEmail) || sanitizePhone(matchedPhone) === "773633918") throw new Error("هذا الحساب يعود للمالك الأساسي ولا يمكن تعيينه كمشرف.");
+	let existingSupervisor = false;
+	try {
+		existingSupervisor = (await getDoc(doc(db, SUPERVISORS_COLLECTION, matchedUid))).exists();
+	} catch {
+		existingSupervisor = false;
+	}
+	return {
+		uid: matchedUid,
+		displayName: (matchedName || `مستخدم ${matchedPhone || matchedUid.slice(0, 6)}`).trim(),
+		phone: sanitizePhone(matchedPhone) || "",
+		email: matchedEmail.trim().toLowerCase(),
+		existingSupervisor
+	};
+}
+/**
+* Subscribe to the signed-in user's own supervisor assignment document in real time.
+*/
+function subscribeToMySupervisorProfile(uid, callback, onError) {
+	const ref = doc(db, SUPERVISORS_COLLECTION, uid);
+	return onSnapshot(ref, (snap) => {
+		if (!snap.exists()) {
+			callback(null);
+			return;
+		}
+		const data = snap.data();
+		callback({
+			uid: snap.id,
+			displayName: String(data.displayName || "مشرف"),
+			phone: String(data.phone || ""),
+			email: String(data.email || ""),
+			level: data.level,
+			permissions: sanitizeSupervisorPermissions(data.permissions || {}),
+			isActive: Boolean(data.isActive),
+			assignedBy: String(data.assignedBy || ""),
+			assignedByName: String(data.assignedByName || ""),
+			notes: String(data.notes || ""),
+			createdAt: data.createdAt,
+			updatedAt: data.updatedAt
+		});
+	}, (error) => {
+		if (onError) onError(error);
+	});
+}
+/**
+* Owner-only: Subscribe to all supervisor assignments.
+*/
+function subscribeToAllSupervisors(callback, onError) {
+	const q = query(collection(db, SUPERVISORS_COLLECTION), orderBy("updatedAt", "desc"));
+	return onSnapshot(q, (snap) => {
+		callback(snap.docs.map((d) => {
+			const data = d.data();
+			return {
+				uid: d.id,
+				displayName: String(data.displayName || "مشرف"),
+				phone: String(data.phone || ""),
+				email: String(data.email || ""),
+				level: data.level,
+				permissions: sanitizeSupervisorPermissions(data.permissions || {}),
+				isActive: Boolean(data.isActive),
+				assignedBy: String(data.assignedBy || ""),
+				assignedByName: String(data.assignedByName || ""),
+				notes: String(data.notes || ""),
+				createdAt: data.createdAt,
+				updatedAt: data.updatedAt
+			};
+		}));
+	}, (error) => {
+		if (onError) onError(error);
+		handleFirestoreError(error, OperationType.LIST, SUPERVISORS_COLLECTION);
+	});
+}
+/**
+* Owner-only: Subscribe to administrative audit log entries.
+*/
+function subscribeToAdminAuditLogs(callback, onError) {
+	const q = query(collection(db, AUDIT_LOGS_COLLECTION), orderBy("createdAt", "desc"), limit(120));
+	return onSnapshot(q, (snap) => {
+		callback(snap.docs.map((d) => {
+			const data = d.data();
+			return {
+				id: d.id,
+				actorUid: String(data.actorUid || ""),
+				actorName: String(data.actorName || "مسؤول"),
+				actorLevel: data.actorLevel || "legacy_admin",
+				actionType: String(data.actionType || ""),
+				targetId: data.targetId ? String(data.targetId) : void 0,
+				targetLabel: data.targetLabel ? String(data.targetLabel) : void 0,
+				details: data.details ? String(data.details) : void 0,
+				createdAt: data.createdAt
+			};
+		}));
+	}, (error) => {
+		if (onError) onError(error);
+		handleFirestoreError(error, OperationType.LIST, AUDIT_LOGS_COLLECTION);
+	});
+}
+/**
+* Append an immutable administrative audit log entry.
+*/
+async function logAdminAction(params) {
+	if (!params.actorUid) return;
+	const logId = createSafeDocId$1("log");
+	try {
+		await setDoc(doc(db, AUDIT_LOGS_COLLECTION, logId), {
+			actorUid: params.actorUid,
+			actorName: (params.actorName || "مسؤول").trim().slice(0, 100),
+			actorLevel: params.actorLevel,
+			actionType: params.actionType.trim().slice(0, 80),
+			...params.targetId ? { targetId: params.targetId.slice(0, 128) } : {},
+			...params.targetLabel ? { targetLabel: params.targetLabel.trim().slice(0, 160) } : {},
+			...params.details ? { details: params.details.trim().slice(0, 600) } : {},
+			createdAt: serverTimestamp()
+		});
+	} catch (err) {
+		console.warn("Could not write admin audit log:", err);
+	}
+}
+/**
+* Owner-only: Assign a new supervisor linked to an existing user UID,
+* or update an existing supervisor's level and permissions.
+*/
+async function saveSupervisorAssignment(params) {
+	const { target, level, isActive, notes, actorUid, actorName } = params;
+	if (!target.uid || target.uid === actorUid) throw new Error("لا يمكن تعديل حساب المالك كمشرف.");
+	const sanitizedPerms = sanitizeSupervisorPermissions(params.permissions);
+	const supRef = doc(db, SUPERVISORS_COLLECTION, target.uid);
+	const existingSnap = await getDoc(supRef);
+	const isUpdate = existingSnap.exists();
+	const payload = {
+		uid: target.uid,
+		displayName: target.displayName.slice(0, 100),
+		...target.phone ? { phone: target.phone.slice(0, 20) } : {},
+		...target.email ? { email: target.email.slice(0, 160) } : {},
+		level,
+		permissions: sanitizedPerms,
+		isActive: Boolean(isActive),
+		assignedBy: actorUid,
+		assignedByName: (actorName || "المالك").trim().slice(0, 100),
+		...notes?.trim() ? { notes: notes.trim().slice(0, 300) } : {},
+		createdAt: isUpdate ? existingSnap.data()?.createdAt || serverTimestamp() : serverTimestamp(),
+		updatedAt: serverTimestamp()
+	};
+	try {
+		if (isUpdate) await updateDoc(supRef, {
+			displayName: target.displayName.slice(0, 100),
+			phone: (target.phone || "").slice(0, 20),
+			email: (target.email || "").slice(0, 160),
+			level,
+			permissions: sanitizedPerms,
+			isActive: Boolean(isActive),
+			assignedBy: actorUid,
+			assignedByName: (actorName || "المالك").trim().slice(0, 100),
+			notes: (notes || "").trim().slice(0, 300),
+			updatedAt: serverTimestamp()
+		});
+		else await setDoc(supRef, payload);
+		try {
+			if ((await getDoc(doc(db, "users", target.uid))).exists()) await updateDoc(doc(db, "users", target.uid), {
+				role: isActive ? "admin" : "user",
+				updatedAt: serverTimestamp()
+			});
+		} catch (syncErr) {
+			console.warn("Optional user role sync warning:", syncErr);
+		}
+		await logAdminAction({
+			actorUid,
+			actorName,
+			actorLevel: "owner",
+			actionType: isUpdate ? "تعديل صلاحيات مشرف" : "إضافة مشرف",
+			targetId: target.uid,
+			targetLabel: target.displayName,
+			details: `المستوى: ${SUPERVISOR_LEVEL_META[level].label} | الحالة: ${isActive ? "مفعّل" : "معطّل"}`
+		});
+	} catch (error) {
+		handleFirestoreError(error, isUpdate ? OperationType.UPDATE : OperationType.CREATE, `${SUPERVISORS_COLLECTION}/${target.uid}`);
+	}
+}
+/**
+* Owner-only: Toggle supervisor enabled/disabled state.
+*/
+async function toggleSupervisorActive(params) {
+	const { supervisor, nextActive, actorUid, actorName } = params;
+	const supRef = doc(db, SUPERVISORS_COLLECTION, supervisor.uid);
+	try {
+		await updateDoc(supRef, {
+			isActive: Boolean(nextActive),
+			assignedBy: actorUid,
+			assignedByName: (actorName || "المالك").trim().slice(0, 100),
+			updatedAt: serverTimestamp()
+		});
+		try {
+			if ((await getDoc(doc(db, "users", supervisor.uid))).exists()) await updateDoc(doc(db, "users", supervisor.uid), {
+				role: nextActive ? "admin" : "user",
+				updatedAt: serverTimestamp()
+			});
+		} catch {}
+		await logAdminAction({
+			actorUid,
+			actorName,
+			actorLevel: "owner",
+			actionType: nextActive ? "تفعيل حساب مشرف" : "تعطيل حساب مشرف",
+			targetId: supervisor.uid,
+			targetLabel: supervisor.displayName,
+			details: `تم ${nextActive ? "تفعيل" : "تعطيل"} صلاحيات الإشراف (${SUPERVISOR_LEVEL_META[supervisor.level].label})`
+		});
+	} catch (error) {
+		handleFirestoreError(error, OperationType.UPDATE, `${SUPERVISORS_COLLECTION}/${supervisor.uid}`);
+	}
+}
+/**
+* Owner-only: Revoke all supervisor privileges and delete supervisor assignment.
+*/
+async function revokeAndDeleteSupervisor(params) {
+	const { supervisor, actorUid, actorName } = params;
+	const supRef = doc(db, SUPERVISORS_COLLECTION, supervisor.uid);
+	try {
+		await deleteDoc(supRef);
+		try {
+			const userSnap = await getDoc(doc(db, "users", supervisor.uid));
+			if (userSnap.exists() && userSnap.data()?.role !== "user") await updateDoc(doc(db, "users", supervisor.uid), {
+				role: "user",
+				updatedAt: serverTimestamp()
+			});
+		} catch (syncErr) {
+			console.warn("Could not reset user role after supervisor removal:", syncErr);
+		}
+		await logAdminAction({
+			actorUid,
+			actorName,
+			actorLevel: "owner",
+			actionType: "إلغاء وحذف إشراف",
+			targetId: supervisor.uid,
+			targetLabel: supervisor.displayName,
+			details: `تم سحب صلاحيات (${SUPERVISOR_LEVEL_META[supervisor.level].label}) وإعادة الحساب كمستخدم عادي`
+		});
+	} catch (error) {
+		handleFirestoreError(error, OperationType.DELETE, `${SUPERVISORS_COLLECTION}/${supervisor.uid}`);
+	}
 }
 // src/context/AuthContext.tsx
 var import_jsx_runtime = require_jsx_runtime();
@@ -896,12 +1382,74 @@ function getPhoneAuthEmail(cleanPhone, version = 1) {
 var AuthProvider = ({ children }) => {
 	const [currentUser, setCurrentUser] = (0, import_react.useState)(null);
 	const [userProfile, setUserProfile] = (0, import_react.useState)(null);
+	const [supervisorProfile, setSupervisorProfile] = (0, import_react.useState)(null);
+	const [supervisorLoaded, setSupervisorLoaded] = (0, import_react.useState)(false);
 	const [isGuest, setIsGuest] = (0, import_react.useState)(false);
 	const [isLoading, setIsLoading] = (0, import_react.useState)(true);
 	const [activeRole, setActiveRole] = (0, import_react.useState)("user");
+	const isOwner = (0, import_react.useMemo)(() => {
+		if (!currentUser?.email || !isOwnerEmail(currentUser.email)) return false;
+		if (currentUser.email.toLowerCase() === "user_967773633918_v1@qataba-blood.app") return true;
+		return currentUser.emailVerified === true;
+	}, [currentUser]);
+	const { isAuthorizedAdmin, adminLevel, adminPermissions } = (0, import_react.useMemo)(() => {
+		if (isOwner) return {
+			isAuthorizedAdmin: true,
+			adminLevel: "owner",
+			adminPermissions: OWNER_PERMISSIONS
+		};
+		if (supervisorProfile) {
+			if (supervisorProfile.isActive) return {
+				isAuthorizedAdmin: true,
+				adminLevel: supervisorProfile.level,
+				adminPermissions: sanitizeSupervisorPermissions(supervisorProfile.permissions)
+			};
+			return {
+				isAuthorizedAdmin: false,
+				adminLevel: null,
+				adminPermissions: EMPTY_PERMISSIONS
+			};
+		}
+		if (supervisorLoaded && userProfile?.role === "admin") return {
+			isAuthorizedAdmin: true,
+			adminLevel: "legacy_admin",
+			adminPermissions: { ...SUPERVISOR_LEVEL_META.general_admin.defaultPermissions }
+		};
+		return {
+			isAuthorizedAdmin: false,
+			adminLevel: null,
+			adminPermissions: EMPTY_PERMISSIONS
+		};
+	}, [
+		isOwner,
+		supervisorProfile,
+		supervisorLoaded,
+		userProfile
+	]);
+	(0, import_react.useEffect)(() => {
+		if (!currentUser?.uid) {
+			setSupervisorProfile(null);
+			setSupervisorLoaded(false);
+			return;
+		}
+		setSupervisorLoaded(false);
+		const unsub = subscribeToMySupervisorProfile(currentUser.uid, (record) => {
+			setSupervisorProfile(record);
+			setSupervisorLoaded(true);
+		}, (err) => {
+			console.warn("Supervisor assignment listener warning:", err);
+			setSupervisorProfile(null);
+			setSupervisorLoaded(true);
+		});
+		return () => unsub();
+	}, [currentUser?.uid]);
+	(0, import_react.useEffect)(() => {
+		if (!isAuthorizedAdmin && activeRole === "admin") {
+			setActiveRole("user");
+			localStorage.setItem("blood_app_active_role", "user");
+		}
+	}, [isAuthorizedAdmin, activeRole]);
 	const switchActiveRole = (role) => {
-		const isMasterAdmin = currentUser?.email === "ziadalsyyadi@gmail.com" || currentUser?.email === "user_967773633918_v1@qataba-blood.app";
-		const isAuthorizedAdmin = userProfile?.role === "admin" || isMasterAdmin;
 		const nextRole = role === "admin" && isAuthorizedAdmin ? "admin" : "user";
 		setActiveRole(nextRole);
 		localStorage.setItem("blood_app_active_role", nextRole);
@@ -910,15 +1458,22 @@ var AuthProvider = ({ children }) => {
 		const userDocRef = doc(db, "users", user.uid);
 		try {
 			const snap = await getDoc(userDocRef);
-			const isAdminEmail = user.email === "ziadalsyyadi@gmail.com" || user.email === "user_967773633918_v1@qataba-blood.app";
+			const isAdminEmail = isOwnerEmail(user.email) && (user.email?.toLowerCase() === "user_967773633918_v1@qataba-blood.app" || user.emailVerified === true);
 			if (snap.exists()) {
 				const data = snap.data();
-				if (isAdminEmail && data.role !== "admin") await updateDoc(userDocRef, { role: "admin" });
+				const updates = {};
+				if (isAdminEmail && data.role !== "admin") updates.role = "admin";
+				if (user.email && data.email !== user.email) updates.email = user.email;
+				if (Object.keys(updates).length > 0) {
+					updates.updatedAt = serverTimestamp();
+					await updateDoc(userDocRef, updates).catch((e) => console.warn("Could not sync user metadata updates:", e));
+				}
 				setUserProfile({
 					uid: user.uid,
 					displayName: data.displayName || user.displayName || "مستخدم",
 					phone: data.phone || "",
 					phoneVerified: data.phoneVerified ?? Boolean(user.phoneNumber),
+					email: data.email || user.email || "",
 					role: isAdminEmail ? "admin" : data.role || "user",
 					createdAt: data.createdAt
 				});
@@ -932,12 +1487,14 @@ var AuthProvider = ({ children }) => {
 					displayName: user.displayName || (extractedPhone ? `مستخدم ${extractedPhone}` : "فاعل خير"),
 					phone: extractedPhone,
 					phoneVerified: Boolean(user.phoneNumber),
+					email: user.email || "",
 					role: isAdminEmail ? "admin" : "user"
 				};
 				await setDoc(userDocRef, {
 					displayName: newProfile.displayName,
 					phone: extractedPhone,
 					phoneVerified: Boolean(user.phoneNumber),
+					...user.email ? { email: user.email } : {},
 					role: isAdminEmail ? "admin" : "user",
 					createdAt: serverTimestamp()
 				}, { merge: true });
@@ -1118,6 +1675,7 @@ var AuthProvider = ({ children }) => {
 						displayName,
 						phone: cleanPhone,
 						phoneVerified: false,
+						email,
 						role: "user",
 						createdAt: serverTimestamp()
 					});
@@ -1295,6 +1853,11 @@ var AuthProvider = ({ children }) => {
 		value: {
 			currentUser,
 			userProfile,
+			supervisorProfile,
+			isOwner,
+			isAuthorizedAdmin,
+			adminLevel,
+			adminPermissions,
 			isGuest,
 			isLoading,
 			loginWithPhone,
@@ -2842,7 +3405,7 @@ var PrivacyPolicyModal = ({ isOpen, onClose }) => {
 // src/version.ts
 var APP_VERSION = ("1.2.0".trim(), "1.2.0".trim());
 // node_modules/@capacitor/share/dist/esm/index.js
-var Share = registerPlugin("Share", { web: () => __vitePreload(() => import("./web-BESIbEQE.js").then((m) => new m.ShareWeb()), []) });
+var Share = registerPlugin("Share", { web: () => __vitePreload(() => import("./web-B72olyuY.js").then((m) => new m.ShareWeb()), []) });
 // src/utils/shareUtils.ts
 /**
 * The permanent official distribution link for Bank AlDam Qataba.
@@ -2883,9 +3446,79 @@ var shareData = async (options) => {
 		console.error("Sharing failed:", error);
 	}
 };
+// node_modules/@capacitor/app/dist/esm/index.js
+var App$1 = registerPlugin("App", { web: () => __vitePreload(() => import("./web-Dg1D-ih6.js").then((m) => new m.AppWeb()), []) });
+// src/utils/backNavigation.ts
+var backStack = [];
+function registerBackHandler(handler) {
+	const entry = {
+		id: Symbol("back-handler"),
+		handler
+	};
+	backStack.push(entry);
+	return () => {
+		const idx = backStack.findIndex((item) => item.id === entry.id);
+		if (idx !== -1) backStack.splice(idx, 1);
+	};
+}
+function dispatchRegisteredBackHandlers() {
+	for (let i = backStack.length - 1; i >= 0; i--) {
+		const entry = backStack[i];
+		if (!entry) continue;
+		if (entry.handler() !== false) return true;
+	}
+	return false;
+}
+/**
+* Registers an active overlay/modal onto the LIFO back-button stack.
+* When active, pressing the hardware/system back button closes the topmost overlay first.
+*/
+function useRegisterBackHandler(isActive, onBack) {
+	const onBackRef = (0, import_react.useRef)(onBack);
+	onBackRef.current = onBack;
+	(0, import_react.useEffect)(() => {
+		if (!isActive) return;
+		return registerBackHandler(() => {
+			onBackRef.current();
+			return true;
+		});
+	}, [isActive]);
+}
+function isNativeBackPluginAvailable() {
+	try {
+		return Capacitor.isNativePlatform() && Capacitor.isPluginAvailable("App");
+	} catch {
+		return false;
+	}
+}
+async function addNativeBackButtonListener(callback) {
+	if (!isNativeBackPluginAvailable()) return null;
+	try {
+		const handle = await App$1.addListener("backButton", () => {
+			callback();
+		});
+		return () => {
+			try {
+				handle.remove();
+			} catch {}
+		};
+	} catch {
+		return null;
+	}
+}
+async function exitApplication() {
+	if (isNativeBackPluginAvailable()) try {
+		await App$1.exitApp();
+		return "exited";
+	} catch {}
+	try {
+		window.close();
+	} catch {}
+	return window.closed ? "exited" : "browser_fallback";
+}
 // src/components/Sidebar.tsx
-var Sidebar = ({ isOpen, onClose, donors, onOpenExitConfirm, onOpenChat, onOpenWebsite }) => {
-	const { currentUser, userProfile, logout, deleteAccount } = useAuth();
+var Sidebar = ({ isOpen, onClose, donors, onOpenExitConfirm, onOpenChat, onOpenWebsite, onOpenSupervisors }) => {
+	const { currentUser, userProfile, isOwner, isAuthorizedAdmin, logout, deleteAccount } = useAuth();
 	const [isEditing, setIsSidebarEditing] = (0, import_react.useState)(false);
 	const [editName, setEditName] = (0, import_react.useState)(userProfile?.displayName || "");
 	const [editPhone, setEditPhone] = (0, import_react.useState)(userProfile?.phone || "");
@@ -2901,11 +3534,22 @@ var Sidebar = ({ isOpen, onClose, donors, onOpenExitConfirm, onOpenChat, onOpenW
 	const [deleteError, setDeleteError] = (0, import_react.useState)(null);
 	const [needsPassword, setNeedsPassword] = (0, import_react.useState)(false);
 	const [isDeletingAccount, setIsDeletingAccount] = (0, import_react.useState)(false);
+	useRegisterBackHandler(showAboutModal, () => setShowAboutModal(false));
+	useRegisterBackHandler(showPrivacyModal, () => setShowPrivacyModal(false));
+	useRegisterBackHandler(showLogoutConfirm, () => setShowLogoutConfirm(false));
+	useRegisterBackHandler(showDeleteAccountConfirm, () => {
+		if (!isDeletingAccount) {
+			setShowDeleteAccountConfirm(false);
+			setNeedsPassword(false);
+			setDeletePassword("");
+			setDeleteError(null);
+		}
+	});
 	(0, import_react.useEffect)(() => {
-		if (!currentUser || userProfile?.role === "admin") return;
+		if (!currentUser || isAuthorizedAdmin) return;
 		const unsubscribe = subscribeToConversation(currentUser.uid, setConversation);
 		return () => unsubscribe();
-	}, [currentUser, userProfile?.role]);
+	}, [currentUser, isAuthorizedAdmin]);
 	const myDonorProfile = donors.find((d) => d.userId === currentUser?.uid);
 	const handleSaveSettings = async () => {
 		if (!currentUser) return;
@@ -3303,27 +3947,54 @@ var Sidebar = ({ isOpen, onClose, donors, onOpenExitConfirm, onOpenChat, onOpenW
 										})]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "space-y-2",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-											onClick: () => setShowLogoutConfirm(true),
-											className: "w-full flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-2xl text-slate-700 hover:bg-slate-50 transition-colors text-right cursor-pointer shadow-2xs",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogOut, { className: "w-4 h-4 rotate-180" })
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-xs font-black",
-												children: "تسجيل الخروج"
-											})]
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-											onClick: () => setShowDeleteAccountConfirm(true),
-											className: "w-full flex items-center gap-3 p-3 bg-rose-50/80 border border-rose-200 rounded-2xl text-rose-700 hover:bg-rose-100 transition-colors text-right cursor-pointer shadow-2xs",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "w-8 h-8 rounded-xl bg-rose-600 text-white flex items-center justify-center",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-4 h-4" })
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-xs font-black",
-												children: "حذف الحساب"
-											})]
-										})]
+										children: [
+											isOwner && onOpenSupervisors && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												type: "button",
+												onClick: () => {
+													onOpenSupervisors();
+													onClose();
+												},
+												className: "w-full flex items-center justify-between gap-3 p-3 bg-slate-900 text-white border border-slate-800 rounded-2xl hover:bg-slate-800 transition-colors text-right cursor-pointer shadow-2xs",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex items-center gap-3",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+														className: "w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center",
+														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "w-4 h-4" })
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-xs font-black block",
+														children: "إدارة المشرفين"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-[10px] text-slate-300 font-bold block",
+														children: "الصلاحيات وسجل العمليات"
+													})] })]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "px-2 py-0.5 rounded-lg bg-amber-400/20 text-amber-200 text-[9px] font-black",
+													children: "المالك فقط"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												onClick: () => setShowLogoutConfirm(true),
+												className: "w-full flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-2xl text-slate-700 hover:bg-slate-50 transition-colors text-right cursor-pointer shadow-2xs",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogOut, { className: "w-4 h-4 rotate-180" })
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-xs font-black",
+													children: "تسجيل الخروج"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												onClick: () => setShowDeleteAccountConfirm(true),
+												className: "w-full flex items-center gap-3 p-3 bg-rose-50/80 border border-rose-200 rounded-2xl text-rose-700 hover:bg-rose-100 transition-colors text-right cursor-pointer shadow-2xs",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "w-8 h-8 rounded-xl bg-rose-600 text-white flex items-center justify-center",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-4 h-4" })
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-xs font-black",
+													children: "حذف الحساب"
+												})]
+											})
+										]
 									})]
 								})
 							]
@@ -3975,10 +4646,30 @@ var VisitorRestrictionModal = ({ isOpen, onClose, onOpenRegister, onOpenLogin })
 		})
 	});
 };
+// src/components/SubpageBackBar.tsx
+var SubpageBackBar = ({ title, onBack }) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "flex items-center justify-between gap-3 bg-white border border-slate-200/90 rounded-2xl px-3 py-2 shadow-2xs",
+		dir: "rtl",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+			type: "button",
+			"data-testid": "inapp-back-button",
+			onClick: onBack,
+			className: "min-h-[44px] px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-red-50 text-slate-800 hover:text-red-700 font-black text-xs sm:text-sm flex items-center gap-2 transition-colors active:scale-95 cursor-pointer shrink-0",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "w-4 h-4 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "whitespace-nowrap",
+				children: "العودة للرئيسية"
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			className: "text-xs sm:text-sm font-extrabold text-slate-600 truncate",
+			children: title
+		})]
+	});
+};
 // src/components/DonorSearch.tsx
-var DonorSearch = ({ donors, onNavigateToRegister, initialBloodType = "ALL", onEditDonor, onDeleteDonor, syncStats, isOffline = false, onOpenAuth }) => {
-	const { userProfile, currentUser, activeRole } = useAuth();
-	const isAdmin = activeRole === "admin";
+var DonorSearch = ({ donors, onBack, onNavigateToRegister, initialBloodType = "ALL", onEditDonor, onDeleteDonor, syncStats, isOffline = false, onOpenAuth }) => {
+	const { userProfile, currentUser, activeRole, adminPermissions, adminLevel } = useAuth();
+	const isAdmin = activeRole === "admin" && adminPermissions.manageDonors;
 	const [showVisitorRestriction, setShowVisitorRestriction] = (0, import_react.useState)(false);
 	const [selectedBloodType, setSelectedBloodType] = (0, import_react.useState)(initialBloodType);
 	const [searchQuery, setSearchQuery] = (0, import_react.useState)("");
@@ -4055,6 +4746,18 @@ var DonorSearch = ({ donors, onNavigateToRegister, initialBloodType = "ALL", onE
 		}, 2e3);
 	};
 	const [whatsAppTargetDonor, setWhatsAppTargetDonor] = (0, import_react.useState)(null);
+	useRegisterBackHandler(showVisitorRestriction, () => setShowVisitorRestriction(false));
+	useRegisterBackHandler(isImportModalOpen, () => {
+		setIsImportModalOpen(false);
+		setImportResult(null);
+	});
+	useRegisterBackHandler(Boolean(donorToDelete), () => {
+		if (!isDeleting) {
+			setDonorToDelete(null);
+			setDeleteError(null);
+		}
+	});
+	useRegisterBackHandler(Boolean(whatsAppTargetDonor), () => setWhatsAppTargetDonor(null));
 	const confirmWhatsAppNavigation = (donor) => {
 		const message = `السلام عليكم أخي ${donor.fullName} الكريم،\nحصلت على رقمك من تطبيق (قطرة دم تنقذ حياة - سجل المتبرعين بقعطبة).\nلدينا حالة بحاجة ماسة لفصيلة الدم (${donor.bloodType})، هل أنت متاح للتبرع وجزاك الله خيراً؟`;
 		openWhatsAppChat(donor.phone, message);
@@ -4075,6 +4778,13 @@ var DonorSearch = ({ donors, onNavigateToRegister, initialBloodType = "ALL", onE
 		try {
 			const res = await importRawDonors(importText);
 			if (res.success) {
+				if (isAdmin && currentUser?.uid) logAdminAction({
+					actorUid: currentUser.uid,
+					actorName: userProfile?.displayName || currentUser.displayName || "مشرف المتبرعين",
+					actorLevel: adminLevel || "donor_admin",
+					actionType: "استيراد دفعة متبرعين",
+					details: `تم استيراد ${res.count} متبرعاً`
+				});
 				setImportResult({
 					success: true,
 					message: `تم استيراد ${res.count} متبرعاً بنجاح إلى قاعدة البيانات!`
@@ -4098,8 +4808,16 @@ var DonorSearch = ({ donors, onNavigateToRegister, initialBloodType = "ALL", onE
 		setSheetsSyncFeedback(null);
 		try {
 			const res = await pushAllDonorsToSheets(donors);
-			if (res.success) setSheetsSyncFeedback(`تمت مزامنة ${res.count} متبرعاً مع جدول Google Sheets بنجاح!`);
-			else setSheetsSyncFeedback(res.error || "فشلت المزامنة مع Google Sheets");
+			if (res.success) {
+				if (isAdmin && currentUser?.uid) logAdminAction({
+					actorUid: currentUser.uid,
+					actorName: userProfile?.displayName || currentUser.displayName || "مشرف المتبرعين",
+					actorLevel: adminLevel || "donor_admin",
+					actionType: "تصدير المتبرعين إلى Google Sheets",
+					details: `عدد السجلات: ${res.count}`
+				});
+				setSheetsSyncFeedback(`تمت مزامنة ${res.count} متبرعاً مع جدول Google Sheets بنجاح!`);
+			} else setSheetsSyncFeedback(res.error || "فشلت المزامنة مع Google Sheets");
 		} catch (err) {
 			setSheetsSyncFeedback(`خطأ: ${err.message}`);
 		} finally {
@@ -4117,6 +4835,10 @@ var DonorSearch = ({ donors, onNavigateToRegister, initialBloodType = "ALL", onE
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "space-y-4",
 		children: [
+			onBack && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SubpageBackBar, {
+				title: "البحث عن متبرعي الدم",
+				onBack
+			}),
 			deleteSuccess && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "p-3.5 rounded-2xl bg-emerald-500 text-white font-bold text-xs sm:text-sm flex items-center justify-between shadow-lg shadow-emerald-200 animate-in fade-in slide-in-from-top-2 duration-200",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -4128,7 +4850,7 @@ var DonorSearch = ({ donors, onNavigateToRegister, initialBloodType = "ALL", onE
 					children: "إغلاق"
 				})]
 			}),
-			activeRole === "admin" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			isAdmin && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "bg-linear-to-r from-amber-600 via-amber-600 to-rose-700 text-white rounded-2xl p-4 shadow-md space-y-3",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex flex-col sm:flex-row sm:items-center justify-between gap-2.5",
@@ -4244,7 +4966,7 @@ var DonorSearch = ({ donors, onNavigateToRegister, initialBloodType = "ALL", onE
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 								className: "text-xs bg-red-50 text-red-700 font-bold px-2.5 py-1 rounded-full border border-red-200",
 								children: [combinedDonors.length, " متبرع"]
-							}), sheetsDonors.length > 0 && activeRole === "admin" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							}), sheetsDonors.length > 0 && isAdmin && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "text-[9px] text-emerald-600 font-bold bg-emerald-50 px-1.5 rounded-sm",
 								children: "يتضمن بيانات الأرشيف"
 							})]
@@ -4354,7 +5076,7 @@ var DonorSearch = ({ donors, onNavigateToRegister, initialBloodType = "ALL", onE
 							})]
 						}, bt))]
 					})] }),
-					selectedBloodType !== "ALL" && sheetsDonors.length === 0 && userProfile?.role === "admin" && activeRole === "admin" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					selectedBloodType !== "ALL" && sheetsDonors.length === 0 && isAdmin && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "pt-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 							onClick: handleSearchSheets,
@@ -4422,7 +5144,7 @@ var DonorSearch = ({ donors, onNavigateToRegister, initialBloodType = "ALL", onE
 													title: "تم التحقق من ملكية رقم الهاتف برمز تأكيد",
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "w-3 h-3 text-blue-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "رقم موثوق" })]
 												}),
-												donor.source === "google_sheets" && activeRole === "admin" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												donor.source === "google_sheets" && isAdmin && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 													className: "inline-flex items-center gap-0.5 text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-100 font-bold px-1.5 py-0.5 rounded-full",
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FileSpreadsheet, { className: "w-3 h-3 text-emerald-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "سجل الأرشيف" })]
 												})
@@ -4626,8 +5348,18 @@ var DonorSearch = ({ donors, onNavigateToRegister, initialBloodType = "ALL", onE
 									setIsDeleting(true);
 									setDeleteError(null);
 									try {
-										await onDeleteDonor(donorToDelete.id, donorToDelete.phone);
-										setDeleteSuccess(`تم حذف بيانات المتبرع (${donorToDelete.fullName}) بنجاح!`);
+										const target = donorToDelete;
+										await onDeleteDonor(target.id, target.phone);
+										if (isAdmin && currentUser?.uid) logAdminAction({
+											actorUid: currentUser.uid,
+											actorName: userProfile?.displayName || currentUser.displayName || "مشرف المتبرعين",
+											actorLevel: adminLevel || "donor_admin",
+											actionType: "حذف متبرع",
+											targetId: target.id,
+											targetLabel: `${target.fullName} (${target.bloodType})`,
+											details: `الهاتف: ${target.phone}`
+										});
+										setDeleteSuccess(`تم حذف بيانات المتبرع (${target.fullName}) بنجاح!`);
 										setTimeout(() => {
 											setDeleteSuccess(null);
 										}, 3500);
@@ -5455,9 +6187,9 @@ var getUrgentRemainingHours = (req) => {
 	const leftMs = 1728e5 - (Date.now() - createdMs);
 	return Math.max(0, Math.floor(leftMs / 36e5));
 };
-var UrgentRequests = ({ urgentRequests, onOpenAuth }) => {
-	const { currentUser, userProfile, activeRole } = useAuth();
-	const isAdmin = activeRole === "admin";
+var UrgentRequests = ({ urgentRequests, onBack, onOpenAuth }) => {
+	const { currentUser, userProfile, activeRole, adminPermissions, adminLevel } = useAuth();
+	const isAdmin = activeRole === "admin" && adminPermissions.manageUrgentRequests;
 	const [filterStatus, setFilterStatus] = (0, import_react.useState)("open");
 	const [isModalOpen, setIsModalOpen] = (0, import_react.useState)(false);
 	const [showVisitorRestriction, setShowVisitorRestriction] = (0, import_react.useState)(false);
@@ -5465,12 +6197,31 @@ var UrgentRequests = ({ urgentRequests, onOpenAuth }) => {
 	const [reqToDelete, setReqToDelete] = (0, import_react.useState)(null);
 	const [isDeletingReq, setIsDeletingReq] = (0, import_react.useState)(false);
 	const [deleteReqError, setDeleteReqError] = (0, import_react.useState)(null);
+	useRegisterBackHandler(showVisitorRestriction, () => setShowVisitorRestriction(false));
+	useRegisterBackHandler(isModalOpen, () => setIsModalOpen(false));
+	useRegisterBackHandler(Boolean(whatsAppTargetReq), () => setWhatsAppTargetReq(null));
+	useRegisterBackHandler(Boolean(reqToDelete), () => {
+		if (!isDeletingReq) {
+			setReqToDelete(null);
+			setDeleteReqError(null);
+		}
+	});
 	const handleDeleteRequestConfirm = async () => {
 		if (!reqToDelete) return;
 		setIsDeletingReq(true);
 		setDeleteReqError(null);
 		try {
-			await deleteUrgentRequest(reqToDelete.id);
+			const target = reqToDelete;
+			await deleteUrgentRequest(target.id);
+			if (isAdmin && currentUser?.uid) logAdminAction({
+				actorUid: currentUser.uid,
+				actorName: userProfile?.displayName || currentUser.displayName || "مشرف الطلبات",
+				actorLevel: adminLevel || "urgent_admin",
+				actionType: "حذف طلب دم عاجل",
+				targetId: target.id,
+				targetLabel: `${target.patientName} (${target.bloodType})`,
+				details: `المستشفى: ${target.hospital}`
+			});
 			setReqToDelete(null);
 		} catch (err) {
 			setDeleteReqError(err.message || "فشل حذف البلاغ");
@@ -5550,6 +6301,14 @@ var UrgentRequests = ({ urgentRequests, onOpenAuth }) => {
 		const newStatus = request.status === "open" ? "fulfilled" : "open";
 		try {
 			await updateRequestStatus(request.id, newStatus);
+			if (isAdmin && currentUser?.uid) logAdminAction({
+				actorUid: currentUser.uid,
+				actorName: userProfile?.displayName || currentUser.displayName || "مشرف الطلبات",
+				actorLevel: adminLevel || "urgent_admin",
+				actionType: newStatus === "fulfilled" ? "إغلاق طلب دم عاجل" : "إعادة فتح طلب دم عاجل",
+				targetId: request.id,
+				targetLabel: `${request.patientName} (${request.bloodType})`
+			});
 			if (newStatus === "fulfilled") confetti_module_default({
 				particleCount: 100,
 				spread: 80,
@@ -5574,6 +6333,10 @@ var UrgentRequests = ({ urgentRequests, onOpenAuth }) => {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "space-y-4",
 		children: [
+			onBack && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SubpageBackBar, {
+				title: "طلبات الدم العاجلة",
+				onBack
+			}),
 			isAdmin && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "bg-linear-to-r from-amber-600 via-amber-700 to-rose-700 text-white rounded-2xl p-4 shadow-md space-y-2",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -6196,16 +6959,24 @@ var seedInitialLocations = async () => {
 	}
 };
 // src/components/DonorRegistration.tsx
-var DonorRegistration = ({ onSuccessNavigate, donors, onOpenAuth, editingDonorId, onDeleteDonor }) => {
-	const { currentUser, userProfile, activeRole } = useAuth();
-	const isAdmin = activeRole === "admin";
+var DonorRegistration = ({ onBack, onSuccessNavigate, donors, onOpenAuth, editingDonorId, onDeleteDonor }) => {
+	const { currentUser, userProfile, activeRole, adminPermissions, adminLevel } = useAuth();
+	const isAdmin = activeRole === "admin" && adminPermissions.manageDonors;
+	const canManageLocations = activeRole === "admin" && adminPermissions.manageLocations;
 	const existingDonor = editingDonorId ? donors.find((d) => d.id === editingDonorId) : currentUser ? donors.find((d) => d.userId === currentUser.uid) : null;
 	const cleanDonorPhone = existingDonor?.phone ? existingDonor.phone.replace(/\D/g, "") : "";
 	const cleanUserPhone = userProfile?.phone ? userProfile.phone.replace(/\D/g, "") : "";
-	const canEdit = Boolean(existingDonor && currentUser && (existingDonor.userId && existingDonor.userId === currentUser.uid || cleanUserPhone.length >= 7 && cleanDonorPhone.length >= 7 && cleanDonorPhone === cleanUserPhone)) || isAdmin;
+	const isOwner = Boolean(existingDonor && currentUser && (existingDonor.userId && existingDonor.userId === currentUser.uid || cleanUserPhone.length >= 7 && cleanDonorPhone.length >= 7 && cleanDonorPhone === cleanUserPhone));
+	const canEdit = isOwner || isAdmin;
 	const [confirmDeleteModal, setConfirmDeleteModal] = (0, import_react.useState)(false);
 	const [isDeleting, setIsDeleting] = (0, import_react.useState)(false);
 	const [deleteError, setDeleteError] = (0, import_react.useState)(null);
+	useRegisterBackHandler(confirmDeleteModal, () => {
+		if (!isDeleting) {
+			setConfirmDeleteModal(false);
+			setDeleteError(null);
+		}
+	});
 	const [fullName, setFullName] = (0, import_react.useState)("");
 	const [bloodType, setBloodType] = (0, import_react.useState)("O+");
 	const [phone, setPhone] = (0, import_react.useState)("");
@@ -6330,6 +7101,15 @@ var DonorRegistration = ({ onSuccessNavigate, donors, onOpenAuth, editingDonorId
 				isAvailable,
 				allowContact
 			}, !isCreatingNew && existingDonor ? existingDonor.id : void 0);
+			if (isAdmin && currentUser?.uid && (!isOwner || existingDonor && !isCreatingNew)) logAdminAction({
+				actorUid: currentUser.uid,
+				actorName: userProfile?.displayName || currentUser.displayName || "مشرف المتبرعين",
+				actorLevel: adminLevel || "donor_admin",
+				actionType: existingDonor && !isCreatingNew ? "تعديل بيانات متبرع" : "إضافة متبرع بواسطة المشرف",
+				targetId: savedDonorId || void 0,
+				targetLabel: `${cleanName} (${bloodType})`,
+				details: `المنطقة: ${cleanResidence}`
+			});
 			setSuccessMessage(existingDonor && !isCreatingNew ? isAdmin ? `تم تحديث بيانات المتبرع (${cleanName}) بنجاح بصلاحية مسؤول التطبيق!` : "تم تحديث بيانات المتبرع بنجاح!" : "بارك الله فيك! تم تسجيلك بنجاح وحفظ بياناتك كمتبرع مؤكد.");
 			confetti_module_default({
 				particleCount: 100,
@@ -6356,9 +7136,12 @@ var DonorRegistration = ({ onSuccessNavigate, donors, onOpenAuth, editingDonorId
 			setErrorMessage("حدث خطأ أثناء حفظ البيانات. يرجى التأكد من اتصال الإنترنت.");
 		}
 	};
-	if (editingDonorId && existingDonor && !canEdit && !isCreatingNew) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	if (editingDonorId && existingDonor && !canEdit && !isCreatingNew) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "max-w-xl mx-auto p-4 sm:p-6 text-center space-y-4",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		children: [onBack && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SubpageBackBar, {
+			title: "التسجيل في بنك الدم",
+			onBack
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "bg-white rounded-3xl p-6 sm:p-8 border border-amber-200 shadow-xl space-y-4",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -6398,11 +7181,15 @@ var DonorRegistration = ({ onSuccessNavigate, donors, onOpenAuth, editingDonorId
 					})]
 				})
 			]
-		})
+		})]
 	});
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "max-w-2xl mx-auto space-y-4",
 		children: [
+			onBack && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SubpageBackBar, {
+				title: !isCreatingNew && existingDonor ? "تعديل بيانات المتبرع" : "التسجيل في بنك الدم",
+				onBack
+			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "bg-linear-to-r from-red-600 to-rose-700 text-white rounded-2xl p-4 sm:p-5 shadow-md shadow-red-200",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -6557,14 +7344,14 @@ var DonorRegistration = ({ onSuccessNavigate, donors, onOpenAuth, editingDonorId
 											className: "text-red-500",
 											children: "*"
 										})]
-									}), isAdmin && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									}), canManageLocations && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 										type: "button",
 										onClick: () => setShowLocationAddInput(!showLocationAddInput),
 										className: "text-[11px] font-black text-amber-900 bg-amber-100 hover:bg-amber-200 border border-amber-300 px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors cursor-pointer",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CirclePlus, { className: "w-3.5 h-3.5 text-amber-700" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "إضافة منطقة (وضع المسؤول)" })]
 									})]
 								}),
-								isAdmin && showLocationAddInput && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								canManageLocations && showLocationAddInput && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "mb-3 p-3 bg-amber-50 border border-amber-200 rounded-2xl space-y-2 animate-in fade-in",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										className: "text-xs font-black text-amber-900 block",
@@ -6797,6 +7584,15 @@ var DonorRegistration = ({ onSuccessNavigate, donors, onOpenAuth, editingDonorId
 									setDeleteError(null);
 									try {
 										await onDeleteDonor(existingDonor.id, existingDonor.phone);
+										if (isAdmin && currentUser?.uid) logAdminAction({
+											actorUid: currentUser.uid,
+											actorName: userProfile?.displayName || currentUser.displayName || "مشرف المتبرعين",
+											actorLevel: adminLevel || "donor_admin",
+											actionType: "حذف متبرع",
+											targetId: existingDonor.id,
+											targetLabel: `${existingDonor.fullName} (${existingDonor.bloodType})`,
+											details: `الهاتف: ${existingDonor.phone}`
+										});
 										setConfirmDeleteModal(false);
 										onSuccessNavigate();
 									} catch (err) {
@@ -6826,10 +7622,14 @@ var DonorRegistration = ({ onSuccessNavigate, donors, onOpenAuth, editingDonorId
 	});
 };
 // src/components/BloodDonationEducationalInfo.tsx
-var BloodDonationEducationalInfo = () => {
+var BloodDonationEducationalInfo = ({ onBack }) => {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "w-full max-w-4xl mx-auto space-y-4 text-right font-['Cairo',sans-serif] select-none",
 		children: [
+			onBack && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SubpageBackBar, {
+				title: "فوائد وتعليمات التبرع بالدم",
+				onBack
+			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "bg-white rounded-3xl p-2 sm:p-3 border border-slate-200/90 shadow-sm relative overflow-hidden",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -6990,6 +7790,7 @@ var QaetabahHospitalsDirectory = ({ isOpen, onClose, isEmbedded = false }) => {
 	});
 	const [hospitalLoading, setHospitalLoading] = (0, import_react.useState)(false);
 	const [adminFeedback, setAdminFeedback] = (0, import_react.useState)(null);
+	useRegisterBackHandler(isFormOpen, () => setIsFormOpen(false));
 	(0, import_react.useEffect)(() => {
 		if (!isOpen) return;
 		setLoading(true);
@@ -7463,7 +8264,7 @@ var Encoding;
 	Encoding["UTF16"] = "utf16";
 })(Encoding || (Encoding = {}));
 // node_modules/@capacitor/filesystem/dist/esm/index.js
-var Filesystem = registerPlugin("Filesystem", { web: () => __vitePreload(() => import("./web-n9aPwXF-.js").then((m) => new m.FilesystemWeb()), []) });
+var Filesystem = registerPlugin("Filesystem", { web: () => __vitePreload(() => import("./web-Br-S3yoT.js").then((m) => new m.FilesystemWeb()), []) });
 f();
 -(Math.pow(10, 8) * 24 * 60 * 60 * 1e3);
 /**
@@ -10056,6 +10857,7 @@ var ar = {
 };
 // src/components/AdminChatManager.tsx
 var AdminChatManager = () => {
+	const { currentUser, userProfile, adminLevel } = useAuth();
 	const [conversations, setConversations] = (0, import_react.useState)([]);
 	const [selectedUserId, setSelectedUserId] = (0, import_react.useState)(null);
 	const [messages, setMessages] = (0, import_react.useState)([]);
@@ -10086,13 +10888,31 @@ var AdminChatManager = () => {
 	};
 	const handleSendMessage = async (e) => {
 		e.preventDefault();
-		if (!inputText.trim() || !selectedUserId) return;
+		if (!inputText.trim() || !selectedUserId || !currentUser?.uid) return;
 		const text = inputText;
 		setInputText("");
-		await sendMessage(selectedUserId, "admin", text, true);
+		await sendMessage(selectedUserId, currentUser.uid, text, true);
+		logAdminAction({
+			actorUid: currentUser.uid,
+			actorName: userProfile?.displayName || currentUser.displayName || "مشرف الدعم",
+			actorLevel: adminLevel || "support_admin",
+			actionType: "الرد على محادثة دعم",
+			targetId: selectedUserId,
+			targetLabel: selectedConversation?.userDisplayName || selectedUserId,
+			details: text.trim().slice(0, 120)
+		});
 	};
 	const handleStatusChange = async (userId, status) => {
 		await updateConversationStatus(userId, status);
+		if (currentUser?.uid) logAdminAction({
+			actorUid: currentUser.uid,
+			actorName: userProfile?.displayName || currentUser.displayName || "مشرف الدعم",
+			actorLevel: adminLevel || "support_admin",
+			actionType: "تغيير حالة محادثة دعم",
+			targetId: userId,
+			targetLabel: selectedConversation?.userDisplayName || userId,
+			details: `الحالة الجديدة: ${status}`
+		});
 	};
 	const filteredConversations = conversations.filter((conv) => {
 		const matchesSearch = conv.userDisplayName.toLowerCase().includes(searchTerm.toLowerCase()) || conv.userPhone && conv.userPhone.includes(searchTerm);
@@ -10992,8 +11812,27 @@ function openWebsiteInExternalBrowser(candidateUrl) {
 	}
 }
 // src/components/AdminDashboard.tsx
-var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGlobalRefresh, isRefreshing = false }) => {
-	const { userProfile, currentUser, activeRole, switchActiveRole, loginWithGoogle } = useAuth();
+var AdminDashboard = ({ onBack, donors = [], urgentRequests = [], onEditDonor, onDeleteDonor, onGlobalRefresh, onOpenSupervisors, isRefreshing = false }) => {
+	const { userProfile, currentUser, switchActiveRole, isOwner, isAuthorizedAdmin, adminLevel, adminPermissions } = useAuth();
+	const canManageDonors = isAuthorizedAdmin && adminPermissions.manageDonors;
+	const canManageUrgent = isAuthorizedAdmin && adminPermissions.manageUrgentRequests;
+	const canManageSupport = isAuthorizedAdmin && adminPermissions.manageSupportChat;
+	const canManageHospitals = isAuthorizedAdmin && adminPermissions.manageHospitals;
+	const canManageLocations = isAuthorizedAdmin && adminPermissions.manageLocations;
+	const canManageSettings = isAuthorizedAdmin && adminPermissions.manageSettings;
+	const canManageUsersRecovery = isAuthorizedAdmin && adminPermissions.manageUsersRecovery;
+	const writeAudit = (actionType, targetId, targetLabel, details) => {
+		if (!currentUser?.uid) return;
+		logAdminAction({
+			actorUid: currentUser.uid,
+			actorName: userProfile?.displayName || currentUser.displayName || "مسؤول",
+			actorLevel: adminLevel || "legacy_admin",
+			actionType,
+			targetId,
+			targetLabel,
+			details
+		});
+	};
 	const [importText, setImportText] = (0, import_react.useState)("");
 	const [announcement, setAnnouncement] = (0, import_react.useState)("");
 	const [announcementType, setAnnouncementType] = (0, import_react.useState)("general");
@@ -11021,6 +11860,14 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 	});
 	const [hospitalLoading, setHospitalLoading] = (0, import_react.useState)(false);
 	const [showChatManager, setShowChatManager] = (0, import_react.useState)(false);
+	useRegisterBackHandler(isHospitalFormOpen, () => setIsHospitalFormOpen(false));
+	useRegisterBackHandler(showChatManager, () => setShowChatManager(false));
+	useRegisterBackHandler(Boolean(adminDonorToDelete), () => {
+		if (!adminIsDeleting) {
+			setAdminDonorToDelete(null);
+			setAdminDeleteError(null);
+		}
+	});
 	import_react.useEffect(() => {
 		const unsub = subscribeToHospitals((data) => {
 			setHospitals(data);
@@ -11030,6 +11877,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 	const [totalUsersCount, setTotalUsersCount] = (0, import_react.useState)(0);
 	const [todaySignupsCount, setTodaySignupsCount] = (0, import_react.useState)(0);
 	const [adminsCount, setAdminsCount] = (0, import_react.useState)(0);
+	const [supervisorsCount, setSupervisorsCount] = (0, import_react.useState)(0);
 	const [adminsList, setAdminsList] = (0, import_react.useState)([]);
 	const [allUsersList, setAllUsersList] = (0, import_react.useState)([]);
 	const [isCleaningUp, setIsCleaningUp] = (0, import_react.useState)(false);
@@ -11044,6 +11892,8 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 	const [directRecoveryName, setDirectRecoveryName] = (0, import_react.useState)("");
 	const [issuingDirectRecovery, setIssuingDirectRecovery] = (0, import_react.useState)(false);
 	const [copiedRecoveryCode, setCopiedRecoveryCode] = (0, import_react.useState)(false);
+	const [urgentFilter, setUrgentFilter] = (0, import_react.useState)("all");
+	const [busyUrgentId, setBusyUrgentId] = (0, import_react.useState)(null);
 	const [locations, setLocations] = (0, import_react.useState)([]);
 	const [showLocationsSection, setShowLocationsSection] = (0, import_react.useState)(false);
 	const [editingLocationId, setEditingLocationId] = (0, import_react.useState)(null);
@@ -11054,6 +11904,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 	const [isSavingWebsiteUrl, setIsSavingWebsiteUrl] = (0, import_react.useState)(false);
 	const [websiteSaveResult, setWebsiteSaveResult] = (0, import_react.useState)(null);
 	const fetchUserStats = async () => {
+		if (!isOwner && !canManageUsersRecovery) return;
 		try {
 			let authUsers = [];
 			try {
@@ -11078,7 +11929,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 				const authRecord = allUsers.find((item) => item.uid === docSnap.id);
 				if (authRecord) Object.assign(authRecord, userWithId);
 				else allUsers.push(userWithId);
-				if (data.role === "admin" || data.email === "ziadalsyyadi@gmail.com") admins.push(userWithId);
+				if (data.role === "admin" || isOwnerEmail(data.email)) admins.push(userWithId);
 				let createdTime = null;
 				if (data.createdAt?.toDate) createdTime = data.createdAt.toDate().getTime();
 				else if (data.createdAt) createdTime = new Date(data.createdAt).getTime();
@@ -11093,6 +11944,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 		}
 	};
 	const refreshRecoveryRequests = async () => {
+		if (!canManageUsersRecovery) return;
 		try {
 			setRecoveryRequests(await listAccountRecoveryRequests());
 		} catch (error) {
@@ -11114,6 +11966,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 			const issued = await approveAccountRecovery(requestId);
 			setIssuedRecoveryCode(issued);
 			await refreshRecoveryRequests();
+			writeAudit("اعتماد استعادة حساب", requestId, issued.phone, `إصدار رمز استعادة للرقم ${issued.phone}`);
 			setResult({
 				success: true,
 				message: `تم إصدار رمز الاستعادة للرقم ${issued.phone} بنجاح.`
@@ -11139,6 +11992,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 			setDirectRecoveryPhone("");
 			setDirectRecoveryName("");
 			await refreshRecoveryRequests();
+			writeAudit("إصدار رمز استعادة مباشر", issued.requestId, issued.phone, `الاسم: ${issued.fullName}`);
 			setResult({
 				success: true,
 				message: `تم إصدار رمز استعادة مباشر للرقم ${issued.phone}.`
@@ -11158,6 +12012,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 			await revokeAccountRecovery(requestId);
 			setIssuedRecoveryCode((current) => current?.requestId === requestId ? null : current);
 			await refreshRecoveryRequests();
+			writeAudit("إلغاء رمز استعادة", requestId, requestId);
 			setResult({
 				success: true,
 				message: "تم إلغاء الرمز بنجاح. يمكن للمستخدم طلب رمز جديد."
@@ -11177,6 +12032,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 			await deleteAccountRecoveryRequest(requestId);
 			setRecoveryRequests((prev) => prev.filter((r) => r.id !== requestId));
 			setIssuedRecoveryCode((current) => current?.requestId === requestId ? null : current);
+			writeAudit("حذف سجل طلب استعادة", requestId, requestId);
 			setResult({
 				success: true,
 				message: "تم حذف سجل طلب الاستعادة."
@@ -11191,15 +12047,16 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 		}
 	};
 	const handleDeleteAppUser = async (uid) => {
-		if (!window.confirm("سيتم حذف حساب المستخدم من Firebase Auth وملفه وسجلاته المرتبطة. هل تريد المتابعة؟")) return;
+		if (!window.confirm("سيتم حذف حساب المستخدم وملفه من قاعدة البيانات. هل تريد المتابعة؟")) return;
 		setDeletingUserId(uid);
 		try {
 			await deleteAppUser(uid);
 			setAllUsersList((prev) => prev.filter((item) => (item.uid || item.id) !== uid));
 			setTotalUsersCount((prev) => Math.max(0, prev - 1));
+			writeAudit("حذف ملف مستخدم", uid, uid);
 			setResult({
 				success: true,
-				message: "تم حذف حساب المستخدم وسجلاته المرتبطة."
+				message: "تم حذف ملف المستخدم بنجاح."
 			});
 		} catch (error) {
 			setResult({
@@ -11217,9 +12074,23 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 		return () => unsub();
 	}, []);
 	import_react.useEffect(() => {
-		fetchUserStats();
-		refreshRecoveryRequests();
-	}, [donors.length]);
+		if (isOwner || canManageUsersRecovery) fetchUserStats();
+		if (canManageUsersRecovery) refreshRecoveryRequests();
+	}, [
+		donors.length,
+		isOwner,
+		canManageUsersRecovery
+	]);
+	import_react.useEffect(() => {
+		if (!isOwner) {
+			setSupervisorsCount(0);
+			return;
+		}
+		const unsub = subscribeToAllSupervisors((records) => {
+			setSupervisorsCount(records.filter((r) => r.isActive).length);
+		}, () => {});
+		return () => unsub();
+	}, [isOwner]);
 	const filteredDonors = import_react.useMemo(() => {
 		return donors.filter((d) => {
 			if (adminBloodFilter !== "ALL" && d.bloodType !== adminBloodFilter) return false;
@@ -11234,6 +12105,13 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 		adminBloodFilter,
 		adminSearchQuery
 	]);
+	const filteredUrgentRequests = import_react.useMemo(() => {
+		return urgentRequests.filter((req) => {
+			if (urgentFilter === "open") return req.status === "open";
+			if (urgentFilter === "fulfilled") return req.status === "fulfilled";
+			return true;
+		});
+	}, [urgentRequests, urgentFilter]);
 	import_react.useEffect(() => {
 		const fetchSettings = async () => {
 			try {
@@ -11255,8 +12133,8 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 		return () => unsub();
 	}, [websiteInputDirty]);
 	import_react.useEffect(() => {
-		if (userProfile?.role === "admin" || currentUser?.email === "ziadalsyyadi@gmail.com" || currentUser?.email === "user_967773633918_v1@qataba-blood.app") ensureWebsiteConfigSeededForAdmin();
-	}, [currentUser, userProfile?.role]);
+		if (isOwner) ensureWebsiteConfigSeededForAdmin();
+	}, [isOwner]);
 	const handleExportExcel = async () => {
 		setLoading(true);
 		setResult(null);
@@ -11380,7 +12258,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 			setLoading(false);
 		}
 	};
-	if (!(userProfile?.role === "admin" || currentUser?.email === "ziadalsyyadi@gmail.com" || currentUser?.email === "user_967773633918_v1@qataba-blood.app")) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+	if (!isAuthorizedAdmin) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "max-w-md mx-auto my-8 p-6 rounded-3xl bg-white border border-slate-200 shadow-xl space-y-4 text-right",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -11389,11 +12267,11 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 				className: "text-lg font-black text-center text-slate-900",
-				children: "الدخول للمسؤول فقط"
+				children: "الدخول للمسؤول أو المشرف المعتمد فقط"
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "text-xs text-center text-slate-600",
-				children: "سجّل الدخول بحساب المسؤول المعتمد. لا يمكن فتح لوحة الإدارة باستخدام رمز PIN أو وضع المستخدم."
+				children: "سجّل الدخول بحساب المالك أو بحساب مشرف مفعّل في قاعدة البيانات."
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 				type: "button",
@@ -11417,6 +12295,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 				updatedAt: serverTimestamp(),
 				updatedBy: currentUser.uid
 			}, { merge: true });
+			writeAudit("نشر تعميم عام", "settings/global", announcementType, announcement.trim().slice(0, 120));
 			setResult({
 				success: true,
 				message: announcement.trim() ? "تم تعميم الرسالة ونشرها بنجاح لتظهر فوراً عند جميع المشتركين في الإشعارات! ✓" : "تم تحديث الإعدادات بنجاح!"
@@ -11443,6 +12322,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 				updatedBy: currentUser.uid
 			}, { merge: true });
 			setAnnouncement("");
+			writeAudit("مسح التعميم العام", "settings/global", "announcement");
 			setResult({
 				success: true,
 				message: "تم إلغاء ومسح الرسالة من إشعارات جميع المشتركين بنجاح. ✓"
@@ -11472,6 +12352,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 			const savedUrl = await saveRemoteWebsiteUrl(valid);
 			setWebsiteUrlInput(savedUrl);
 			setWebsiteInputDirty(false);
+			writeAudit("تحديث رابط الموقع الرسمي", WEBSITE_CONFIG_PATH, savedUrl);
 			setWebsiteSaveResult({
 				success: true,
 				message: "تم حفظ وتحديث رابط الموقع في Firebase بنجاح وسيتحدث تلقائياً لدى جميع المستخدمين! ✓"
@@ -11492,6 +12373,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 		try {
 			const res = await importRawDonors(importText);
 			if (res.success) {
+				writeAudit("استيراد متبرعين نصي", void 0, `${res.count} متبرع`);
 				setResult({
 					success: true,
 					message: `تم استيراد ${res.count} متبرعاً بنجاح إلى قاعدة البيانات!`
@@ -11530,11 +12412,13 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 				}
 				setImportText(text);
 				const res = await importRawDonors(text);
-				if (res.success) setResult({
-					success: true,
-					message: `تم اختيار الملف (${file.name}) واستيراد ${res.count} متبرعاً بنجاح إلى قاعدة البيانات!`
-				});
-				else setResult({
+				if (res.success) {
+					writeAudit("استيراد ملف متبرعين", void 0, file.name, `تم استيراد ${res.count} متبرع`);
+					setResult({
+						success: true,
+						message: `تم اختيار الملف (${file.name}) واستيراد ${res.count} متبرعاً بنجاح إلى قاعدة البيانات!`
+					});
+				} else setResult({
 					success: false,
 					message: res.error || "حدث خطأ أثناء تحليل بيانات الملف المختار"
 				});
@@ -11558,6 +12442,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 		reader.readAsText(file);
 	};
 	const handleCleanupUsers = async () => {
+		if (!isOwner) return;
 		if (!window.confirm("هل أنت متأكد من حذف كافة المستخدمين التجريبيين؟ سيتم الإبقاء على حسابك وحسابات المسؤولين الموثقة فقط.")) return;
 		setIsCleaningUp(true);
 		setResult(null);
@@ -11566,11 +12451,11 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 			let deletedCount = 0;
 			for (const userDoc of usersSnap.docs) {
 				const data = userDoc.data();
-				const email = data.email || "";
-				if (email === "ziadalsyyadi@gmail.com" || email === "user_967773633918_v1@qataba-blood.app" || data.role === "admin" || userDoc.id === currentUser?.uid) continue;
+				if (isOwnerEmail(data.email || "") || data.role === "admin" || userDoc.id === currentUser?.uid) continue;
 				await deleteDoc(doc(db, "users", userDoc.id));
 				deletedCount++;
 			}
+			writeAudit("تنظيف الحسابات التجريبية", "users", `${deletedCount} حساب`);
 			setResult({
 				success: true,
 				message: `تم تنظيف قاعدة البيانات وحذف ${deletedCount} مستخدم تجريبي بنجاح.`
@@ -11603,21 +12488,27 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 						className: "p-2.5 rounded-2xl bg-amber-500 text-white shadow-md shadow-amber-200",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "w-6 h-6" })
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center gap-2",
+						className: "flex flex-wrap items-center gap-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 							className: "text-lg font-black text-slate-900",
 							children: "لوحة تحكم المسؤول"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "text-[10px] bg-amber-500 text-white font-bold px-2 py-0.5 rounded-full",
-							children: "صلاحيات كاملة ✓"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "text-[10px] bg-amber-500 text-white font-bold px-2.5 py-0.5 rounded-full",
+							children: [adminLevel ? ALL_SUPERVISOR_LEVEL_LABELS[adminLevel] : "مسؤول", " ✓"]
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "text-xs text-slate-600 font-medium",
-						children: "إدارة السجل، الإعلانات، المزامنة، وصلاحيات التعديل"
+						children: isOwner ? "صلاحيات المالك الكاملة وإدارة المشرفين والنظام" : "الأقسام المتاحة حسب صلاحيات الإشراف المعتمدة في قاعدة البيانات"
 					})] })]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center gap-2",
+					className: "flex flex-wrap items-center gap-2",
 					children: [
+						isOwner && onOpenSupervisors && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							type: "button",
+							onClick: onOpenSupervisors,
+							className: "flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 text-amber-300 hover:bg-slate-800 transition-colors text-xs font-black shadow-xs cursor-pointer",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "إدارة المشرفين" })]
+						}),
 						onGlobalRefresh && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 							onClick: onGlobalRefresh,
 							disabled: isRefreshing,
@@ -11641,7 +12532,11 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 					]
 				})]
 			}),
-			showChatManager && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			result && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: `p-3 rounded-2xl flex items-center gap-2 text-xs font-bold ${result.success ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-red-50 text-red-700 border border-red-200"}`,
+				children: [result.success ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "w-4 h-4 shrink-0" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, { className: "w-4 h-4 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: result.message })]
+			}),
+			showChatManager && canManageSupport && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "fixed inset-0 z-50 bg-white lg:bg-black/50 lg:backdrop-blur-sm lg:p-4 flex items-center justify-center animate-in fade-in zoom-in duration-200",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "w-full h-full lg:max-w-6xl lg:h-[90vh] relative",
@@ -11655,7 +12550,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "grid grid-cols-2 sm:grid-cols-5 gap-3",
 				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					(isOwner || canManageUsersRecovery) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "p-4 rounded-3xl bg-linear-to-br from-amber-500 to-amber-600 text-white shadow-md shadow-amber-200 flex flex-col items-center justify-center text-center space-y-1",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -11671,8 +12566,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 								children: "إجمالي مستخدمي التطبيق"
 							})
 						]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "p-4 rounded-3xl bg-linear-to-br from-emerald-500 to-emerald-600 text-white shadow-md shadow-emerald-200 flex flex-col items-center justify-center text-center space-y-1",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -11688,8 +12582,8 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 								children: "المنضمين الجدد اليوم"
 							})
 						]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					})] }),
+					canManageDonors && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "p-4 rounded-3xl bg-linear-to-br from-red-600 to-red-700 text-white shadow-md shadow-red-200 flex flex-col items-center justify-center text-center space-y-1",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -11706,7 +12600,24 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 							})
 						]
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					canManageUrgent && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "p-4 rounded-3xl bg-linear-to-br from-rose-600 to-rose-700 text-white shadow-md shadow-rose-200 flex flex-col items-center justify-center text-center space-y-1",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "p-2 rounded-2xl bg-white/20 backdrop-blur-xs",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Droplet, { className: "w-5 h-5 text-white" })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "text-xl font-black",
+								children: urgentRequests.filter((r) => r.status === "open").length
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "text-[10px] font-extrabold text-rose-100",
+								children: "طلبات دم عاجلة مفتوحة"
+							})
+						]
+					}),
+					isOwner && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "p-4 rounded-3xl bg-linear-to-br from-blue-600 to-blue-700 text-white shadow-md shadow-blue-200 flex flex-col items-center justify-center text-center space-y-1",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -11715,15 +12626,15 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 								className: "text-xl font-black",
-								children: adminsCount
+								children: supervisorsCount
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 								className: "text-[10px] font-extrabold text-blue-100",
-								children: "المسؤولين (Admins)"
+								children: "المشرفون المفعّلون"
 							})
 						]
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					canManageHospitals && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "p-4 rounded-3xl bg-linear-to-br from-slate-800 to-slate-900 text-white shadow-md shadow-slate-200 flex flex-col items-center justify-center text-center space-y-1",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -11745,7 +12656,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "grid grid-cols-1 sm:grid-cols-2 gap-4",
 				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					canManageDonors && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -11799,7 +12710,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 							})
 						]
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					canManageSettings && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -11887,7 +12798,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 									})
 								]
 							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							(canManageDonors || isOwner) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "pt-2 border-t border-slate-100",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "flex items-center justify-between mb-2",
@@ -11947,7 +12858,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 							})
 						]
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					isOwner && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -11971,7 +12882,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", {
 										className: "px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-mono text-[10px]",
 										dir: "ltr",
-										children: WEBSITE_CONFIG_PATH
+										children: "appConfig/websiteUrl"
 									}),
 									" ",
 									"ليصل التغيير لجميع المستخدمين تلقائياً دون الحاجة لإصدار APK أو AAB جديد."
@@ -11993,7 +12904,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 											setWebsiteInputDirty(true);
 											setWebsiteSaveResult(null);
 										},
-										placeholder: DEFAULT_WEBSITE_URL,
+										placeholder: "https://sites.google.com/view/bank-al-dam-qataba",
 										className: "w-full p-2.5 rounded-xl border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 outline-hidden text-xs font-mono font-bold text-left bg-slate-50",
 										required: true
 									})] }),
@@ -12022,7 +12933,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 												type: "button",
 												onClick: () => {
-													setWebsiteUrlInput(DEFAULT_WEBSITE_URL);
+													setWebsiteUrlInput("https://sites.google.com/view/bank-al-dam-qataba");
 													setWebsiteInputDirty(true);
 													setWebsiteSaveResult(null);
 												},
@@ -12040,7 +12951,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 							})
 						]
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					canManageSupport && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "p-5 rounded-3xl bg-white border border-slate-200 shadow-xs flex flex-col items-center justify-center gap-4 text-center",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -12061,19 +12972,162 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 							})
 						]
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					canManageUrgent && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4 sm:col-span-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex flex-wrap items-center justify-between gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-2 text-slate-900",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Droplet, { className: "w-5 h-5 text-rose-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
+									className: "text-sm font-black",
+									children: [
+										"إدارة طلبات الدم العاجلة (",
+										urgentRequests.length,
+										")"
+									]
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "flex items-center gap-1.5",
+								children: [
+									"all",
+									"open",
+									"fulfilled"
+								].map((statusKey) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => setUrgentFilter(statusKey),
+									className: `px-2.5 py-1 rounded-lg text-[10px] font-black cursor-pointer transition-colors ${urgentFilter === statusKey ? "bg-rose-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`,
+									children: statusKey === "all" ? "الكل" : statusKey === "open" ? "مفتوحة" : "مكتملة"
+								}, statusKey))
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "space-y-2.5 max-h-[340px] overflow-y-auto pr-1",
+							children: filteredUrgentRequests.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "p-6 text-center rounded-2xl bg-slate-50 border border-dashed border-slate-200 text-xs text-slate-500",
+								children: "لا توجد طلبات دم مطابقة للتصفية الحالية."
+							}) : filteredUrgentRequests.map((req) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "space-y-1",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex flex-wrap items-center gap-2",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "px-2 py-0.5 rounded-lg bg-rose-600 text-white text-xs font-black",
+												children: req.bloodType
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs font-black text-slate-900",
+												children: req.patientName
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: `px-2 py-0.5 rounded-full text-[10px] font-black ${req.status === "fulfilled" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`,
+												children: req.status === "fulfilled" ? "مكتمل ✓" : "مفتوح"
+											})
+										]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "text-[11px] text-slate-600 flex flex-wrap items-center gap-3",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["المستشفى: ", req.hospital] }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "font-mono",
+												dir: "ltr",
+												children: req.contactPhone
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "flex items-center gap-1",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-3 h-3 text-slate-400" }),
+													req.unitsNeeded,
+													" وحدة"
+												]
+											})
+										]
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										type: "button",
+										disabled: busyUrgentId === req.id,
+										onClick: async () => {
+											const nextStatus = req.status === "fulfilled" ? "open" : "fulfilled";
+											setBusyUrgentId(req.id);
+											try {
+												await updateRequestStatus(req.id, nextStatus);
+												writeAudit(nextStatus === "fulfilled" ? "إغلاق طلب دم عاجل" : "إعادة فتح طلب دم عاجل", req.id, req.patientName, `الفصيلة: ${req.bloodType} | المستشفى: ${req.hospital}`);
+												setResult({
+													success: true,
+													message: nextStatus === "fulfilled" ? `تم تحديث حالة طلب (${req.patientName}) إلى مكتمل.` : `تمت إعادة فتح طلب (${req.patientName}).`
+												});
+											} catch (err) {
+												setResult({
+													success: false,
+													message: err?.message || "تعذر تحديث الطلب."
+												});
+											} finally {
+												setBusyUrgentId(null);
+											}
+										},
+										className: "px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-[11px] font-black transition-colors disabled:opacity-50 cursor-pointer",
+										children: req.status === "fulfilled" ? "إعادة فتح" : "تم توفير الدم"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										type: "button",
+										disabled: busyUrgentId === req.id,
+										onClick: async () => {
+											if (!window.confirm(`هل تريد حذف طلب (${req.patientName}) نهائياً؟`)) return;
+											setBusyUrgentId(req.id);
+											try {
+												await deleteUrgentRequest(req.id);
+												writeAudit("حذف طلب دم عاجل", req.id, req.patientName, `الفصيلة: ${req.bloodType}`);
+												setResult({
+													success: true,
+													message: `تم حذف طلب (${req.patientName}) بنجاح.`
+												});
+											} catch (err) {
+												setResult({
+													success: false,
+													message: err?.message || "تعذر حذف الطلب."
+												});
+											} finally {
+												setBusyUrgentId(null);
+											}
+										},
+										className: "p-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 disabled:opacity-50 cursor-pointer",
+										title: "حذف الطلب",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-3.5 h-3.5" })
+									})]
+								})]
+							}, req.id))
+						})]
+					}),
+					isOwner && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center gap-2 text-slate-900",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "w-5 h-5 text-blue-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-									className: "text-sm font-black",
-									children: "إدارة النظام والتنظيف"
+								className: "flex items-center justify-between gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-2 text-slate-900",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "w-5 h-5 text-blue-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+										className: "text-sm font-black",
+										children: "إدارة النظام والمشرفين"
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-900 text-amber-300",
+									children: "المالك فقط"
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "text-xs text-slate-600 leading-relaxed",
-								children: "يمكنك تنظيف قاعدة البيانات من الحسابات التجريبية أو إدارة صلاحيات المسؤولين. سيتم الحفاظ على حسابك الأساسي فقط."
+								children: "يمكنك إضافة أو تعديل أو تعطيل المشرفين ومراجعة سجل العمليات الإدارية، أو تنظيف الحسابات التجريبية."
+							}),
+							onOpenSupervisors && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: onOpenSupervisors,
+								className: "w-full py-3 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs shadow-md transition-all flex items-center justify-center gap-2 active:scale-98 cursor-pointer",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+									"إدارة المشرفين وصلاحياتهم (",
+									supervisorsCount,
+									")"
+								] })]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								onClick: handleCleanupUsers,
@@ -12086,7 +13140,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
 									className: "text-[10px] font-black text-slate-400 mb-2 uppercase",
 									children: [
-										"المسؤولون الحاليون (",
+										"حسابات الإدارة (",
 										adminsCount,
 										"):"
 									]
@@ -12105,14 +13159,14 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 											})]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "text-[8px] bg-blue-600 text-white px-1.5 py-0.5 rounded-full font-bold",
-											children: "مسؤول"
+											children: isOwnerEmail(admin.email) ? "المالك" : "مشرف"
 										})]
 									}, admin.id))
 								})]
 							})
 						]
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					canManageUsersRecovery && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -12131,40 +13185,44 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "text-xs text-slate-500 leading-relaxed font-medium",
-								children: "عرض أسماء وبيانات كافة المسجلين في التطبيق."
+								children: "عرض أسماء وبيانات المسجلين في التطبيق (يُستثنى المالك والمشرفون من الحذف)."
 							}),
 							showUsersSection && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 								className: "space-y-2 max-h-[300px] overflow-y-auto pr-1 pt-2 border-t border-slate-50",
-								children: allUsersList.map((u) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between gap-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex flex-col",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-xs font-black text-slate-900",
-											children: u.displayName || u.fullName || "مستخدم غير معروف"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-[10px] text-slate-500 font-mono",
-											children: u.phone || u.email || "بدون هاتف"
+								children: allUsersList.map((u) => {
+									const targetUid = u.uid || u.id;
+									const isProtected = isOwnerEmail(u.email) || u.role === "admin" || targetUid === currentUser?.uid;
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex flex-col",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs font-black text-slate-900",
+												children: u.displayName || u.fullName || "مستخدم غير معروف"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-[10px] text-slate-500 font-mono",
+												children: u.phone || u.email || "بدون هاتف"
+											})]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center gap-2",
+											children: [(isOwnerEmail(u.email) || u.role === "admin") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-[8px] bg-amber-500 text-white px-1.5 py-0.5 rounded-full font-bold",
+												children: isOwnerEmail(u.email) ? "المالك" : "مشرف"
+											}), !isProtected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: () => handleDeleteAppUser(targetUid),
+												disabled: deletingUserId === targetUid,
+												className: "p-1.5 rounded-lg bg-red-50 text-red-600 disabled:opacity-40",
+												title: "حذف الحساب",
+												children: deletingUserId === targetUid ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: "w-3.5 h-3.5 animate-spin" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-3.5 h-3.5" })
+											})]
 										})]
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex items-center gap-2",
-										children: [u.role === "admin" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-[8px] bg-amber-500 text-white px-1.5 py-0.5 rounded-full font-bold",
-											children: "مسؤول"
-										}), u.role !== "admin" && (u.uid || u.id) !== currentUser?.uid && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-											type: "button",
-											onClick: () => handleDeleteAppUser(u.uid || u.id),
-											disabled: deletingUserId === (u.uid || u.id),
-											className: "p-1.5 rounded-lg bg-red-50 text-red-600 disabled:opacity-40",
-											title: "حذف الحساب",
-											children: deletingUserId === (u.uid || u.id) ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: "w-3.5 h-3.5 animate-spin" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-3.5 h-3.5" })
-										})]
-									})]
-								}, u.uid || u.id))
+									}, targetUid);
+								})
 							})
 						]
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					canManageUsersRecovery && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -12362,7 +13420,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 							})
 						]
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					canManageLocations && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -12396,7 +13454,9 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 										onClick: async () => {
 											if (!locationNameInput.trim()) return;
-											await saveLocation(locationNameInput, editingLocationId || void 0);
+											const trimmedLoc = locationNameInput.trim();
+											await saveLocation(trimmedLoc, editingLocationId || void 0);
+											writeAudit(editingLocationId ? "تعديل منطقة سكنية" : "إضافة منطقة سكنية", editingLocationId || void 0, trimmedLoc);
 											setLocationLocationNameInput("");
 											setEditingLocationId(null);
 											setResult({
@@ -12427,6 +13487,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 												onClick: async () => {
 													if (window.confirm(`هل أنت متأكد من حذف منطقة "${loc.name}"؟`)) {
 														await deleteLocation(loc.id);
+														writeAudit("حذف منطقة سكنية", loc.id, loc.name);
 														setResult({
 															success: true,
 															message: "تم حذف المنطقة بنجاح."
@@ -12444,7 +13505,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 					})
 				]
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			canManageDonors && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "space-y-4",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
 					className: "text-sm font-black text-slate-900 flex items-center gap-2",
@@ -12495,6 +13556,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 										const data = await fetchDonorsFromGoogleSheets();
 										if (data.success) {
 											if (onGlobalRefresh) await onGlobalRefresh();
+											writeAudit("مزامنة من Google Sheets", void 0, `${data.count || 0} سجل`);
 											setResult({
 												success: true,
 												message: `تم مزامنة ${data.count || 0} اسماً من الأرشيف (Sheets ➔ App) بنجاح!`
@@ -12548,11 +13610,13 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 											return;
 										}
 										const res = await pushAllDonorsToSheets(donors);
-										if (res.success) setResult({
-											success: true,
-											message: `تم تحديث جدول البيانات بـ ${res.count} متبرع من التطبيق بنجاح! ✓`
-										});
-										else setResult({
+										if (res.success) {
+											writeAudit("تحديث جدول Google Sheets", void 0, `${res.count} متبرع`);
+											setResult({
+												success: true,
+												message: `تم تحديث جدول البيانات بـ ${res.count} متبرع من التطبيق بنجاح! ✓`
+											});
+										} else setResult({
 											success: false,
 											message: res.error || "فشل تحديث جدول البيانات. تأكد من صلاحية Anyone في Apps Script."
 										});
@@ -12573,7 +13637,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 					})]
 				})]
 			}),
-			showDonorsSection && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			canManageDonors && showDonorsSection && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -12701,7 +13765,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 					})
 				]
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			canManageHospitals && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3",
@@ -12726,6 +13790,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 									setResult(null);
 									try {
 										await seedHospitals();
+										writeAudit("تهيئة دليل المستشفيات");
 										setResult({
 											success: true,
 											message: "تم إدراج البيانات الأولية للمستشفيات بنجاح! ✓"
@@ -12808,6 +13873,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 								onClick: async () => {
 									if (window.confirm(`هل أنت متأكد من حذف ${h.name} من الدليل؟`)) {
 										await deleteHospital(h.id);
+										writeAudit("حذف مرفق طبي", h.id, h.name);
 										setResult({
 											success: true,
 											message: "تم حذف المستشفى بنجاح"
@@ -12824,7 +13890,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 					})
 				})]
 			}),
-			isHospitalFormOpen && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			isHospitalFormOpen && canManageHospitals && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 text-right",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150 overflow-y-auto max-h-[90vh]",
@@ -12845,6 +13911,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 							setResult(null);
 							try {
 								await saveHospital(hospitalForm, editingHospital?.id);
+								writeAudit(editingHospital ? "تعديل مرفق طبي" : "إضافة مرفق طبي", editingHospital?.id, hospitalForm.name);
 								setResult({
 									success: true,
 									message: editingHospital ? "تم تحديث بيانات المستشفى بنجاح! ✓" : "تم إضافة المستشفى الجديد بنجاح! ✓"
@@ -12854,7 +13921,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 								console.error("Hospital save error:", err);
 								setResult({
 									success: false,
-									message: `فشل حفظ البيانات: ${err.message?.includes("Permission denied") ? "عذراً، لا تمتلك صلاحيات كافية (Admin) للقيام بهذا الإجراء." : "حدث خطأ تقني أثناء الحفظ."}`
+									message: `فشل حفظ البيانات: ${err.message?.includes("Permission denied") ? "عذراً، لا تمتلك صلاحيات كافية للقيام بهذا الإجراء." : "حدث خطأ تقني أثناء الحفظ."}`
 								});
 							} finally {
 								setHospitalLoading(false);
@@ -12986,6 +14053,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 									setAdminDeleteError(null);
 									try {
 										await onDeleteDonor(adminDonorToDelete.id, adminDonorToDelete.phone);
+										writeAudit("حذف متبرع", adminDonorToDelete.id, adminDonorToDelete.fullName, `الفصيلة: ${adminDonorToDelete.bloodType}`);
 										setResult({
 											success: true,
 											message: `تم حذف بيانات المتبرع (${adminDonorToDelete.fullName}) بنجاح! ✓`
@@ -13014,7 +14082,7 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 					]
 				})
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			canManageDonors && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "grid grid-cols-2 sm:grid-cols-4 gap-3",
 				children: [
 					{
@@ -13060,6 +14128,903 @@ var AdminDashboard = ({ onBack, donors = [], onEditDonor, onDeleteDonor, onGloba
 		]
 	});
 };
+// src/components/SupervisorManagement.tsx
+var LEVELS_ORDER = [
+	"donor_admin",
+	"urgent_admin",
+	"support_admin",
+	"general_admin"
+];
+function formatAuditDate(ts) {
+	try {
+		const date = typeof ts?.toDate === "function" ? ts.toDate() : ts instanceof Date ? ts : null;
+		if (!date) return "الآن";
+		return new Intl.DateTimeFormat("ar-YE", {
+			dateStyle: "medium",
+			timeStyle: "short"
+		}).format(date);
+	} catch {
+		return "—";
+	}
+}
+function getLevelBadgeStyle(level) {
+	switch (level) {
+		case "donor_admin": return "bg-rose-50 text-rose-700 border-rose-200";
+		case "urgent_admin": return "bg-amber-50 text-amber-800 border-amber-200";
+		case "support_admin": return "bg-sky-50 text-sky-700 border-sky-200";
+		case "general_admin": return "bg-indigo-50 text-indigo-700 border-indigo-200";
+	}
+}
+var SupervisorManagement = ({ onBackToAdmin }) => {
+	const { currentUser, userProfile, isOwner } = useAuth();
+	const [subTab, setSubTab] = (0, import_react.useState)("list");
+	const [supervisors, setSupervisors] = (0, import_react.useState)([]);
+	const [auditLogs, setAuditLogs] = (0, import_react.useState)([]);
+	const [loadingList, setLoadingList] = (0, import_react.useState)(true);
+	const [loadingAudit, setLoadingAudit] = (0, import_react.useState)(true);
+	const [errorMsg, setErrorMsg] = (0, import_react.useState)(null);
+	const [statusToast, setStatusToast] = (0, import_react.useState)(null);
+	const [searchQuery, setSearchQuery] = (0, import_react.useState)("");
+	const [levelFilter, setLevelFilter] = (0, import_react.useState)("ALL");
+	const [auditSearch, setAuditSearch] = (0, import_react.useState)("");
+	const [showAddModal, setShowAddModal] = (0, import_react.useState)(false);
+	const [identifierInput, setIdentifierInput] = (0, import_react.useState)("");
+	const [lookupLoading, setLookupLoading] = (0, import_react.useState)(false);
+	const [lookupError, setLookupError] = (0, import_react.useState)(null);
+	const [resolvedCandidate, setResolvedCandidate] = (0, import_react.useState)(null);
+	const [selectedLevel, setSelectedLevel] = (0, import_react.useState)("donor_admin");
+	const [selectedPerms, setSelectedPerms] = (0, import_react.useState)(SUPERVISOR_LEVEL_META.donor_admin.defaultPermissions);
+	const [formActive, setFormActive] = (0, import_react.useState)(true);
+	const [formNotes, setFormNotes] = (0, import_react.useState)("");
+	const [submitting, setSubmitting] = (0, import_react.useState)(false);
+	const [editingSupervisor, setEditingSupervisor] = (0, import_react.useState)(null);
+	const [deleteTarget, setDeleteTarget] = (0, import_react.useState)(null);
+	const [busyUid, setBusyUid] = (0, import_react.useState)(null);
+	useRegisterBackHandler(showAddModal, () => {
+		if (!submitting) setShowAddModal(false);
+	});
+	useRegisterBackHandler(Boolean(editingSupervisor), () => {
+		if (!submitting) setEditingSupervisor(null);
+	});
+	useRegisterBackHandler(Boolean(deleteTarget), () => {
+		if (!busyUid) setDeleteTarget(null);
+	});
+	(0, import_react.useEffect)(() => {
+		if (!isOwner) return;
+		setLoadingList(true);
+		const unsubSups = subscribeToAllSupervisors((items) => {
+			setSupervisors(items);
+			setLoadingList(false);
+		}, (err) => {
+			console.warn("Could not subscribe to supervisors:", err);
+			setLoadingList(false);
+			setErrorMsg("تعذر تحميل قائمة المشرفين. تحقق من الاتصال وصلاحيات المالك.");
+		});
+		setLoadingAudit(true);
+		const unsubAudit = subscribeToAdminAuditLogs((logs) => {
+			setAuditLogs(logs);
+			setLoadingAudit(false);
+		}, (err) => {
+			console.warn("Could not subscribe to audit logs:", err);
+			setLoadingAudit(false);
+		});
+		return () => {
+			unsubSups();
+			unsubAudit();
+		};
+	}, [isOwner]);
+	const showToast = (msg) => {
+		setStatusToast(msg);
+		setTimeout(() => setStatusToast(null), 4500);
+	};
+	const filteredSupervisors = (0, import_react.useMemo)(() => {
+		const q = searchQuery.trim().toLowerCase();
+		return supervisors.filter((s) => {
+			if (levelFilter !== "ALL" && s.level !== levelFilter) return false;
+			if (!q) return true;
+			return s.displayName.toLowerCase().includes(q) || (s.phone || "").toLowerCase().includes(q) || (s.email || "").toLowerCase().includes(q) || SUPERVISOR_LEVEL_META[s.level].label.toLowerCase().includes(q);
+		});
+	}, [
+		supervisors,
+		searchQuery,
+		levelFilter
+	]);
+	const filteredAuditLogs = (0, import_react.useMemo)(() => {
+		const q = auditSearch.trim().toLowerCase();
+		if (!q) return auditLogs;
+		return auditLogs.filter((log) => log.actorName.toLowerCase().includes(q) || log.actionType.toLowerCase().includes(q) || (log.targetLabel || "").toLowerCase().includes(q) || (log.details || "").toLowerCase().includes(q));
+	}, [auditLogs, auditSearch]);
+	if (!isOwner || !currentUser) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "bg-white rounded-3xl p-8 border border-rose-200 text-center space-y-4 max-w-lg mx-auto shadow-xs",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "w-16 h-16 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lock, { className: "w-8 h-8" })
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+				className: "text-lg font-black text-slate-900",
+				children: "صلاحية مقصورة على المالك فقط"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-xs text-slate-600 leading-relaxed font-medium",
+				children: "صفحة «إدارة المشرفين» ومراجعة سجل العمليات الإدارية متاحة فقط لحساب المالك الأساسي للتطبيق، ولا يمكن لأي مشرف الوصول إليها أو تعديلها."
+			})
+		]
+	});
+	const actorName = userProfile?.displayName || currentUser.displayName || "المالك";
+	const openAddModal = () => {
+		setIdentifierInput("");
+		setLookupError(null);
+		setResolvedCandidate(null);
+		setSelectedLevel("donor_admin");
+		setSelectedPerms({ ...SUPERVISOR_LEVEL_META.donor_admin.defaultPermissions });
+		setFormActive(true);
+		setFormNotes("");
+		setShowAddModal(true);
+	};
+	const openEditModal = (sup) => {
+		setEditingSupervisor(sup);
+		setSelectedLevel(sup.level);
+		setSelectedPerms(sanitizeSupervisorPermissions(sup.permissions));
+		setFormActive(sup.isActive);
+		setFormNotes(sup.notes || "");
+	};
+	const handleLevelChange = (level) => {
+		setSelectedLevel(level);
+		setSelectedPerms({ ...SUPERVISOR_LEVEL_META[level].defaultPermissions });
+	};
+	const togglePermissionKey = (key) => {
+		setSelectedPerms((prev) => ({
+			...prev,
+			[key]: !prev[key],
+			manageSupervisors: false
+		}));
+	};
+	const handleLookupExistingUser = async (e) => {
+		if (e) e.preventDefault();
+		setLookupError(null);
+		setResolvedCandidate(null);
+		setLookupLoading(true);
+		try {
+			const candidate = await resolveExistingUserForSupervisor(identifierInput);
+			setResolvedCandidate(candidate);
+		} catch (err) {
+			setLookupError(err.message || "تعذر العثور على الحساب.");
+		} finally {
+			setLookupLoading(false);
+		}
+	};
+	const handleConfirmAddSupervisor = async () => {
+		if (!resolvedCandidate) {
+			setLookupError("ابحث أولاً عن حساب موجود برقم الهاتف أو البريد الإلكتروني.");
+			return;
+		}
+		if (!PERMISSION_LABELS.some((p) => selectedPerms[p.key])) {
+			setLookupError("حدد صلاحية واحدة على الأقل للمشرف.");
+			return;
+		}
+		setSubmitting(true);
+		setLookupError(null);
+		try {
+			await saveSupervisorAssignment({
+				target: resolvedCandidate,
+				level: selectedLevel,
+				permissions: selectedPerms,
+				isActive: formActive,
+				notes: formNotes,
+				actorUid: currentUser.uid,
+				actorName
+			});
+			setShowAddModal(false);
+			showToast(`تم تعيين «${resolvedCandidate.displayName}» كـ ${SUPERVISOR_LEVEL_META[selectedLevel].label} بنجاح.`);
+		} catch (err) {
+			setLookupError(err.message || "حدث خطأ أثناء حفظ صلاحيات المشرف.");
+		} finally {
+			setSubmitting(false);
+		}
+	};
+	const handleConfirmEditSupervisor = async () => {
+		if (!editingSupervisor) return;
+		if (!PERMISSION_LABELS.some((p) => selectedPerms[p.key])) {
+			setErrorMsg("حدد صلاحية واحدة على الأقل للمشرف.");
+			return;
+		}
+		setSubmitting(true);
+		setErrorMsg(null);
+		try {
+			await saveSupervisorAssignment({
+				target: {
+					uid: editingSupervisor.uid,
+					displayName: editingSupervisor.displayName,
+					phone: editingSupervisor.phone || "",
+					email: editingSupervisor.email || "",
+					existingSupervisor: true
+				},
+				level: selectedLevel,
+				permissions: selectedPerms,
+				isActive: formActive,
+				notes: formNotes,
+				actorUid: currentUser.uid,
+				actorName
+			});
+			const updatedName = editingSupervisor.displayName;
+			setEditingSupervisor(null);
+			showToast(`تم تحديث صلاحيات «${updatedName}» بنجاح.`);
+		} catch (err) {
+			setErrorMsg(err.message || "فشل تحديث صلاحيات المشرف.");
+		} finally {
+			setSubmitting(false);
+		}
+	};
+	const handleToggleActive = async (sup) => {
+		setBusyUid(sup.uid);
+		setErrorMsg(null);
+		try {
+			await toggleSupervisorActive({
+				supervisor: sup,
+				nextActive: !sup.isActive,
+				actorUid: currentUser.uid,
+				actorName
+			});
+			showToast(!sup.isActive ? `تم تفعيل حساب المشرف «${sup.displayName}».` : `تم تعطيل حساب المشرف «${sup.displayName}» فوراً.`);
+		} catch (err) {
+			setErrorMsg(err.message || "تعذر تغيير حالة المشرف.");
+		} finally {
+			setBusyUid(null);
+		}
+	};
+	const handleConfirmDeleteSupervisor = async () => {
+		if (!deleteTarget) return;
+		setBusyUid(deleteTarget.uid);
+		setErrorMsg(null);
+		try {
+			await revokeAndDeleteSupervisor({
+				supervisor: deleteTarget,
+				actorUid: currentUser.uid,
+				actorName
+			});
+			const deletedName = deleteTarget.displayName;
+			setDeleteTarget(null);
+			showToast(`تم إلغاء الإشراف وحذف تعيين «${deletedName}».`);
+		} catch (err) {
+			setErrorMsg(err.message || "تعذر حذف تعيين المشرف.");
+		} finally {
+			setBusyUid(null);
+		}
+	};
+	const activeCount = supervisors.filter((s) => s.isActive).length;
+	const disabledCount = supervisors.length - activeCount;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-4 text-right font-['Cairo',sans-serif]",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-5 text-white shadow-lg border border-slate-700/60",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex flex-col sm:flex-row sm:items-center justify-between gap-4",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-start gap-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/30 text-amber-300 flex items-center justify-center shrink-0",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "w-6 h-6" })
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center gap-2 flex-wrap",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "text-lg font-black",
+								children: "إدارة المشرفين والصلاحيات"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "px-2 py-0.5 rounded-lg bg-amber-400/20 text-amber-200 border border-amber-400/30 text-[10px] font-black",
+								children: "المالك فقط"
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-xs text-slate-300 mt-1 leading-relaxed",
+							children: "ربط الإشراف بالحسابات المسجلة مسبقاً، ضبط مستويات الصلاحيات، ومراقبة سجل العمليات الإدارية محمياً بقواعد Firestore."
+						})] })]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-2 self-end sm:self-center",
+						children: [onBackToAdmin && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "button",
+							onClick: onBackToAdmin,
+							className: "px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-black transition-colors cursor-pointer",
+							children: "لوحة التحكم"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							type: "button",
+							onClick: openAddModal,
+							className: "px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black flex items-center gap-1.5 shadow-md transition-all active:scale-95 cursor-pointer",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "إضافة مشرف" })]
+						})]
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "grid grid-cols-3 gap-2.5 mt-4 pt-4 border-t border-white/10",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "bg-white/5 rounded-2xl p-3 border border-white/10",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[10px] text-slate-300 font-bold block",
+								children: "إجمالي المشرفين"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-lg font-black",
+								children: supervisors.length
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "bg-emerald-500/15 rounded-2xl p-3 border border-emerald-400/20",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[10px] text-emerald-200 font-bold block",
+								children: "حسابات مفعّلة"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-lg font-black text-emerald-300",
+								children: activeCount
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "bg-rose-500/15 rounded-2xl p-3 border border-rose-400/20",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[10px] text-rose-200 font-bold block",
+								children: "حسابات معطّلة"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-lg font-black text-rose-300",
+								children: disabledCount
+							})]
+						})
+					]
+				})]
+			}),
+			statusToast && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-black flex items-center gap-2 shadow-xs",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "w-4 h-4 shrink-0 text-emerald-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: statusToast })]
+			}),
+			errorMsg && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold flex items-center justify-between gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, { className: "w-4 h-4 shrink-0 text-rose-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: errorMsg })]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					type: "button",
+					onClick: () => setErrorMsg(null),
+					className: "text-rose-500 hover:text-rose-700",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "w-4 h-4" })
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "grid grid-cols-2 gap-2 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-2xs",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					type: "button",
+					onClick: () => setSubTab("list"),
+					className: `py-2.5 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-colors cursor-pointer ${subTab === "list" ? "bg-slate-900 text-white shadow-xs" : "text-slate-600 hover:bg-slate-50"}`,
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+						"المشرفون الحاليون (",
+						supervisors.length,
+						")"
+					] })]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					type: "button",
+					onClick: () => setSubTab("audit"),
+					className: `py-2.5 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-colors cursor-pointer ${subTab === "audit" ? "bg-slate-900 text-white shadow-xs" : "text-slate-600 hover:bg-slate-50"}`,
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(History, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+						"سجل العمليات الإدارية (",
+						auditLogs.length,
+						")"
+					] })]
+				})]
+			}),
+			subTab === "list" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "space-y-3",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "bg-white rounded-2xl p-3.5 border border-slate-200 shadow-2xs space-y-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "relative",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							type: "text",
+							value: searchQuery,
+							onChange: (e) => setSearchQuery(e.target.value),
+							placeholder: "ابحث عن مشرف بالاسم، رقم الهاتف، أو البريد الإلكتروني...",
+							className: "w-full pr-10 pl-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold outline-hidden focus:ring-2 focus:ring-slate-900/15"
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex flex-wrap gap-1.5",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "button",
+							onClick: () => setLevelFilter("ALL"),
+							className: `px-3 py-1.5 rounded-xl text-[11px] font-black border transition-colors cursor-pointer ${levelFilter === "ALL" ? "bg-slate-900 text-white border-slate-900" : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"}`,
+							children: "الكل"
+						}), LEVELS_ORDER.map((lvl) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "button",
+							onClick: () => setLevelFilter(lvl),
+							className: `px-3 py-1.5 rounded-xl text-[11px] font-black border transition-colors cursor-pointer ${levelFilter === lvl ? "bg-slate-900 text-white border-slate-900" : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"}`,
+							children: SUPERVISOR_LEVEL_META[lvl].label
+						}, lvl))]
+					})]
+				}), loadingList ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "bg-white rounded-3xl p-8 border border-slate-200 text-center space-y-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-8 h-8 border-3 border-slate-900 border-t-transparent rounded-full animate-spin mx-auto" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-xs font-bold text-slate-500",
+						children: "جارٍ تحميل قائمة المشرفين..."
+					})]
+				}) : filteredSupervisors.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "bg-white rounded-3xl p-8 border border-dashed border-slate-300 text-center space-y-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "w-6 h-6" })
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-1",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-sm font-black text-slate-800",
+							children: supervisors.length === 0 ? "لا يوجد مشرفون مضافون حالياً" : "لا توجد نتائج مطابقة للبحث"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-xs text-slate-500",
+							children: "اضغط على «إضافة مشرف» لتربط الإشراف بحساب مستخدم مسجل مسبقاً في التطبيق."
+						})]
+					})]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "space-y-3",
+					children: filteredSupervisors.map((sup) => {
+						const grantedPerms = PERMISSION_LABELS.filter((p) => sup.permissions[p.key]);
+						const isBusy = busyUid === sup.uid;
+						return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: `bg-white rounded-3xl p-4 sm:p-5 border transition-all shadow-2xs space-y-3.5 ${sup.isActive ? "border-slate-200" : "border-rose-200 bg-rose-50/20"}`,
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex flex-col sm:flex-row sm:items-start justify-between gap-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "space-y-1.5",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center gap-2 flex-wrap",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+													className: "text-sm sm:text-base font-black text-slate-900",
+													children: sup.displayName
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: `px-2.5 py-0.5 rounded-lg text-[10px] font-black border ${getLevelBadgeStyle(sup.level)}`,
+													children: SUPERVISOR_LEVEL_META[sup.level].label
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: `px-2 py-0.5 rounded-lg text-[10px] font-black border ${sup.isActive ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-rose-100 text-rose-700 border-rose-200"}`,
+													children: sup.isActive ? "مفعّل" : "معطّل"
+												})
+											]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex flex-wrap items-center gap-3 text-[11px] font-bold text-slate-500",
+											children: [sup.phone && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "flex items-center gap-1 font-mono",
+												dir: "ltr",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "w-3.5 h-3.5 text-slate-400" }), sup.phone]
+											}), sup.email && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "flex items-center gap-1 font-mono",
+												dir: "ltr",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mail, { className: "w-3.5 h-3.5 text-slate-400" }), sup.email]
+											})]
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex flex-wrap items-center gap-2",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												type: "button",
+												onClick: () => openEditModal(sup),
+												disabled: isBusy,
+												className: "px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-black flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PenLine, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "تعديل الصلاحيات" })]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												type: "button",
+												onClick: () => handleToggleActive(sup),
+												disabled: isBusy,
+												className: `px-3 py-2 rounded-xl text-[11px] font-black flex items-center gap-1.5 border transition-colors cursor-pointer disabled:opacity-50 ${sup.isActive ? "bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200" : "bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-emerald-200"}`,
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Power, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: sup.isActive ? "تعطيل" : "تفعيل" })]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												type: "button",
+												onClick: () => setDeleteTarget(sup),
+												disabled: isBusy,
+												className: "px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-[11px] font-black flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "إلغاء وحذف" })]
+											})
+										]
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "flex flex-wrap gap-1.5 pt-2 border-t border-slate-100",
+									children: grantedPerms.map((p) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 text-[10px] font-bold flex items-center gap-1",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "w-3 h-3 text-emerald-600" }), p.label]
+									}, p.key))
+								}),
+								sup.notes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+									className: "text-[11px] text-slate-500 bg-slate-50 rounded-xl px-3 py-2 border border-slate-100",
+									children: ["ملاحظة: ", sup.notes]
+								})
+							]
+						}, sup.uid);
+					})
+				})]
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "space-y-3",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "bg-white rounded-2xl p-3.5 border border-slate-200 shadow-2xs",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "relative",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							type: "text",
+							value: auditSearch,
+							onChange: (e) => setAuditSearch(e.target.value),
+							placeholder: "تصفية سجل العمليات باسم المنفذ أو نوع العملية أو الهدف...",
+							className: "w-full pr-10 pl-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold outline-hidden focus:ring-2 focus:ring-slate-900/15"
+						})]
+					})
+				}), loadingAudit ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "bg-white rounded-3xl p-8 border border-slate-200 text-center space-y-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-8 h-8 border-3 border-slate-900 border-t-transparent rounded-full animate-spin mx-auto" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-xs font-bold text-slate-500",
+						children: "جارٍ تحميل السجل الإداري..."
+					})]
+				}) : filteredAuditLogs.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "bg-white rounded-3xl p-8 border border-dashed border-slate-300 text-center space-y-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(History, { className: "w-8 h-8 text-slate-300 mx-auto" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-xs font-bold text-slate-500",
+						children: "لا توجد عمليات مسجلة بعد."
+					})]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "space-y-2",
+					children: filteredAuditLogs.map((log) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "bg-white rounded-2xl p-3.5 border border-slate-200 shadow-2xs space-y-1.5",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center justify-between gap-2 flex-wrap",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-2 flex-wrap",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Activity, { className: "w-4 h-4 text-slate-700 shrink-0" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-black text-slate-900",
+											children: log.actionType
+										}),
+										log.targetLabel && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "text-[11px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-lg",
+											children: ["← ", log.targetLabel]
+										})
+									]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "text-[10px] font-bold text-slate-400 flex items-center gap-1",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-3 h-3" }), formatAuditDate(log.createdAt)]
+								})]
+							}),
+							log.details && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-[11px] text-slate-600 leading-relaxed",
+								children: log.details
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-2 pt-1 text-[10px] font-bold text-slate-500",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["المنفذ: ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+									className: "text-slate-800",
+									children: log.actorName
+								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "px-1.5 py-0.5 rounded bg-slate-100 text-slate-700",
+									children: ALL_SUPERVISOR_LEVEL_LABELS[log.actorLevel] || log.actorLevel
+								})]
+							})
+						]
+					}, log.id))
+				})]
+			}),
+			showAddModal && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "fixed inset-0 z-50 bg-black/65 backdrop-blur-xs flex items-center justify-center p-4 font-['Cairo',sans-serif] text-right overflow-y-auto",
+				onClick: () => !submitting && setShowAddModal(false),
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 space-y-4 my-auto max-h-[90vh] overflow-y-auto",
+					onClick: (e) => e.stopPropagation(),
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between pb-3 border-b border-slate-100",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-2.5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, { className: "w-5 h-5" })
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+									className: "text-base font-black text-slate-900",
+									children: "إضافة مشرف جديد"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-[11px] text-slate-500 font-bold",
+									children: "ربط الإشراف بحساب موجود في Firebase دون إنشاء حساب أو تغيير كلمة المرور"
+								})] })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: () => !submitting && setShowAddModal(false),
+								className: "p-1.5 rounded-xl hover:bg-slate-100 text-slate-500",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "w-5 h-5" })
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+							onSubmit: handleLookupExistingUser,
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+								className: "block text-xs font-black text-slate-800",
+								children: "رقم هاتف المستخدم أو بريده الإلكتروني:"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									type: "text",
+									value: identifierInput,
+									onChange: (e) => {
+										setIdentifierInput(e.target.value);
+										setResolvedCandidate(null);
+										setLookupError(null);
+									},
+									placeholder: "مثال: 771234567 أو name@gmail.com",
+									className: "flex-1 p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold outline-hidden focus:ring-2 focus:ring-amber-500",
+									dir: "ltr",
+									required: true
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "submit",
+									disabled: lookupLoading || !identifierInput.trim(),
+									className: "px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-black shrink-0 disabled:opacity-50 cursor-pointer",
+									children: lookupLoading ? "جارٍ البحث..." : "بحث عن الحساب"
+								})]
+							})]
+						}),
+						lookupError && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold flex items-center gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldAlert, { className: "w-4 h-4 shrink-0 text-rose-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: lookupError })]
+						}),
+						resolvedCandidate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-1.5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center justify-between gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-2 text-emerald-900 font-black text-xs",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserCheck, { className: "w-4 h-4 text-emerald-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["تم العثور على الحساب: ", resolvedCandidate.displayName] })]
+								}), resolvedCandidate.existingSupervisor && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-[10px] font-black px-2 py-0.5 rounded bg-amber-100 text-amber-800",
+									children: "معيّن سابقاً (سيتم التحديث)"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex flex-wrap gap-3 text-[11px] font-bold text-emerald-800",
+								children: [resolvedCandidate.phone && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									dir: "ltr",
+									children: ["📞 ", resolvedCandidate.phone]
+								}), resolvedCandidate.email && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									dir: "ltr",
+									children: ["✉ ", resolvedCandidate.email]
+								})]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+								className: "block text-xs font-black text-slate-800",
+								children: "مستوى الإشراف:"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "grid grid-cols-1 sm:grid-cols-2 gap-2",
+								children: LEVELS_ORDER.map((lvl) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => handleLevelChange(lvl),
+									className: `p-3 rounded-2xl border-2 text-right transition-all cursor-pointer ${selectedLevel === lvl ? "border-amber-500 bg-amber-50/70" : "border-slate-200 bg-white hover:border-slate-300"}`,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "text-xs font-black text-slate-900",
+										children: SUPERVISOR_LEVEL_META[lvl].label
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-[10px] text-slate-500 mt-0.5 leading-snug",
+										children: SUPERVISOR_LEVEL_META[lvl].description
+									})]
+								}, lvl))
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+								className: "block text-xs font-black text-slate-800",
+								children: "الصلاحيات المسموحة:"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "space-y-1.5 bg-slate-50 p-3 rounded-2xl border border-slate-200",
+								children: [PERMISSION_LABELS.map((perm) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+									className: "flex items-start gap-2.5 p-2 rounded-xl bg-white border border-slate-100 cursor-pointer hover:border-amber-200",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "checkbox",
+										checked: selectedPerms[perm.key],
+										onChange: () => togglePermissionKey(perm.key),
+										className: "mt-0.5 w-4 h-4 accent-amber-600 rounded shrink-0"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xs font-black text-slate-800 block",
+										children: perm.label
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-[10px] text-slate-500 block",
+										children: perm.description
+									})] })]
+								}, perm.key)), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-2 p-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-500",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KeyRound, { className: "w-4 h-4 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-[10px] font-bold",
+										children: "صلاحية «إدارة المالك والمشرفين» محجوزة للمالك الأساسي فقط بقواعد الأمان."
+									})]
+								})]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+								className: "flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs font-black text-slate-800",
+									children: "تفعيل صلاحيات المشرف فور الحفظ"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									type: "checkbox",
+									checked: formActive,
+									onChange: (e) => setFormActive(e.target.checked),
+									className: "w-4 h-4 accent-emerald-600"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								type: "text",
+								value: formNotes,
+								onChange: (e) => setFormNotes(e.target.value),
+								maxLength: 300,
+								placeholder: "ملاحظة إدارية اختيارية (مثال: مسؤول المناوبة المسائية)...",
+								className: "w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold outline-hidden"
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-2 gap-2 pt-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: handleConfirmAddSupervisor,
+								disabled: submitting || !resolvedCandidate,
+								className: "py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black shadow-md disabled:opacity-50 cursor-pointer flex items-center justify-center gap-1.5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Shield, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: submitting ? "جارٍ الحفظ..." : "تأكيد إضافة المشرف" })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: () => !submitting && setShowAddModal(false),
+								disabled: submitting,
+								className: "py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-black cursor-pointer",
+								children: "إلغاء"
+							})]
+						})
+					]
+				})
+			}),
+			editingSupervisor && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "fixed inset-0 z-50 bg-black/65 backdrop-blur-xs flex items-center justify-center p-4 font-['Cairo',sans-serif] text-right overflow-y-auto",
+				onClick: () => !submitting && setEditingSupervisor(null),
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 space-y-4 my-auto max-h-[90vh] overflow-y-auto",
+					onClick: (e) => e.stopPropagation(),
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between pb-3 border-b border-slate-100",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+								className: "text-base font-black text-slate-900",
+								children: ["تعديل صلاحيات: ", editingSupervisor.displayName]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-[11px] text-slate-500 font-bold",
+								dir: "ltr",
+								children: editingSupervisor.phone || editingSupervisor.email || editingSupervisor.uid
+							})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: () => !submitting && setEditingSupervisor(null),
+								className: "p-1.5 rounded-xl hover:bg-slate-100 text-slate-500",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "w-5 h-5" })
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+								className: "block text-xs font-black text-slate-800",
+								children: "مستوى الإشراف:"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "grid grid-cols-2 gap-2",
+								children: LEVELS_ORDER.map((lvl) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => handleLevelChange(lvl),
+									className: `p-2.5 rounded-xl border-2 text-right transition-all cursor-pointer ${selectedLevel === lvl ? "border-amber-500 bg-amber-50/70" : "border-slate-200 bg-white"}`,
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xs font-black text-slate-900 block",
+										children: SUPERVISOR_LEVEL_META[lvl].label
+									})
+								}, lvl))
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "space-y-1.5 bg-slate-50 p-3 rounded-2xl border border-slate-200",
+							children: PERMISSION_LABELS.map((perm) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+								className: "flex items-start gap-2.5 p-2 rounded-xl bg-white border border-slate-100 cursor-pointer",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									type: "checkbox",
+									checked: selectedPerms[perm.key],
+									onChange: () => togglePermissionKey(perm.key),
+									className: "mt-0.5 w-4 h-4 accent-amber-600 rounded shrink-0"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs font-black text-slate-800 block",
+									children: perm.label
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-[10px] text-slate-500 block",
+									children: perm.description
+								})] })]
+							}, perm.key))
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+							className: "flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-xs font-black text-slate-800",
+								children: "الحساب مفعّل"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								type: "checkbox",
+								checked: formActive,
+								onChange: (e) => setFormActive(e.target.checked),
+								className: "w-4 h-4 accent-emerald-600"
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							type: "text",
+							value: formNotes,
+							onChange: (e) => setFormNotes(e.target.value),
+							maxLength: 300,
+							placeholder: "ملاحظة إدارية اختيارية...",
+							className: "w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold outline-hidden"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-2 gap-2 pt-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: handleConfirmEditSupervisor,
+								disabled: submitting,
+								className: "py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-black disabled:opacity-50 cursor-pointer",
+								children: submitting ? "جارٍ الحفظ..." : "حفظ التعديلات"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: () => !submitting && setEditingSupervisor(null),
+								disabled: submitting,
+								className: "py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-black cursor-pointer",
+								children: "إلغاء"
+							})]
+						})
+					]
+				})
+			}),
+			deleteTarget && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "fixed inset-0 z-50 bg-black/65 backdrop-blur-xs flex items-center justify-center p-4 font-['Cairo',sans-serif] text-right",
+				onClick: () => !busyUid && setDeleteTarget(null),
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-rose-200 space-y-4",
+					onClick: (e) => e.stopPropagation(),
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-6 h-6" })
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "text-center space-y-1.5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+								className: "text-base font-black text-slate-900",
+								children: "تأكيد إلغاء الإشراف وحذفه"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "text-xs text-slate-600 leading-relaxed font-bold",
+								children: [
+									"سيتم سحب جميع صلاحيات الإشراف عن «",
+									deleteTarget.displayName,
+									"» وحذف تعيينه فوراً مع بقاء حسابه العادي دون مساس."
+								]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-2 gap-2 pt-1",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: handleConfirmDeleteSupervisor,
+								disabled: busyUid === deleteTarget.uid,
+								className: "py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black disabled:opacity-50 cursor-pointer",
+								children: busyUid === deleteTarget.uid ? "جارٍ الإلغاء..." : "نعم، إلغاء وحذف"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: () => setDeleteTarget(null),
+								disabled: busyUid === deleteTarget.uid,
+								className: "py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-black cursor-pointer",
+								children: "تراجع"
+							})]
+						})
+					]
+				})
+			})
+		]
+	});
+};
 // src/components/ChatSupport.tsx
 var ChatSupport = ({ userProfile, onBack }) => {
 	const [messages, setMessages] = (0, import_react.useState)([]);
@@ -13098,19 +15063,25 @@ var ChatSupport = ({ userProfile, onBack }) => {
 		} : void 0);
 	};
 	if (!currentUser) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "flex flex-col items-center justify-center h-full p-8 text-center bg-white",
+		className: "flex flex-col items-center justify-center h-full p-8 text-center bg-white rounded-3xl border border-slate-200 space-y-4",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4",
+				className: "w-16 h-16 bg-red-100 rounded-full flex items-center justify-center",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MessageSquare, { className: "text-red-600 w-8 h-8" })
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-				className: "text-xl font-bold text-gray-900 mb-2",
+				className: "text-xl font-bold text-gray-900",
 				children: "يرجى تسجيل الدخول"
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "text-gray-600",
 				children: "يجب عليك تسجيل الدخول لتتمكن من التواصل مع الإدارة."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+				type: "button",
+				onClick: onBack,
+				className: "min-h-[44px] px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center gap-2 transition-colors cursor-pointer",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "العودة للرئيسية" })]
 			})
 		]
 	});
@@ -13124,8 +15095,11 @@ var ChatSupport = ({ userProfile, onBack }) => {
 					className: "flex items-center gap-3",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "button",
 							onClick: onBack,
-							className: "p-2 hover:bg-gray-100 rounded-full transition-colors lg:hidden",
+							"aria-label": "العودة للرئيسية",
+							title: "العودة للرئيسية",
+							className: "min-h-[40px] min-w-[40px] p-2 hover:bg-gray-100 rounded-full transition-colors flex items-center justify-center cursor-pointer",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "w-5 h-5" })
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -14371,21 +16345,77 @@ var ConfirmExitModal = ({ isOpen, onClose, onConfirm }) => {
 		})
 	});
 };
-// src/components/RoleSelectionModal.tsx
-var RoleSelectionModal = ({ isOpen, onClose, currentRole, onRoleChange }) => {
-	const { userProfile, currentUser } = useAuth();
+// src/components/AppExitConfirmModal.tsx
+var AppExitConfirmModal = ({ isOpen, onCancel, onConfirm }) => {
 	if (!isOpen) return null;
-	const isAuthorizedAdmin = userProfile?.role === "admin" || currentUser?.email === "ziadalsyyadi@gmail.com" || currentUser?.email === "user_967773633918_v1@qataba-blood.app";
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		role: "dialog",
+		"aria-modal": "true",
+		"aria-labelledby": "app-exit-confirm-title",
+		className: "fixed inset-0 z-[150] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 font-['Cairo',sans-serif]",
+		dir: "rtl",
+		onClick: onCancel,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "bg-white rounded-3xl max-w-xs w-full p-6 shadow-2xl border border-slate-100 space-y-5 text-center relative animate-in zoom-in-95 duration-200",
+			onClick: (e) => e.stopPropagation(),
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					type: "button",
+					onClick: onCancel,
+					"aria-label": "إلغاء",
+					className: "absolute top-3.5 left-3.5 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "w-5 h-5" })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "w-16 h-16 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto shadow-inner border border-red-100",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogOut, { className: "w-8 h-8 rotate-180" })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-1.5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						id: "app-exit-confirm-title",
+						className: "text-lg font-black text-slate-900 leading-snug",
+						children: "هل تريد الخروج من التطبيق؟"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-xs text-slate-500 font-bold leading-relaxed",
+						children: "سيتم إغلاق تطبيق بنك الدم – قعطبة عند التأكيد."
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex flex-col gap-2.5 pt-1",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						type: "button",
+						"data-testid": "app-exit-confirm-yes",
+						onClick: onConfirm,
+						className: "w-full min-h-[44px] py-3 px-4 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-black text-sm shadow-lg shadow-red-200 transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogOut, { className: "w-4 h-4 rotate-180" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "نعم، خروج" })]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						"data-testid": "app-exit-confirm-cancel",
+						onClick: onCancel,
+						className: "w-full min-h-[44px] py-3 px-4 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm transition-all active:scale-95 cursor-pointer",
+						children: "إلغاء"
+					})]
+				})
+			]
+		})
+	});
+};
+// src/components/RoleSelectionModal.tsx
+var RoleSelectionModal = ({ isOpen, onClose, currentRole, onRoleChange, onOpenSupervisors }) => {
+	const { isOwner, isAuthorizedAdmin, adminLevel } = useAuth();
+	if (!isOpen) return null;
 	const selectRole = (role) => {
 		if (role === "admin" && !isAuthorizedAdmin) return;
 		onRoleChange(role);
 		onClose();
 	};
+	const levelLabel = adminLevel ? ALL_SUPERVISOR_LEVEL_LABELS[adminLevel] : "غير معيّن";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65",
 		onClick: onClose,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "bg-white w-full max-w-sm rounded-3xl p-5 space-y-4 text-right",
+			className: "bg-white w-full max-w-sm rounded-3xl p-5 space-y-4 text-right font-['Cairo',sans-serif]",
 			onClick: (e) => e.stopPropagation(),
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -14397,7 +16427,7 @@ var RoleSelectionModal = ({ isOpen, onClose, currentRole, onRoleChange }) => {
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 					onClick: () => selectRole("user"),
-					className: `w-full text-right p-4 rounded-2xl border-2 ${currentRole === "user" ? "border-red-600 bg-red-50" : "border-slate-200"}`,
+					className: `w-full text-right p-4 rounded-2xl border-2 transition-all cursor-pointer ${currentRole === "user" ? "border-red-600 bg-red-50" : "border-slate-200"}`,
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-2 font-black",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(User, { className: "w-5 h-5" }), " دور المستخدم"]
@@ -14409,23 +16439,44 @@ var RoleSelectionModal = ({ isOpen, onClose, currentRole, onRoleChange }) => {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 					onClick: () => selectRole("admin"),
 					disabled: !isAuthorizedAdmin,
-					className: "w-full text-right p-4 rounded-2xl border-2 border-amber-300 bg-amber-50 disabled:opacity-50",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "font-black text-amber-900",
-						children: "لوحة المسؤول"
+					className: `w-full text-right p-4 rounded-2xl border-2 transition-all cursor-pointer disabled:opacity-50 ${currentRole === "admin" && isAuthorizedAdmin ? "border-amber-500 bg-amber-50" : "border-amber-200 bg-amber-50/50"}`,
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center justify-between gap-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center gap-2 font-black text-amber-900",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "w-5 h-5 text-amber-700" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "لوحة المسؤول" })]
+						}), isAuthorizedAdmin && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "px-2 py-0.5 rounded-lg bg-amber-200/80 text-amber-950 text-[10px] font-black",
+							children: levelLabel
+						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "text-xs text-amber-800 mt-1",
-						children: isAuthorizedAdmin ? "تم التحقق من صلاحية حسابك" : "الدخول لحساب المسؤول المعتمد فقط بعد تسجيل الدخول"
+						children: isAuthorizedAdmin ? "تم التحقق من صلاحية حسابك وفق قاعدة البيانات" : "الدخول لحساب المالك أو المشرف المعتمد فقط"
+					})]
+				}),
+				isOwner && onOpenSupervisors && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					type: "button",
+					onClick: () => {
+						onClose();
+						onOpenSupervisors();
+					},
+					className: "w-full text-right p-3.5 rounded-2xl border-2 border-slate-900 bg-slate-900 text-white hover:bg-slate-800 transition-colors flex items-center justify-between cursor-pointer",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-2 font-black text-xs",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "w-4 h-4 text-amber-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "إدارة المشرفين" })]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-[10px] font-black text-amber-300",
+						children: "المالك فقط"
 					})]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					onClick: onClose,
-					className: "w-full py-2 rounded-xl bg-slate-100 text-slate-700 font-bold",
+					className: "w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs cursor-pointer",
 					children: "إغلاق"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "text-[10px] text-slate-500 text-center",
-					children: "صلاحيات المسؤول تُحدد من الحساب وقاعدة البيانات، وليس برمز داخل التطبيق."
+					children: "صلاحيات الإشراف تُتحقق في قواعد أمان Firebase ولا تُمنح عبر الواجهة وحدها."
 				})
 			]
 		})
@@ -14446,7 +16497,7 @@ var Weekday;
 	Weekday[Weekday["Saturday"] = 7] = "Saturday";
 })(Weekday || (Weekday = {}));
 // node_modules/@capacitor/local-notifications/dist/esm/index.js
-var LocalNotifications = registerPlugin("LocalNotifications", { web: () => __vitePreload(() => import("./web-CcHffJ2W.js").then((m) => new m.LocalNotificationsWeb()), []) });
+var LocalNotifications = registerPlugin("LocalNotifications", { web: () => __vitePreload(() => import("./web-DZFBEYOQ.js").then((m) => new m.LocalNotificationsWeb()), []) });
 // src/services/notificationService.ts
 var SOUND_PREF_KEY = "qataba_alert_sound_enabled_v1";
 var SEEN_ALERTS_KEY = "qataba_seen_alerts_v1";
@@ -15082,7 +17133,7 @@ var UrgentAlertModal = ({ alerts, soundEnabled, onToggleSound, onDismissCurrent,
 };
 // src/App.tsx
 function AppContent() {
-	const { currentUser, userProfile, activeRole, switchActiveRole, isLoading, logout, isGuest } = useAuth();
+	const { currentUser, userProfile, activeRole, switchActiveRole, isOwner, isAuthorizedAdmin, adminLevel, adminPermissions, isLoading, logout, isGuest } = useAuth();
 	const [activeTab, setActiveTab] = (0, import_react.useState)("home");
 	const [searchInitialBloodType, setSearchInitialBloodType] = (0, import_react.useState)("ALL");
 	const [rawDonors, setRawDonors] = (0, import_react.useState)(() => getInstantLocalDonorsSync());
@@ -15157,12 +17208,40 @@ function AppContent() {
 	const [isInstallModalOpen, setIsInstallModalOpen] = (0, import_react.useState)(false);
 	const [isCompatibilityOpen, setIsCompatibilityOpen] = (0, import_react.useState)(false);
 	const [isExitConfirmOpen, setIsExitConfirmOpen] = (0, import_react.useState)(false);
+	const [isAppExitModalOpen, setIsAppExitModalOpen] = (0, import_react.useState)(false);
 	const [isRoleModalOpen, setIsRoleModalOpen] = (0, import_react.useState)(false);
 	const [isNotificationsOpen, setIsNotificationsOpen] = (0, import_react.useState)(false);
 	const [isHospitalsModalOpen, setIsHospitalsModalOpen] = (0, import_react.useState)(false);
 	const [isSidebarOpen, setIsSidebarOpen] = (0, import_react.useState)(false);
 	const [editingDonorId, setEditingDonorId] = (0, import_react.useState)(null);
 	const [isVisitorRestrictionOpen, setIsVisitorRestrictionOpen] = (0, import_react.useState)(false);
+	const navigateToHome = () => {
+		setActiveTab("home");
+		setEditingDonorId(null);
+		window.scrollTo({
+			top: 0,
+			behavior: "smooth"
+		});
+	};
+	const openSupervisorsTab = () => {
+		if (!isOwner) return;
+		setActiveTab("supervisors");
+		setEditingDonorId(null);
+		window.scrollTo({
+			top: 0,
+			behavior: "smooth"
+		});
+	};
+	(0, import_react.useEffect)(() => {
+		if (isLoading) return;
+		if (activeTab === "supervisors" && !isOwner) setActiveTab("home");
+		else if (activeTab === "admin" && !isAuthorizedAdmin) setActiveTab("home");
+	}, [
+		activeTab,
+		isLoading,
+		isOwner,
+		isAuthorizedAdmin
+	]);
 	const handleEditDonor = (donorId) => {
 		setEditingDonorId(donorId || null);
 		setActiveTab("register");
@@ -15208,7 +17287,7 @@ function AppContent() {
 		if (announcement) setDraftAnnouncement(announcement);
 	}, [announcement]);
 	const handleSaveAnnouncement = async () => {
-		if (!currentUser) return;
+		if (!currentUser || !adminPermissions.manageSettings) return;
 		setIsSavingAnnouncement(true);
 		justSavedAnnouncementAtRef.current = Date.now();
 		try {
@@ -15221,6 +17300,15 @@ function AppContent() {
 				updatedAt: serverTimestamp(),
 				updatedBy: currentUser.uid
 			}, { merge: true });
+			logAdminAction({
+				actorUid: currentUser.uid,
+				actorName: userProfile?.displayName || currentUser.displayName || "مسؤول",
+				actorLevel: adminLevel || "legacy_admin",
+				actionType: "نشر تعميم من الرئيسية",
+				targetId: "settings/global",
+				targetLabel: draftAnnouncementType,
+				details: draftAnnouncement.trim().slice(0, 120)
+			});
 			setToastMessage("تم نشر وتحديث التعميم بنجاح لتظهر فوراً لدى جميع المستخدمين! ✓");
 			setTimeout(() => setToastMessage(null), 4e3);
 		} catch (err) {
@@ -15232,7 +17320,7 @@ function AppContent() {
 		}
 	};
 	const handleClearAnnouncement = async () => {
-		if (!currentUser) return;
+		if (!currentUser || !adminPermissions.manageSettings) return;
 		setIsSavingAnnouncement(true);
 		try {
 			await setDoc(doc(db, "settings", "global"), {
@@ -15243,6 +17331,13 @@ function AppContent() {
 				updatedBy: currentUser.uid
 			}, { merge: true });
 			setDraftAnnouncement("");
+			logAdminAction({
+				actorUid: currentUser.uid,
+				actorName: userProfile?.displayName || currentUser.displayName || "مسؤول",
+				actorLevel: adminLevel || "legacy_admin",
+				actionType: "مسح التعميم من الرئيسية",
+				targetId: "settings/global"
+			});
 			setToastMessage("تم مسح التعميم بنجاح! ✓");
 			setTimeout(() => setToastMessage(null), 3e3);
 		} catch (err) {
@@ -15517,9 +17612,9 @@ function AppContent() {
 	(0, import_react.useEffect)(() => {
 		if (currentUser) {
 			initializePushNotifications(currentUser.uid);
-			if (userProfile?.role === "admin" || currentUser.email === "ziadalsyyadi@gmail.com" || currentUser.email === "user_967773633918_v1@qataba-blood.app") ensureWebsiteConfigSeededForAdmin();
+			if (isOwner) ensureWebsiteConfigSeededForAdmin();
 		}
-	}, [currentUser, userProfile?.role]);
+	}, [currentUser, isOwner]);
 	(0, import_react.useEffect)(() => {
 		if (!currentUser || currentUser.isAnonymous) return;
 		let active = true;
@@ -15547,6 +17642,109 @@ function AppContent() {
 	const unreadNotificationsCount = openUrgentCount + (announcement ? 1 : 0);
 	const hasLoggedOut = typeof window !== "undefined" && localStorage.getItem("has_logged_out") === "true";
 	const showInitialAuth = !currentUser && (!isGuest || hasLoggedOut);
+	const handleBackPressRef = (0, import_react.useRef)(() => {});
+	handleBackPressRef.current = () => {
+		if (isAppExitModalOpen) {
+			setIsAppExitModalOpen(false);
+			return;
+		}
+		if (dispatchRegisteredBackHandlers()) return;
+		if (pendingAlerts.length > 0) {
+			setPendingAlerts((prev) => prev.slice(1));
+			return;
+		}
+		if (isHospitalsModalOpen) {
+			setIsHospitalsModalOpen(false);
+			return;
+		}
+		if (isNotificationsOpen) {
+			setIsNotificationsOpen(false);
+			return;
+		}
+		if (isRoleModalOpen) {
+			setIsRoleModalOpen(false);
+			return;
+		}
+		if (isExitConfirmOpen) {
+			setIsExitConfirmOpen(false);
+			return;
+		}
+		if (isCompatibilityOpen) {
+			setIsCompatibilityOpen(false);
+			return;
+		}
+		if (isInstallModalOpen) {
+			setIsInstallModalOpen(false);
+			return;
+		}
+		if (isVisitorRestrictionOpen) {
+			setIsVisitorRestrictionOpen(false);
+			return;
+		}
+		if (isAuthModalOpen && !showInitialAuth) {
+			setIsAuthModalOpen(false);
+			return;
+		}
+		if (isSidebarOpen) {
+			setIsSidebarOpen(false);
+			return;
+		}
+		if (showInitialAuth) {
+			setIsAppExitModalOpen(true);
+			return;
+		}
+		if (activeTab !== "home") {
+			navigateToHome();
+			return;
+		}
+		setIsAppExitModalOpen(true);
+	};
+	const handleConfirmAppExit = async () => {
+		if (await exitApplication() === "browser_fallback") {
+			setIsAppExitModalOpen(false);
+			setToastMessage("تم تأكيد الخروج — يمكنك إغلاق علامة تبويب المتصفح بأمان.");
+			setTimeout(() => setToastMessage(null), 3500);
+		}
+	};
+	(0, import_react.useEffect)(() => {
+		let removeNativeListener = null;
+		let disposed = false;
+		if (isNativeBackPluginAvailable()) {
+			addNativeBackButtonListener(() => {
+				handleBackPressRef.current();
+			}).then((cleanup) => {
+				if (disposed) cleanup?.();
+				else removeNativeListener = cleanup;
+			});
+			return () => {
+				disposed = true;
+				removeNativeListener?.();
+			};
+		}
+		const ensureGuardHistoryEntry = () => {
+			try {
+				if (!window.history.state?.__qatabaBackGuard) {
+					window.history.replaceState({
+						...window.history.state || {},
+						__qatabaBase: true
+					}, "");
+					window.history.pushState({ __qatabaBackGuard: true }, "");
+				}
+			} catch {}
+		};
+		ensureGuardHistoryEntry();
+		const handlePopState = () => {
+			handleBackPressRef.current();
+			try {
+				if (!window.history.state?.__qatabaBackGuard) window.history.pushState({ __qatabaBackGuard: true }, "");
+			} catch {}
+		};
+		window.addEventListener("popstate", handlePopState);
+		return () => {
+			disposed = true;
+			window.removeEventListener("popstate", handlePopState);
+		};
+	}, []);
 	if (isLoading) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "min-h-screen bg-linear-to-b from-slate-950 via-red-950 to-slate-950 flex flex-col items-center justify-center p-6 text-white text-center font-['Cairo',sans-serif]",
 		children: [
@@ -15574,13 +17772,17 @@ function AppContent() {
 			})
 		]
 	});
-	if (showInitialAuth) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	if (showInitialAuth) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "min-h-screen bg-linear-to-b from-slate-950 via-red-950 to-slate-950 font-['Cairo',sans-serif]",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthModal, {
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthModal, {
 			isOpen: true,
 			isInitialScreen: true,
 			onClose: () => {}
-		})
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppExitConfirmModal, {
+			isOpen: isAppExitModalOpen,
+			onCancel: () => setIsAppExitModalOpen(false),
+			onConfirm: handleConfirmAppExit
+		})]
 	});
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "min-h-screen bg-slate-50 text-slate-800 pb-20 font-['Cairo',sans-serif]",
@@ -15602,7 +17804,8 @@ function AppContent() {
 				donors,
 				onOpenExitConfirm: () => setIsExitConfirmOpen(true),
 				onOpenChat: () => setActiveTab("chat"),
-				onOpenWebsite: handleOpenOfficialWebsite
+				onOpenWebsite: handleOpenOfficialWebsite,
+				onOpenSupervisors: isOwner ? openSupervisorsTab : void 0
 			}),
 			toastMessage && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "fixed top-16 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 bg-emerald-700 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-emerald-500/50 animate-in slide-in-from-top-3 duration-300",
@@ -15682,7 +17885,7 @@ function AppContent() {
 					}),
 					activeTab === "home" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "space-y-6",
-						children: [activeRole === "admin" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						children: [activeRole === "admin" && isAuthorizedAdmin && adminPermissions.manageSettings && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "bg-linear-to-r from-amber-600 via-amber-700 to-rose-700 text-white rounded-2xl p-4 shadow-md space-y-3",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "flex flex-col sm:flex-row sm:items-center justify-between gap-2.5",
@@ -15772,6 +17975,7 @@ function AppContent() {
 					}),
 					activeTab === "search" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DonorSearch, {
 						donors,
+						onBack: navigateToHome,
 						onNavigateToRegister: () => {
 							if (currentUser) setActiveTab("register");
 							else setIsVisitorRestrictionOpen(true);
@@ -15785,9 +17989,11 @@ function AppContent() {
 					}),
 					activeTab === "urgent" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(UrgentRequests, {
 						urgentRequests,
+						onBack: navigateToHome,
 						onOpenAuth: () => setIsAuthModalOpen(true)
 					}),
 					activeTab === "register" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DonorRegistration, {
+						onBack: navigateToHome,
 						onSuccessNavigate: () => {
 							setActiveTab("search");
 							setEditingDonorId(null);
@@ -15797,42 +18003,65 @@ function AppContent() {
 						editingDonorId,
 						onDeleteDonor: handleDeleteDonor
 					}),
-					activeTab === "info" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BloodDonationEducationalInfo, {}),
+					activeTab === "info" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BloodDonationEducationalInfo, { onBack: navigateToHome }),
 					activeTab === "hospitals" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "w-full max-w-4xl mx-auto space-y-4",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-200/90 text-center",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-inner",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hospital, { className: "w-7 h-7 sm:w-8 sm:h-8" })
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-									className: "text-lg sm:text-xl font-black text-slate-900",
-									children: "دليل المستشفيات والنقاط الطبية"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-xs sm:text-sm text-slate-500 font-bold mt-1",
-									children: "مديرية قعطبة - الضالع"
-								})
-							]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(QaetabahHospitalsDirectory, {
-							isOpen: true,
-							isEmbedded: true,
-							onClose: () => setActiveTab("home")
-						})]
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SubpageBackBar, {
+								title: "دليل المستشفيات والنقاط الطبية",
+								onBack: navigateToHome
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-200/90 text-center",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-inner",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hospital, { className: "w-7 h-7 sm:w-8 sm:h-8" })
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+										className: "text-lg sm:text-xl font-black text-slate-900",
+										children: "دليل المستشفيات والنقاط الطبية"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs sm:text-sm text-slate-500 font-bold mt-1",
+										children: "مديرية قعطبة - الضالع"
+									})
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(QaetabahHospitalsDirectory, {
+								isOpen: true,
+								isEmbedded: true,
+								onClose: navigateToHome
+							})
+						]
 					}),
 					activeTab === "admin" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AdminDashboard, {
-						onBack: () => setActiveTab("home"),
+						onBack: navigateToHome,
 						donors,
+						urgentRequests,
 						onEditDonor: handleEditDonor,
 						onDeleteDonor: handleDeleteDonor,
 						onGlobalRefresh: handleGlobalRefresh,
+						onOpenSupervisors: isOwner ? openSupervisorsTab : void 0,
 						isRefreshing
+					}),
+					activeTab === "supervisors" && isOwner && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-4",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SubpageBackBar, {
+							title: "إدارة المشرفين",
+							onBack: navigateToHome
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SupervisorManagement, { onBackToAdmin: () => {
+							switchActiveRole("admin");
+							setActiveTab("admin");
+							window.scrollTo({
+								top: 0,
+								behavior: "smooth"
+							});
+						} })]
 					}),
 					activeTab === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChatSupport, {
 						userProfile,
-						onBack: () => setActiveTab("home")
+						onBack: navigateToHome
 					})
 				] })]
 			}),
@@ -15890,7 +18119,8 @@ function AppContent() {
 					switchActiveRole(role);
 					setActiveTab(role === "admin" ? "admin" : "home");
 				},
-				onOpenAdminAuth: () => setIsAuthModalOpen(true)
+				onOpenAdminAuth: () => setIsAuthModalOpen(true),
+				onOpenSupervisors: isOwner ? openSupervisorsTab : void 0
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(NotificationsModal, {
 				isOpen: isNotificationsOpen,
@@ -15931,6 +18161,11 @@ function AppContent() {
 						});
 					}
 				}
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppExitConfirmModal, {
+				isOpen: isAppExitModalOpen,
+				onCancel: () => setIsAppExitModalOpen(false),
+				onConfirm: handleConfirmAppExit
 			})
 		]
 	});

@@ -31,12 +31,16 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { BloodType, BLOOD_TYPES, Donor } from '../types';
 import { searchDonorsFromSheets, importRawDonors, pushAllDonorsToSheets } from '../services/googleSheetsService';
+import { logAdminAction } from '../services/supervisorService';
 import { getWhatsAppUrl, openWhatsAppChat } from '../utils/whatsapp';
 import { shareData, getAppLink } from '../utils/shareUtils';
 import { VisitorRestrictionModal } from './VisitorRestrictionModal';
+import { SubpageBackBar } from './SubpageBackBar';
+import { useRegisterBackHandler } from '../utils/backNavigation';
 
 interface DonorSearchProps {
   donors: Donor[];
+  onBack?: () => void;
   onNavigateToRegister: () => void;
   initialBloodType?: BloodType | 'ALL';
   onEditDonor?: (donorId: string) => void;
@@ -55,6 +59,7 @@ interface DonorSearchProps {
 
 export const DonorSearch: React.FC<DonorSearchProps> = ({
   donors,
+  onBack,
   onNavigateToRegister,
   initialBloodType = 'ALL',
   onEditDonor,
@@ -63,8 +68,8 @@ export const DonorSearch: React.FC<DonorSearchProps> = ({
   isOffline = false,
   onOpenAuth,
 }) => {
-  const { userProfile, currentUser, activeRole } = useAuth();
-  const isAdmin = activeRole === 'admin';
+  const { userProfile, currentUser, activeRole, adminPermissions, adminLevel } = useAuth();
+  const isAdmin = activeRole === 'admin' && adminPermissions.manageDonors;
 
   const [showVisitorRestriction, setShowVisitorRestriction] = useState(false);
 
@@ -164,6 +169,19 @@ export const DonorSearch: React.FC<DonorSearchProps> = ({
 
   const [whatsAppTargetDonor, setWhatsAppTargetDonor] = useState<Donor | null>(null);
 
+  useRegisterBackHandler(showVisitorRestriction, () => setShowVisitorRestriction(false));
+  useRegisterBackHandler(isImportModalOpen, () => {
+    setIsImportModalOpen(false);
+    setImportResult(null);
+  });
+  useRegisterBackHandler(Boolean(donorToDelete), () => {
+    if (!isDeleting) {
+      setDonorToDelete(null);
+      setDeleteError(null);
+    }
+  });
+  useRegisterBackHandler(Boolean(whatsAppTargetDonor), () => setWhatsAppTargetDonor(null));
+
   // WhatsApp helper - opens confirmation dialog
   const handleWhatsApp = (donor: Donor) => {
     setWhatsAppTargetDonor(donor);
@@ -193,6 +211,15 @@ export const DonorSearch: React.FC<DonorSearchProps> = ({
     try {
       const res = await importRawDonors(importText);
       if (res.success) {
+        if (isAdmin && currentUser?.uid) {
+          void logAdminAction({
+            actorUid: currentUser.uid,
+            actorName: userProfile?.displayName || currentUser.displayName || 'مشرف المتبرعين',
+            actorLevel: adminLevel || 'donor_admin',
+            actionType: 'استيراد دفعة متبرعين',
+            details: `تم استيراد ${res.count} متبرعاً`,
+          });
+        }
         setImportResult({
           success: true,
           message: `تم استيراد ${res.count} متبرعاً بنجاح إلى قاعدة البيانات!`,
@@ -215,6 +242,15 @@ export const DonorSearch: React.FC<DonorSearchProps> = ({
     try {
       const res = await pushAllDonorsToSheets(donors);
       if (res.success) {
+        if (isAdmin && currentUser?.uid) {
+          void logAdminAction({
+            actorUid: currentUser.uid,
+            actorName: userProfile?.displayName || currentUser.displayName || 'مشرف المتبرعين',
+            actorLevel: adminLevel || 'donor_admin',
+            actionType: 'تصدير المتبرعين إلى Google Sheets',
+            details: `عدد السجلات: ${res.count}`,
+          });
+        }
         setSheetsSyncFeedback(`تمت مزامنة ${res.count} متبرعاً مع جدول Google Sheets بنجاح!`);
       } else {
         setSheetsSyncFeedback(res.error || 'فشلت المزامنة مع Google Sheets');
@@ -238,6 +274,13 @@ export const DonorSearch: React.FC<DonorSearchProps> = ({
 
   return (
     <div className="space-y-4">
+      {onBack && (
+        <SubpageBackBar
+          title="البحث عن متبرعي الدم"
+          onBack={onBack}
+        />
+      )}
+
       {/* Delete Success Toast Banner */}
       {deleteSuccess && (
         <div className="p-3.5 rounded-2xl bg-emerald-500 text-white font-bold text-xs sm:text-sm flex items-center justify-between shadow-lg shadow-emerald-200 animate-in fade-in slide-in-from-top-2 duration-200">
@@ -255,7 +298,7 @@ export const DonorSearch: React.FC<DonorSearchProps> = ({
       )}
 
       {/* Admin In-Page Donors Toolbar */}
-      {activeRole === 'admin' && (
+      {isAdmin && (
         <div className="bg-linear-to-r from-amber-600 via-amber-600 to-rose-700 text-white rounded-2xl p-4 shadow-md space-y-3">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
             <div className="flex items-center gap-2">
@@ -383,7 +426,7 @@ export const DonorSearch: React.FC<DonorSearchProps> = ({
             <span className="text-xs bg-red-50 text-red-700 font-bold px-2.5 py-1 rounded-full border border-red-200">
               {combinedDonors.length} متبرع
             </span>
-            {sheetsDonors.length > 0 && activeRole === 'admin' && (
+            {sheetsDonors.length > 0 && isAdmin && (
               <span className="text-[9px] text-emerald-600 font-bold bg-emerald-50 px-1.5 rounded-sm">
                 يتضمن بيانات الأرشيف
               </span>
@@ -498,7 +541,7 @@ export const DonorSearch: React.FC<DonorSearchProps> = ({
         </div>
 
         {/* Google Sheets Search Trigger - Restricted to Admin active mode */}
-        {selectedBloodType !== 'ALL' && sheetsDonors.length === 0 && userProfile?.role === 'admin' && activeRole === 'admin' && (
+        {selectedBloodType !== 'ALL' && sheetsDonors.length === 0 && isAdmin && (
           <div className="pt-2">
             <button
               onClick={handleSearchSheets}
@@ -594,7 +637,7 @@ export const DonorSearch: React.FC<DonorSearchProps> = ({
                         </span>
                       )}
 
-                      {donor.source === 'google_sheets' && activeRole === 'admin' && (
+                      {donor.source === 'google_sheets' && isAdmin && (
                         <span className="inline-flex items-center gap-0.5 text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-100 font-bold px-1.5 py-0.5 rounded-full">
                           <FileSpreadsheet className="w-3 h-3 text-emerald-600" />
                           <span>سجل الأرشيف</span>
@@ -815,8 +858,20 @@ export const DonorSearch: React.FC<DonorSearchProps> = ({
                   setIsDeleting(true);
                   setDeleteError(null);
                   try {
-                    await onDeleteDonor(donorToDelete.id, donorToDelete.phone);
-                    setDeleteSuccess(`تم حذف بيانات المتبرع (${donorToDelete.fullName}) بنجاح!`);
+                    const target = donorToDelete;
+                    await onDeleteDonor(target.id, target.phone);
+                    if (isAdmin && currentUser?.uid) {
+                      void logAdminAction({
+                        actorUid: currentUser.uid,
+                        actorName: userProfile?.displayName || currentUser.displayName || 'مشرف المتبرعين',
+                        actorLevel: adminLevel || 'donor_admin',
+                        actionType: 'حذف متبرع',
+                        targetId: target.id,
+                        targetLabel: `${target.fullName} (${target.bloodType})`,
+                        details: `الهاتف: ${target.phone}`,
+                      });
+                    }
+                    setDeleteSuccess(`تم حذف بيانات المتبرع (${target.fullName}) بنجاح!`);
                     setTimeout(() => {
                       setDeleteSuccess(null);
                     }, 3500);

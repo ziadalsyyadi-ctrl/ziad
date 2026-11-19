@@ -42623,6 +42623,51 @@ registerAuth("Browser");
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+var LONG_TYPE = "type.googleapis.com/google.protobuf.Int64Value";
+var UNSIGNED_LONG_TYPE = "type.googleapis.com/google.protobuf.UInt64Value";
+function mapValues(o, f) {
+	const result = {};
+	for (const key in o) if (o.hasOwnProperty(key)) result[key] = f(o[key]);
+	return result;
+}
+/**
+* Takes data and encodes it in a JSON-friendly way, such that types such as
+* Date are preserved.
+* @internal
+* @param data - Data to encode.
+*/
+function encode(data) {
+	if (data == null) return null;
+	if (data instanceof Number) data = data.valueOf();
+	if (typeof data === "number" && isFinite(data)) return data;
+	if (data === true || data === false) return data;
+	if (Object.prototype.toString.call(data) === "[object String]") return data;
+	if (data instanceof Date) return data.toISOString();
+	if (Array.isArray(data)) return data.map((x) => encode(x));
+	if (typeof data === "function" || typeof data === "object") return mapValues(data, (x) => encode(x));
+	throw new Error("Data cannot be encoded in JSON: " + data);
+}
+/**
+* Takes data that's been encoded in a JSON-friendly form and returns a form
+* with richer datatypes, such as Dates, etc.
+* @internal
+* @param json - JSON to convert.
+*/
+function decode(json) {
+	if (json == null) return json;
+	if (json["@type"]) switch (json["@type"]) {
+		case LONG_TYPE:
+		case UNSIGNED_LONG_TYPE: {
+			const value = Number(json["value"]);
+			if (isNaN(value)) throw new Error("Data cannot be decoded from JSON: " + json);
+			return value;
+		}
+		default: throw new Error("Data cannot be decoded from JSON: " + json);
+	}
+	if (Array.isArray(json)) return json.map((x) => decode(x));
+	if (typeof json === "function" || typeof json === "object") return mapValues(json, (x) => decode(x));
+	return json;
+}
 /**
 * @license
 * Copyright 2020 Google LLC
@@ -42659,6 +42704,100 @@ var FUNCTIONS_TYPE = "functions";
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/**
+* Standard error codes for different ways a request can fail, as defined by:
+* https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto
+*
+* This map is used primarily to convert from a backend error code string to
+* a client SDK error code string, and make sure it's in the supported set.
+*/
+var errorCodeMap = {
+	OK: "ok",
+	CANCELLED: "cancelled",
+	UNKNOWN: "unknown",
+	INVALID_ARGUMENT: "invalid-argument",
+	DEADLINE_EXCEEDED: "deadline-exceeded",
+	NOT_FOUND: "not-found",
+	ALREADY_EXISTS: "already-exists",
+	PERMISSION_DENIED: "permission-denied",
+	UNAUTHENTICATED: "unauthenticated",
+	RESOURCE_EXHAUSTED: "resource-exhausted",
+	FAILED_PRECONDITION: "failed-precondition",
+	ABORTED: "aborted",
+	OUT_OF_RANGE: "out-of-range",
+	UNIMPLEMENTED: "unimplemented",
+	INTERNAL: "internal",
+	UNAVAILABLE: "unavailable",
+	DATA_LOSS: "data-loss"
+};
+/**
+* An error returned by the Firebase Functions client SDK.
+*
+* See {@link FunctionsErrorCode} for full documentation of codes.
+*
+* @public
+*/
+var FunctionsError = class FunctionsError extends FirebaseError {
+	/**
+	* Constructs a new instance of the `FunctionsError` class.
+	*/
+	constructor(code, message, details, url) {
+		super(`${FUNCTIONS_TYPE}/${code}`, message || "", url != null ? { url } : void 0);
+		this.details = details;
+		Object.setPrototypeOf(this, FunctionsError.prototype);
+	}
+};
+/**
+* Takes an HTTP status code and returns the corresponding ErrorCode.
+* This is the standard HTTP status code -> error mapping defined in:
+* https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto
+*
+* @param status An HTTP status code.
+* @return The corresponding ErrorCode, or ErrorCode.UNKNOWN if none.
+*/
+function codeForHTTPStatus(status) {
+	if (status >= 200 && status < 300) return "ok";
+	switch (status) {
+		case 0: return "internal";
+		case 400: return "invalid-argument";
+		case 401: return "unauthenticated";
+		case 403: return "permission-denied";
+		case 404: return "not-found";
+		case 409: return "aborted";
+		case 429: return "resource-exhausted";
+		case 499: return "cancelled";
+		case 500: return "internal";
+		case 501: return "unimplemented";
+		case 503: return "unavailable";
+		case 504: return "deadline-exceeded";
+	}
+	return "unknown";
+}
+/**
+* Takes an HTTP response and returns the corresponding Error, if any.
+*/
+function _errorForResponse(httpStatus, bodyJSON, url) {
+	let code = codeForHTTPStatus(httpStatus);
+	let description = code;
+	let details = void 0;
+	try {
+		const errorJSON = bodyJSON && bodyJSON.error;
+		if (errorJSON) {
+			const statusText = errorJSON.status;
+			if (typeof statusText === "string") {
+				if (!errorCodeMap[statusText]) return new FunctionsError("internal", `Unknown backend error status: ${statusText} [${httpStatus}]`, void 0, url);
+				code = errorCodeMap[statusText];
+				description = `Backend error status: ${statusText}`;
+			}
+			const message = errorJSON.message;
+			if (typeof message === "string") description = message;
+			details = errorJSON.details;
+			if (details !== void 0) details = decode(details);
+		}
+	} catch (e) {}
+	if (code === "ok") return null;
+	return new FunctionsError(code, `${description} [${httpStatus}]`, details, url);
+}
 /**
 * @license
 * Copyright 2017 Google LLC
@@ -42743,6 +42882,26 @@ var ContextProvider = class {
 * limitations under the License.
 */
 var DEFAULT_REGION = "us-central1";
+var responseLineRE = /^data: (.*?)(?:\n|$)/;
+/**
+* Returns a Promise that will be rejected after the given duration.
+* The error will be of type FunctionsError.
+*
+* @param millis Number of milliseconds to wait before rejecting.
+*/
+function failAfter(millis) {
+	let timer = null;
+	return {
+		promise: new Promise((_, reject) => {
+			timer = setTimeout(() => {
+				reject(new FunctionsError("deadline-exceeded", "deadline-exceeded"));
+			}, millis);
+		}),
+		cancel: () => {
+			if (timer) clearTimeout(timer);
+		}
+	};
+}
 /**
 * The main class for the Firebase Functions SDK.
 * @internal
@@ -42799,6 +42958,276 @@ function connectFunctionsEmulator$1(functionsInstance, host, port) {
 	const useSsl = isCloudWorkstation(host);
 	functionsInstance.emulatorOrigin = `http${useSsl ? "s" : ""}://${host}:${port}`;
 	if (useSsl) pingServer(functionsInstance.emulatorOrigin + "/backends");
+}
+/**
+* Returns a reference to the callable https trigger with the given name.
+* @param name - The name of the trigger.
+* @public
+*/
+function httpsCallable$1(functionsInstance, name, options) {
+	const callable = (data) => {
+		return call(functionsInstance, name, data, options || {});
+	};
+	callable.stream = (data, options) => {
+		return stream(functionsInstance, name, data, options);
+	};
+	return callable;
+}
+function getCredentials(functionsInstance) {
+	return functionsInstance.emulatorOrigin && isCloudWorkstation(functionsInstance.emulatorOrigin) ? "include" : void 0;
+}
+/**
+* Does an HTTP POST and returns the completed response.
+* @param url The url to post to.
+* @param body The JSON body of the post.
+* @param headers The HTTP headers to include in the request.
+* @param functionsInstance functions instance that is calling postJSON
+* @return A Promise that will succeed when the request finishes.
+*/
+async function postJSON(url, body, headers, fetchImpl, functionsInstance) {
+	headers["Content-Type"] = "application/json";
+	let response;
+	try {
+		response = await fetchImpl(url, {
+			method: "POST",
+			body: JSON.stringify(body),
+			headers,
+			credentials: getCredentials(functionsInstance)
+		});
+	} catch (e) {
+		return {
+			status: 0,
+			json: null
+		};
+	}
+	let json = null;
+	try {
+		json = await response.json();
+	} catch (e) {}
+	return {
+		status: response.status,
+		json
+	};
+}
+/**
+* Creates authorization headers for Firebase Functions requests.
+* @param functionsInstance The Firebase Functions service instance.
+* @param options Options for the callable function, including AppCheck token settings.
+* @return A Promise that resolves a headers map to include in outgoing fetch request.
+*/
+async function makeAuthHeaders(functionsInstance, options) {
+	const headers = {};
+	const context = await functionsInstance.contextProvider.getContext(options.limitedUseAppCheckTokens);
+	if (context.authToken) headers["Authorization"] = "Bearer " + context.authToken;
+	if (context.messagingToken) headers["Firebase-Instance-ID-Token"] = context.messagingToken;
+	if (context.appCheckToken !== null) headers["X-Firebase-AppCheck"] = context.appCheckToken;
+	return headers;
+}
+/**
+* Calls a callable function asynchronously and returns the result.
+* @param name The name of the callable trigger.
+* @param data The data to pass as params to the function.
+*/
+function call(functionsInstance, name, data, options) {
+	return callAtURL(functionsInstance, functionsInstance._url(name), data, options);
+}
+/**
+* Calls a callable function asynchronously and returns the result.
+* @param url The url of the callable trigger.
+* @param data The data to pass as params to the function.
+*/
+async function callAtURL(functionsInstance, url, data, options) {
+	data = encode(data);
+	const body = { data };
+	const headers = await makeAuthHeaders(functionsInstance, options);
+	const failAfterHandle = failAfter(options.timeout || 7e4);
+	const response = await Promise.race([
+		postJSON(url, body, headers, functionsInstance.fetchImpl, functionsInstance),
+		failAfterHandle.promise,
+		functionsInstance.cancelAllRequests
+	]);
+	failAfterHandle.cancel();
+	if (!response) throw new FunctionsError("cancelled", "Firebase Functions instance was deleted.");
+	const error = _errorForResponse(response.status, response.json, url);
+	if (error) throw error;
+	if (!response.json) throw new FunctionsError("internal", "Response is not valid JSON object.", void 0, url);
+	let responseData = response.json.data;
+	if (typeof responseData === "undefined") responseData = response.json.result;
+	if (typeof responseData === "undefined") throw new FunctionsError("internal", "Response is missing data field.", void 0, url);
+	return { data: decode(responseData) };
+}
+/**
+* Calls a callable function asynchronously and returns a streaming result.
+* @param name The name of the callable trigger.
+* @param data The data to pass as params to the function.
+* @param options Streaming request options.
+*/
+function stream(functionsInstance, name, data, options) {
+	return streamAtURL(functionsInstance, functionsInstance._url(name), data, options || {});
+}
+/**
+* Calls a callable function asynchronously and return a streaming result.
+* @param url The url of the callable trigger.
+* @param data The data to pass as params to the function.
+* @param options Streaming request options.
+*/
+async function streamAtURL(functionsInstance, url, data, options) {
+	data = encode(data);
+	const body = { data };
+	const headers = await makeAuthHeaders(functionsInstance, options);
+	headers["Content-Type"] = "application/json";
+	headers["Accept"] = "text/event-stream";
+	let response;
+	try {
+		response = await functionsInstance.fetchImpl(url, {
+			method: "POST",
+			body: JSON.stringify(body),
+			headers,
+			signal: options?.signal,
+			credentials: getCredentials(functionsInstance)
+		});
+	} catch (e) {
+		if (e instanceof Error && e.name === "AbortError") {
+			const error = new FunctionsError("cancelled", "Request was cancelled.");
+			return {
+				data: Promise.reject(error),
+				stream: { [Symbol.asyncIterator]() {
+					return { next() {
+						return Promise.reject(error);
+					} };
+				} }
+			};
+		}
+		const error = _errorForResponse(0, null, url);
+		return {
+			data: Promise.reject(error),
+			stream: { [Symbol.asyncIterator]() {
+				return { next() {
+					return Promise.reject(error);
+				} };
+			} }
+		};
+	}
+	let resultResolver;
+	let resultRejecter;
+	const resultPromise = new Promise((resolve, reject) => {
+		resultResolver = resolve;
+		resultRejecter = reject;
+	});
+	options?.signal?.addEventListener("abort", () => {
+		const error = new FunctionsError("cancelled", "Request was cancelled.");
+		resultRejecter(error);
+	});
+	const rstream = createResponseStream(response.body.getReader(), resultResolver, resultRejecter, options?.signal, url);
+	return {
+		stream: { [Symbol.asyncIterator]() {
+			const rreader = rstream.getReader();
+			return {
+				async next() {
+					const { value, done } = await rreader.read();
+					return {
+						value,
+						done
+					};
+				},
+				async return() {
+					await rreader.cancel();
+					return {
+						done: true,
+						value: void 0
+					};
+				}
+			};
+		} },
+		data: resultPromise
+	};
+}
+/**
+* Creates a ReadableStream that processes a streaming response from a streaming
+* callable function that returns data in server-sent event format.
+*
+* @param reader The underlying reader providing raw response data
+* @param resultResolver Callback to resolve the final result when received
+* @param resultRejecter Callback to reject with an error if encountered
+* @param signal Optional AbortSignal to cancel the stream processing
+* @returns A ReadableStream that emits decoded messages from the response
+*
+* The returned ReadableStream:
+*   1. Emits individual messages when "message" data is received
+*   2. Resolves with the final result when a "result" message is received
+*   3. Rejects with an error if an "error" message is received
+*/
+function createResponseStream(reader, resultResolver, resultRejecter, signal, url) {
+	const processLine = (line, controller) => {
+		const match = line.match(responseLineRE);
+		if (!match) return;
+		const data = match[1];
+		try {
+			const jsonData = JSON.parse(data);
+			if ("result" in jsonData) {
+				resultResolver(decode(jsonData.result));
+				return;
+			}
+			if ("message" in jsonData) {
+				controller.enqueue(decode(jsonData.message));
+				return;
+			}
+			if ("error" in jsonData) {
+				const error = _errorForResponse(0, jsonData, url);
+				controller.error(error);
+				resultRejecter(error);
+				return;
+			}
+		} catch (error) {
+			if (error instanceof FunctionsError) {
+				controller.error(error);
+				resultRejecter(error);
+				return;
+			}
+		}
+	};
+	const decoder = new TextDecoder();
+	return new ReadableStream({
+		start(controller) {
+			let currentText = "";
+			return pump();
+			async function pump() {
+				if (signal?.aborted) {
+					const error = new FunctionsError("cancelled", "Request was cancelled");
+					controller.error(error);
+					resultRejecter(error);
+					return Promise.resolve();
+				}
+				try {
+					const { value, done } = await reader.read();
+					if (done) {
+						if (currentText.trim()) processLine(currentText.trim(), controller);
+						controller.close();
+						return;
+					}
+					if (signal?.aborted) {
+						const error = new FunctionsError("cancelled", "Request was cancelled");
+						controller.error(error);
+						resultRejecter(error);
+						await reader.cancel();
+						return;
+					}
+					currentText += decoder.decode(value, { stream: true });
+					const lines = currentText.split("\n");
+					currentText = lines.pop() || "";
+					for (const line of lines) if (line.trim()) processLine(line.trim(), controller);
+					return pump();
+				} catch (error) {
+					const functionsError = error instanceof FunctionsError ? error : _errorForResponse(0, null, url);
+					controller.error(functionsError);
+					resultRejecter(functionsError);
+				}
+			}
+		},
+		cancel() {
+			return reader.cancel();
+		}
+	});
 }
 var name$1 = "@firebase/functions";
 var version$1 = "0.14.0";
@@ -42870,6 +43299,14 @@ function getFunctions(app = getApp(), regionOrCustomDomain = DEFAULT_REGION) {
 */
 function connectFunctionsEmulator(functionsInstance, host, port) {
 	connectFunctionsEmulator$1(getModularInstance(functionsInstance), host, port);
+}
+/**
+* Returns a reference to the callable HTTPS trigger with the given name.
+* @param name - The name of the trigger.
+* @public
+*/
+function httpsCallable(functionsInstance, name, options) {
+	return httpsCallable$1(getModularInstance(functionsInstance), name, options);
 }
 /**
 * Cloud Functions for Firebase
@@ -43976,4 +44413,4 @@ function registerAppCheck() {
 	registerVersion(name, version);
 }
 registerAppCheck();
-export { deleteDoc as $, onAuthStateChanged as A, signInWithCustomToken as B, inMemoryPersistence as C, linkWithPhoneNumber as D, linkWithCredential as E, sendPasswordResetEmail as F, signInWithRedirect as G, signInWithEmailLink as H, sendSignInLinkToEmail as I, updateEmail as J, signOut as K, setPersistence as L, reload as M, revokeAccessToken as N, linkWithPopup as O, sendEmailVerification as P, addDoc as Q, signInAnonymously as R, getRedirectResult as S, isSignInWithEmailLink as T, signInWithPhoneNumber as U, signInWithEmailAndPassword as V, signInWithPopup as W, updateProfile as X, updatePassword as Y, verifyBeforeUpdateEmail as Z, createUserWithEmailAndPassword as _, getFirestore as _t, FacebookAuthProvider as a, orderBy as at, getAdditionalUserInfo as b, serverTimestamp as bt, OAuthCredential as c, query as ct, TwitterAuthProvider as d, updateDoc as dt, getDoc as et, applyActionCode as f, where as ft, connectAuthEmulator as g, doc as gt, confirmPasswordReset as h, collection as ht, EmailAuthProvider as i, onSnapshot as it, reauthenticateWithCredential as j, linkWithRedirect as k, OAuthProvider as l, runTransaction as lt, browserSessionPersistence as m, arrayUnion as mt, initializeAppCheck as n, getDocs as nt, GithubAuthProvider as o, persistentLocalCache as ot, browserLocalPersistence as p, writeBatch as pt, unlink as q, getFunctions as r, limit as rt, GoogleAuthProvider as s, persistentMultipleTabManager as st, ReCaptchaV3Provider as t, getDocFromServer as tt, RecaptchaVerifier as u, setDoc as ut, deleteUser as v, increment as vt, indexedDBLocalPersistence as w, getAuth as x, initializeApp as xt, fetchSignInMethodsForEmail as y, initializeFirestore as yt, signInWithCredential as z };
+export { addDoc as $, linkWithRedirect as A, signInWithCredential as B, getRedirectResult as C, linkWithCredential as D, isSignInWithEmailLink as E, sendEmailVerification as F, signInWithPopup as G, signInWithEmailAndPassword as H, sendPasswordResetEmail as I, unlink as J, signInWithRedirect as K, sendSignInLinkToEmail as L, reauthenticateWithCredential as M, reload as N, linkWithPhoneNumber as O, revokeAccessToken as P, verifyBeforeUpdateEmail as Q, setPersistence as R, getAuth as S, initializeApp as St, indexedDBLocalPersistence as T, signInWithEmailLink as U, signInWithCustomToken as V, signInWithPhoneNumber as W, updatePassword as X, updateEmail as Y, updateProfile as Z, connectAuthEmulator as _, doc as _t, EmailAuthProvider as a, onSnapshot as at, fetchSignInMethodsForEmail as b, initializeFirestore as bt, GoogleAuthProvider as c, persistentMultipleTabManager as ct, RecaptchaVerifier as d, setDoc as dt, deleteDoc as et, TwitterAuthProvider as f, updateDoc as ft, confirmPasswordReset as g, collection as gt, browserSessionPersistence as h, arrayUnion as ht, httpsCallable as i, limit as it, onAuthStateChanged as j, linkWithPopup as k, OAuthCredential as l, query as lt, browserLocalPersistence as m, writeBatch as mt, initializeAppCheck as n, getDocFromServer as nt, FacebookAuthProvider as o, orderBy as ot, applyActionCode as p, where as pt, signOut as q, getFunctions as r, getDocs as rt, GithubAuthProvider as s, persistentLocalCache as st, ReCaptchaV3Provider as t, getDoc as tt, OAuthProvider as u, runTransaction as ut, createUserWithEmailAndPassword as v, getFirestore as vt, inMemoryPersistence as w, getAdditionalUserInfo as x, serverTimestamp as xt, deleteUser as y, increment as yt, signInAnonymously as z };

@@ -21,8 +21,11 @@ import {
 import { Conversation, ChatMessage, ConversationStatus } from '../types';
 import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
+import { useAuth } from '../context/AuthContext';
+import { logAdminAction } from '../services/supervisorService';
 
 const AdminChatManager: React.FC = () => {
+  const { currentUser, userProfile, adminLevel } = useAuth();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -60,21 +63,41 @@ const AdminChatManager: React.FC = () => {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputText.trim() || !selectedUserId) return;
+    if (!inputText.trim() || !selectedUserId || !currentUser?.uid) return;
 
     const text = inputText;
     setInputText('');
 
     await sendMessage(
       selectedUserId,
-      'admin', // Or actual admin UID if preferred
+      currentUser.uid,
       text,
       true
     );
+    void logAdminAction({
+      actorUid: currentUser.uid,
+      actorName: userProfile?.displayName || currentUser.displayName || 'مشرف الدعم',
+      actorLevel: adminLevel || 'support_admin',
+      actionType: 'الرد على محادثة دعم',
+      targetId: selectedUserId,
+      targetLabel: selectedConversation?.userDisplayName || selectedUserId,
+      details: text.trim().slice(0, 120),
+    });
   };
 
   const handleStatusChange = async (userId: string, status: ConversationStatus) => {
     await updateConversationStatus(userId, status);
+    if (currentUser?.uid) {
+      void logAdminAction({
+        actorUid: currentUser.uid,
+        actorName: userProfile?.displayName || currentUser.displayName || 'مشرف الدعم',
+        actorLevel: adminLevel || 'support_admin',
+        actionType: 'تغيير حالة محادثة دعم',
+        targetId: userId,
+        targetLabel: selectedConversation?.userDisplayName || userId,
+        details: `الحالة الجديدة: ${status}`,
+      });
+    }
   };
 
   const filteredConversations = conversations.filter(conv => {

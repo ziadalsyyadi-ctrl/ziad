@@ -468,6 +468,16 @@ var createLucideIcon = (iconName, iconNode) => {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Activity = createLucideIcon("activity", [["path", {
+	d: "M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2",
+	key: "169zse"
+}]]);
+/**
+* @license lucide-react v0.546.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var ArrowLeft = createLucideIcon("arrow-left", [["path", {
 	d: "m12 19-7-7 7-7",
 	key: "1l729n"
@@ -999,6 +1009,26 @@ var Heart = createLucideIcon("heart", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var History = createLucideIcon("history", [
+	["path", {
+		d: "M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8",
+		key: "1357e3"
+	}],
+	["path", {
+		d: "M3 3v5h5",
+		key: "1xhq8a"
+	}],
+	["path", {
+		d: "M12 7v5l4 2",
+		key: "1fdv2h"
+	}]
+]);
+/**
+* @license lucide-react v0.546.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Hospital = createLucideIcon("hospital", [
 	["path", {
 		d: "M12 7v4",
@@ -1257,6 +1287,19 @@ var Plus = createLucideIcon("plus", [["path", {
 }], ["path", {
 	d: "M12 5v14",
 	key: "s699le"
+}]]);
+/**
+* @license lucide-react v0.546.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Power = createLucideIcon("power", [["path", {
+	d: "M12 2v10",
+	key: "mnfbl"
+}], ["path", {
+	d: "M18.4 6.6a9 9 0 1 1-12.77.04",
+	key: "obofu9"
 }]]);
 /**
 * @license lucide-react v0.546.0 - ISC
@@ -1700,4 +1743,4 @@ var X = createLucideIcon("x", [["path", {
 	d: "m6 6 12 12",
 	key: "d8bk6v"
 }]]);
-export { CircleX as $, Mail as A, HardDriveDownload as B, Phone as C, Menu as D, MessageCircle as E, Info as F, Eye as G, FolderOpen as H, House as I, Droplet as J, EyeOff as K, Hospital as L, LogIn as M, Lock as N, Megaphone as O, KeyRound as P, Clock as Q, Heart as R, Plus as S, MessageSquare as T, FileText as U, Globe as V, FileSpreadsheet as W, Copy as X, Database as Y, Compass as Z, Share2 as _, User as a, ChevronLeft as at, Search as b, Upload as c, Bell as ct, Target as d, ArrowRight as dt, CircleUser as et, Sparkles as f, ArrowLeft as ft, ShieldAlert as g, ShieldCheck as h, Users as i, ChevronRight as it, LogOut as j, MapPin as k, TriangleAlert as l, BellRing as lt, Shield as m, VolumeX as n, CircleCheck as nt, UserPlus as o, Check as ot, Smartphone as p, require_react as pt, ExternalLink as q, Volume2 as r, CircleAlert as rt, UserCheck as s, Calendar as st, X as t, CirclePlus as tt, Trash2 as u, Award as ut, Settings as v, PenLine as w, RefreshCw as x, Send as y, HeartHandshake as z };
+export { Compass as $, MapPin as A, Heart as B, Plus as C, MessageCircle as D, MessageSquare as E, KeyRound as F, FileText as G, HardDriveDownload as H, Info as I, EyeOff as J, FileSpreadsheet as K, House as L, LogOut as M, LogIn as N, Menu as O, Lock as P, Copy as Q, Hospital as R, Power as S, PenLine as T, Globe as U, HeartHandshake as V, FolderOpen as W, Droplet as X, ExternalLink as Y, Database as Z, Share2 as _, User as a, CircleAlert as at, Search as b, Upload as c, Check as ct, Target as d, BellRing as dt, Clock as et, Sparkles as f, Award as ft, ShieldAlert as g, require_react as gt, ShieldCheck as h, Activity as ht, Users as i, CircleCheck as it, Mail as j, Megaphone as k, TriangleAlert as l, Calendar as lt, Shield as m, ArrowLeft as mt, VolumeX as n, CircleUser as nt, UserPlus as o, ChevronRight as ot, Smartphone as p, ArrowRight as pt, Eye as q, Volume2 as r, CirclePlus as rt, UserCheck as s, ChevronLeft as st, X as t, CircleX as tt, Trash2 as u, Bell as ut, Settings as v, Phone as w, RefreshCw as x, Send as y, History as z };

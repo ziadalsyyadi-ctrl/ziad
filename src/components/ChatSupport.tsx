@@ -74,12 +74,20 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ userProfile, onBack }) => {
 
   if (!currentUser) {
     return (
-      <div className="flex flex-col items-center justify-center h-full p-8 text-center bg-white">
-        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+      <div className="flex flex-col items-center justify-center h-full p-8 text-center bg-white rounded-3xl border border-slate-200 space-y-4">
+        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
           <MessageSquare className="text-red-600 w-8 h-8" />
         </div>
-        <h2 className="text-xl font-bold text-gray-900 mb-2">يرجى تسجيل الدخول</h2>
+        <h2 className="text-xl font-bold text-gray-900">يرجى تسجيل الدخول</h2>
         <p className="text-gray-600">يجب عليك تسجيل الدخول لتتمكن من التواصل مع الإدارة.</p>
+        <button
+          type="button"
+          onClick={onBack}
+          className="min-h-[44px] px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center gap-2 transition-colors cursor-pointer"
+        >
+          <ArrowRight className="w-4 h-4" />
+          <span>العودة للرئيسية</span>
+        </button>
       </div>
     );
   }
@@ -89,9 +97,12 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ userProfile, onBack }) => {
       {/* Header */}
       <div className="bg-white border-b px-4 py-3 flex items-center justify-between sticky top-0 z-10 shadow-sm">
         <div className="flex items-center gap-3">
-          <button 
+          <button
+            type="button"
             onClick={onBack}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors lg:hidden"
+            aria-label="العودة للرئيسية"
+            title="العودة للرئيسية"
+            className="min-h-[40px] min-w-[40px] p-2 hover:bg-gray-100 rounded-full transition-colors flex items-center justify-center cursor-pointer"
           >
             <ArrowRight className="w-5 h-5" />
           </button>

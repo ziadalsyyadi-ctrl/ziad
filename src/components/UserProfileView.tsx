@@ -32,6 +32,8 @@ import { APP_VERSION } from '../version';
 import { getWhatsAppUrl, openWhatsAppChat } from '../utils/whatsapp';
 import { AboutUsModal } from './AboutUsModal';
 
+import { ALL_SUPERVISOR_LEVEL_LABELS } from '../services/supervisorService';
+
 interface UserProfileViewProps {
   donors: Donor[];
   urgentRequests: UrgentRequest[];
@@ -39,6 +41,7 @@ interface UserProfileViewProps {
   onOpenInstallModal: () => void;
   onOpenAuth: () => void;
   onGoToAdmin: () => void;
+  onOpenSupervisors?: () => void;
   onOpenExitConfirm: () => void;
   onSearchWithFilter: (bloodType: BloodType | 'ALL') => void;
 }
@@ -50,10 +53,11 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({
   onOpenInstallModal,
   onOpenAuth,
   onGoToAdmin,
+  onOpenSupervisors,
   onOpenExitConfirm,
   onSearchWithFilter,
 }) => {
-  const { currentUser, userProfile, isGuest, logout, activeRole, switchActiveRole, updateUserProfileAndAccount } = useAuth();
+  const { currentUser, userProfile, isOwner, isAuthorizedAdmin, adminLevel, isGuest, logout, activeRole, switchActiveRole, updateUserProfileAndAccount } = useAuth();
   const [toggleLoading, setToggleLoading] = useState(false);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
@@ -359,25 +363,41 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({
           </form>
         )}
 
-        {/* Admin Switcher inside Settings if Admin */}
-        {userProfile?.role === 'admin' && (
+        {/* Admin / Supervisor Switcher inside My Account */}
+        {isAuthorizedAdmin && (
           <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
+            {isOwner && onOpenSupervisors && (
+              <button
+                type="button"
+                onClick={onOpenSupervisors}
+                className="w-full py-3 px-4 rounded-2xl bg-linear-to-r from-slate-900 to-slate-800 text-white font-black text-xs shadow-md transition-all flex items-center justify-between gap-2 hover:from-slate-800 hover:to-slate-700 cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-amber-400" />
+                  <span>إدارة المشرفين</span>
+                </div>
+                <span className="px-2 py-0.5 rounded-lg bg-amber-400/20 text-amber-200 text-[10px] font-black">
+                  المالك فقط
+                </span>
+              </button>
+            )}
+
             {activeRole === 'admin' && (
               <button
                 onClick={onGoToAdmin}
-                className="w-full py-3 px-4 rounded-2xl bg-slate-900 text-white font-black text-xs shadow-lg shadow-slate-200 transition-all flex items-center justify-center gap-2 hover:bg-slate-800"
+                className="w-full py-3 px-4 rounded-2xl bg-slate-900 text-white font-black text-xs shadow-lg shadow-slate-200 transition-all flex items-center justify-center gap-2 hover:bg-slate-800 cursor-pointer"
               >
                 <ShieldAlert className="w-4 h-4 text-amber-400" />
-                <span>فتح لوحة تحكم المسؤول (إكسل وإعدادات)</span>
+                <span>فتح لوحة التحكم ({adminLevel ? ALL_SUPERVISOR_LEVEL_LABELS[adminLevel] : 'المسؤول'})</span>
               </button>
             )}
 
             <button
               onClick={() => setIsRoleModalOpen(true)}
-              className="w-full py-2.5 px-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 font-black text-xs transition-all flex items-center justify-center gap-2 hover:bg-amber-100"
+              className="w-full py-2.5 px-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 font-black text-xs transition-all flex items-center justify-center gap-2 hover:bg-amber-100 cursor-pointer"
             >
               <Settings2 className="w-4 h-4 text-amber-600" />
-              <span>تغيير وضع الحساب (مستخدم / مسؤول)</span>
+              <span>تغيير وضع الحساب (مستخدم / {adminLevel ? ALL_SUPERVISOR_LEVEL_LABELS[adminLevel] : 'مسؤول'})</span>
             </button>
           </div>
         )}
@@ -675,6 +695,7 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({
           switchActiveRole(role);
           setIsRoleModalOpen(false);
         }}
+        onOpenSupervisors={onOpenSupervisors}
       />
 
       <AboutUsModal

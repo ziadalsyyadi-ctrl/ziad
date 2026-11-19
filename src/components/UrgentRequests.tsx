@@ -22,10 +22,13 @@ import confetti from 'canvas-confetti';
 import { useAuth } from '../context/AuthContext';
 import { UrgentRequest, BloodType, BLOOD_TYPES, UrgencyLevel } from '../types';
 import { createUrgentRequest, updateRequestStatus, deleteUrgentRequest } from '../services/donorService';
+import { logAdminAction } from '../services/supervisorService';
 import { YemenPhoneInput } from './YemenPhoneInput';
 import { getWhatsAppUrl, openWhatsAppChat } from '../utils/whatsapp';
 import { shareData, getAppLink } from '../utils/shareUtils';
 import { VisitorRestrictionModal } from './VisitorRestrictionModal';
+import { SubpageBackBar } from './SubpageBackBar';
+import { useRegisterBackHandler } from '../utils/backNavigation';
 
 // Helper to check if urgent request is expired (older than 48 hours)
 export const isUrgentRequestExpired = (req: UrgentRequest): boolean => {
@@ -69,15 +72,17 @@ export const getUrgentRemainingHours = (req: UrgentRequest): number => {
 
 interface UrgentRequestsProps {
   urgentRequests: UrgentRequest[];
+  onBack?: () => void;
   onOpenAuth: () => void;
 }
 
 export const UrgentRequests: React.FC<UrgentRequestsProps> = ({
   urgentRequests,
+  onBack,
   onOpenAuth,
 }) => {
-  const { currentUser, userProfile, activeRole } = useAuth();
-  const isAdmin = activeRole === 'admin';
+  const { currentUser, userProfile, activeRole, adminPermissions, adminLevel } = useAuth();
+  const isAdmin = activeRole === 'admin' && adminPermissions.manageUrgentRequests;
 
   const [filterStatus, setFilterStatus] = useState<'open' | 'fulfilled' | 'all'>('open');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -89,12 +94,34 @@ export const UrgentRequests: React.FC<UrgentRequestsProps> = ({
   const [isDeletingReq, setIsDeletingReq] = useState(false);
   const [deleteReqError, setDeleteReqError] = useState<string | null>(null);
 
+  useRegisterBackHandler(showVisitorRestriction, () => setShowVisitorRestriction(false));
+  useRegisterBackHandler(isModalOpen, () => setIsModalOpen(false));
+  useRegisterBackHandler(Boolean(whatsAppTargetReq), () => setWhatsAppTargetReq(null));
+  useRegisterBackHandler(Boolean(reqToDelete), () => {
+    if (!isDeletingReq) {
+      setReqToDelete(null);
+      setDeleteReqError(null);
+    }
+  });
+
   const handleDeleteRequestConfirm = async () => {
     if (!reqToDelete) return;
     setIsDeletingReq(true);
     setDeleteReqError(null);
     try {
-      await deleteUrgentRequest(reqToDelete.id);
+      const target = reqToDelete;
+      await deleteUrgentRequest(target.id);
+      if (isAdmin && currentUser?.uid) {
+        void logAdminAction({
+          actorUid: currentUser.uid,
+          actorName: userProfile?.displayName || currentUser.displayName || 'مشرف الطلبات',
+          actorLevel: adminLevel || 'urgent_admin',
+          actionType: 'حذف طلب دم عاجل',
+          targetId: target.id,
+          targetLabel: `${target.patientName} (${target.bloodType})`,
+          details: `المستشفى: ${target.hospital}`,
+        });
+      }
       setReqToDelete(null);
     } catch (err: any) {
       setDeleteReqError(err.message || 'فشل حذف البلاغ');
@@ -192,6 +219,16 @@ export const UrgentRequests: React.FC<UrgentRequestsProps> = ({
     const newStatus = request.status === 'open' ? 'fulfilled' : 'open';
     try {
       await updateRequestStatus(request.id, newStatus);
+      if (isAdmin && currentUser?.uid) {
+        void logAdminAction({
+          actorUid: currentUser.uid,
+          actorName: userProfile?.displayName || currentUser.displayName || 'مشرف الطلبات',
+          actorLevel: adminLevel || 'urgent_admin',
+          actionType: newStatus === 'fulfilled' ? 'إغلاق طلب دم عاجل' : 'إعادة فتح طلب دم عاجل',
+          targetId: request.id,
+          targetLabel: `${request.patientName} (${request.bloodType})`,
+        });
+      }
       if (newStatus === 'fulfilled') {
         confetti({
           particleCount: 100,
@@ -225,6 +262,13 @@ export const UrgentRequests: React.FC<UrgentRequestsProps> = ({
 
   return (
     <div className="space-y-4">
+      {onBack && (
+        <SubpageBackBar
+          title="طلبات الدم العاجلة"
+          onBack={onBack}
+        />
+      )}
+
       {/* Admin Urgent Requests In-Page Bar */}
       {isAdmin && (
         <div className="bg-linear-to-r from-amber-600 via-amber-700 to-rose-700 text-white rounded-2xl p-4 shadow-md space-y-2">

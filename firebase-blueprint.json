@@ -162,18 +162,133 @@
           "description": "User phone number",
           "maxLength": 20
         },
+        "phoneVerified": {
+          "type": "boolean",
+          "description": "Whether phone number was verified"
+        },
+        "email": {
+          "type": "string",
+          "description": "Normalized account email in Firebase Auth",
+          "maxLength": 160
+        },
+        "fcmToken": {
+          "type": "string",
+          "description": "Optional push notification token",
+          "maxLength": 512
+        },
         "role": {
           "type": "string",
-          "description": "User role",
+          "description": "Base user role",
           "enum": ["user", "admin"]
         },
         "createdAt": {
           "type": "string",
           "format": "date-time",
           "description": "User creation time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last profile update time"
         }
       },
       "required": ["displayName", "role", "createdAt"]
+    },
+    "SupervisorAssignment": {
+      "title": "SupervisorAssignment",
+      "description": "Role-based supervisor assignment linked to an existing Firebase Auth UID, managed strictly by the Owner",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Existing Firebase Auth UID of the assigned supervisor"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "level": {
+          "type": "string",
+          "description": "Assigned supervision level (Owner is never stored in supervisors)",
+          "enum": ["donor_admin", "urgent_admin", "support_admin", "general_admin"]
+        },
+        "permissions": {
+          "type": "object",
+          "properties": {
+            "manageDonors": { "type": "boolean" },
+            "manageUrgentRequests": { "type": "boolean" },
+            "manageSupportChat": { "type": "boolean" },
+            "manageHospitals": { "type": "boolean" },
+            "manageLocations": { "type": "boolean" },
+            "manageSettings": { "type": "boolean" },
+            "manageUsersRecovery": { "type": "boolean" },
+            "manageSupervisors": { "type": "boolean" }
+          },
+          "required": [
+            "manageDonors",
+            "manageUrgentRequests",
+            "manageSupportChat",
+            "manageHospitals",
+            "manageLocations",
+            "manageSettings",
+            "manageUsersRecovery",
+            "manageSupervisors"
+          ]
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "Whether supervisor assignment is currently enabled"
+        },
+        "assignedBy": {
+          "type": "string",
+          "description": "UID of the Owner who granted/updated supervision"
+        },
+        "assignedByName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "displayName", "level", "permissions", "isActive", "assignedBy", "createdAt", "updatedAt"]
+    },
+    "AdminAuditLog": {
+      "title": "AdminAuditLog",
+      "description": "Append-only audit trail for administrative actions",
+      "type": "object",
+      "properties": {
+        "actorUid": { "type": "string" },
+        "actorName": { "type": "string", "maxLength": 100 },
+        "actorLevel": {
+          "type": "string",
+          "enum": ["owner", "donor_admin", "urgent_admin", "support_admin", "general_admin", "legacy_admin"]
+        },
+        "actionType": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "targetId": { "type": "string", "maxLength": 128 },
+        "targetLabel": { "type": "string", "maxLength": 160 },
+        "details": { "type": "string", "maxLength": 600 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["actorUid", "actorName", "actorLevel", "actionType", "createdAt"]
     },
     "AppSettings": {
       "title": "AppSettings",
@@ -473,6 +588,18 @@
         "$ref": "#/entities/ChatMessage"
       },
       "description": "Individual chat messages"
+    },
+    "/supervisors/{supervisorId}": {
+      "schema": {
+        "$ref": "#/entities/SupervisorAssignment"
+      },
+      "description": "Owner-managed supervisor assignments linked to existing Firebase Auth UIDs"
+    },
+    "/admin_audit_logs/{logId}": {
+      "schema": {
+        "$ref": "#/entities/AdminAuditLog"
+      },
+      "description": "Append-only audit log of all administrative operations"
     }
   }
 }

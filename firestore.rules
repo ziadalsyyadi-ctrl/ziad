@@ -2,12 +2,12 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Global Safety Net Default Deny
+    // 1. Global Safety Net Default Deny
     match /{document=**} {
       allow read, write: if false;
     }
 
-    // Helper functions
+    // 2. Identity & Structural Helpers
     function isValidId(id) {
       return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
     }
@@ -24,15 +24,110 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function isAdmin() {
-      return isSignedIn() && (
-        (request.auth.token.email == 'ziadalsyyadi@gmail.com' && request.auth.token.email_verified == true) ||
-        (request.auth.token.email == 'user_967773633918_v1@qataba-blood.app') ||
-        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+    function isProtectedOwnerEmail(email) {
+      return email is string && (
+        email == 'ziadalsyyadi@gmail.com' ||
+        email == 'user_967773633918_v1@qataba-blood.app'
       );
     }
 
+    function isProtectedOwnerDoc(data) {
+      return ('email' in data && isProtectedOwnerEmail(data.email)) ||
+        ('phone' in data && data.phone == '773633918');
+    }
+
+    function isOwner() {
+      return isSignedIn() && (
+        (request.auth.token.email == 'ziadalsyyadi@gmail.com' && request.auth.token.email_verified == true) ||
+        request.auth.token.email == 'user_967773633918_v1@qataba-blood.app'
+      );
+    }
+
+    function supervisorPath(uid) {
+      return /databases/$(database)/documents/supervisors/$(uid);
+    }
+
+    function userPath(uid) {
+      return /databases/$(database)/documents/users/$(uid);
+    }
+
+    function hasSupervisorDoc() {
+      return isSignedIn() && exists(supervisorPath(request.auth.uid));
+    }
+
+    function supervisorData() {
+      return get(supervisorPath(request.auth.uid)).data;
+    }
+
+    function isActiveSupervisor() {
+      return hasSupervisorDoc() &&
+        supervisorData().isActive == true &&
+        supervisorData().level in ['donor_admin', 'urgent_admin', 'support_admin', 'general_admin'];
+    }
+
+    function hasSupervisorPerm(perm) {
+      return isActiveSupervisor() &&
+        ('permissions' in supervisorData()) &&
+        (supervisorData().permissions is map) &&
+        (perm in supervisorData().permissions) &&
+        supervisorData().permissions[perm] == true;
+    }
+
+    function hasLegacyAdminRole() {
+      return isSignedIn() &&
+        !hasSupervisorDoc() &&
+        exists(userPath(request.auth.uid)) &&
+        get(userPath(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Granular Capability Functions (Database-Enforced RBAC)
+    function canManageSupervisors() {
+      return isOwner();
+    }
+
+    function canManageAppConfig() {
+      return isOwner();
+    }
+
+    function canManageDonors() {
+      return isOwner() || hasSupervisorPerm('manageDonors') || hasLegacyAdminRole();
+    }
+
+    function canManageUrgentRequests() {
+      return isOwner() || hasSupervisorPerm('manageUrgentRequests') || hasLegacyAdminRole();
+    }
+
+    function canManageSupportChat() {
+      return isOwner() || hasSupervisorPerm('manageSupportChat') || hasLegacyAdminRole();
+    }
+
+    function canManageHospitals() {
+      return isOwner() || hasSupervisorPerm('manageHospitals') || hasLegacyAdminRole();
+    }
+
+    function canManageLocations() {
+      return isOwner() || hasSupervisorPerm('manageLocations') || hasLegacyAdminRole();
+    }
+
+    function canManageSettings() {
+      return isOwner() || hasSupervisorPerm('manageSettings') || hasLegacyAdminRole();
+    }
+
+    function canManageUsersRecovery() {
+      return isOwner() || hasSupervisorPerm('manageUsersRecovery');
+    }
+
+    function isAnyActiveAdmin() {
+      return isOwner() || isActiveSupervisor() || hasLegacyAdminRole();
+    }
+
+    function matchesActorLevel(actorLevel) {
+      return (isOwner() && actorLevel == 'owner') ||
+        (!isOwner() && isActiveSupervisor() && actorLevel == supervisorData().level) ||
+        (!isOwner() && !hasSupervisorDoc() && hasLegacyAdminRole() && actorLevel == 'legacy_admin');
+    }
+
+    // 3. Domain Data Validation Helpers
     function isValidBloodType(bt) {
       return bt in ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'];
     }
@@ -55,7 +150,7 @@ service cloud.firestore {
     function isValidUrgentRequest(data) {
       return data.keys().hasAll(['userId', 'patientName', 'bloodType', 'unitsNeeded', 'hospital', 'contactName', 'contactPhone', 'urgencyLevel', 'status']) &&
         data.keys().hasOnly(['userId', 'patientName', 'bloodType', 'unitsNeeded', 'hospital', 'contactName', 'contactPhone', 'urgencyLevel', 'status', 'notes', 'createdAt', 'updatedAt']) &&
-        data.userId is string && data.userId.size() <= 128 && (data.userId == request.auth.uid || isAdmin()) &&
+        data.userId is string && data.userId.size() <= 128 && (data.userId == request.auth.uid || canManageUrgentRequests()) &&
         data.patientName is string && data.patientName.size() >= 2 && data.patientName.size() <= 100 &&
         isValidBloodType(data.bloodType) &&
         data.unitsNeeded is number && data.unitsNeeded >= 1 && data.unitsNeeded <= 20 &&
@@ -65,6 +160,68 @@ service cloud.firestore {
         data.urgencyLevel in ['critical', 'urgent', 'normal'] &&
         data.status in ['open', 'fulfilled'] &&
         (!('notes' in data) || (data.notes is string && data.notes.size() <= 500));
+    }
+
+    function isValidSupervisorPermissions(perms) {
+      return perms is map &&
+        perms.keys().hasAll([
+          'manageDonors',
+          'manageUrgentRequests',
+          'manageSupportChat',
+          'manageHospitals',
+          'manageLocations',
+          'manageSettings',
+          'manageUsersRecovery',
+          'manageSupervisors'
+        ]) &&
+        perms.keys().hasOnly([
+          'manageDonors',
+          'manageUrgentRequests',
+          'manageSupportChat',
+          'manageHospitals',
+          'manageLocations',
+          'manageSettings',
+          'manageUsersRecovery',
+          'manageSupervisors'
+        ]) &&
+        perms.manageDonors is bool &&
+        perms.manageUrgentRequests is bool &&
+        perms.manageSupportChat is bool &&
+        perms.manageHospitals is bool &&
+        perms.manageLocations is bool &&
+        perms.manageSettings is bool &&
+        perms.manageUsersRecovery is bool &&
+        perms.manageSupervisors == false;
+    }
+
+    function isValidSupervisor(data, supervisorId) {
+      return data.keys().hasAll(['uid', 'displayName', 'level', 'permissions', 'isActive', 'assignedBy', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['uid', 'displayName', 'phone', 'email', 'level', 'permissions', 'isActive', 'assignedBy', 'assignedByName', 'notes', 'createdAt', 'updatedAt']) &&
+        data.uid == supervisorId &&
+        data.uid != request.auth.uid &&
+        data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 100 &&
+        (!('phone' in data) || (data.phone is string && data.phone.size() <= 20 && data.phone != '773633918')) &&
+        (!('email' in data) || (data.email is string && data.email.size() <= 160 && !isProtectedOwnerEmail(data.email))) &&
+        data.level in ['donor_admin', 'urgent_admin', 'support_admin', 'general_admin'] &&
+        isValidSupervisorPermissions(data.permissions) &&
+        data.isActive is bool &&
+        data.assignedBy == request.auth.uid &&
+        (!('assignedByName' in data) || (data.assignedByName is string && data.assignedByName.size() <= 100)) &&
+        (!('notes' in data) || (data.notes is string && data.notes.size() <= 300));
+    }
+
+    function isValidAuditLog(data) {
+      return data.keys().hasAll(['actorUid', 'actorName', 'actorLevel', 'actionType', 'createdAt']) &&
+        data.keys().hasOnly(['actorUid', 'actorName', 'actorLevel', 'actionType', 'targetId', 'targetLabel', 'details', 'createdAt']) &&
+        data.actorUid == request.auth.uid &&
+        data.actorName is string && data.actorName.size() >= 1 && data.actorName.size() <= 100 &&
+        data.actorLevel in ['owner', 'donor_admin', 'urgent_admin', 'support_admin', 'general_admin', 'legacy_admin'] &&
+        matchesActorLevel(data.actorLevel) &&
+        data.actionType is string && data.actionType.size() >= 2 && data.actionType.size() <= 80 &&
+        (!('targetId' in data) || (data.targetId is string && data.targetId.size() <= 128)) &&
+        (!('targetLabel' in data) || (data.targetLabel is string && data.targetLabel.size() <= 160)) &&
+        (!('details' in data) || (data.details is string && data.details.size() <= 600)) &&
+        data.createdAt == request.time;
     }
 
     function isValidAccountRecoveryCreate(data) {
@@ -114,20 +271,49 @@ service cloud.firestore {
         (!('updatedBy' in data) || (data.updatedBy is string && data.updatedBy.size() <= 128));
     }
 
-    // Donors Collection
+    // 4. Supervisors & Audit Logs Collections (Strictly Owner-Controlled)
+    match /supervisors/{supervisorId} {
+      allow get: if canManageSupervisors() || (isSignedIn() && request.auth.uid == supervisorId);
+      allow list: if canManageSupervisors();
+
+      allow create: if canManageSupervisors() &&
+        isValidId(supervisorId) &&
+        isValidSupervisor(incoming(), supervisorId) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+
+      allow update: if canManageSupervisors() &&
+        isValidId(supervisorId) &&
+        isValidSupervisor(incoming(), supervisorId) &&
+        incoming().uid == existing().uid &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time;
+
+      allow delete: if canManageSupervisors() && isValidId(supervisorId);
+    }
+
+    match /admin_audit_logs/{logId} {
+      allow get, list: if canManageSupervisors();
+      allow create: if isAnyActiveAdmin() &&
+        isValidId(logId) &&
+        isValidAuditLog(incoming());
+      allow update, delete: if false;
+    }
+
+    // 5. Donors Collection
     match /donors/{donorId} {
       allow read: if true;
 
       allow create: if isSignedIn() &&
         isValidId(donorId) &&
         isValidDonor(incoming()) &&
-        (incoming().userId == request.auth.uid || isAdmin());
+        (incoming().userId == request.auth.uid || canManageDonors());
 
       allow update: if isSignedIn() &&
         isValidId(donorId) &&
         isValidDonor(incoming()) && (
           (
-            (existing().userId == request.auth.uid || isAdmin()) &&
+            (existing().userId == request.auth.uid || canManageDonors()) &&
             incoming().diff(existing()).affectedKeys().hasOnly([
               'fullName', 'bloodType', 'phone', 'phoneVerified', 'residence', 'notes', 'lastDonationDate', 'isAvailable', 'allowContact', 'updatedAt'
             ])
@@ -147,10 +333,10 @@ service cloud.firestore {
 
       allow delete: if isSignedIn() &&
         isValidId(donorId) &&
-        (existing().userId == request.auth.uid || isAdmin());
+        (existing().userId == request.auth.uid || canManageDonors());
     }
 
-    // Urgent Requests Collection
+    // 6. Urgent Requests Collection
     match /urgent_requests/{requestId} {
       allow read: if true;
 
@@ -161,7 +347,7 @@ service cloud.firestore {
       allow update: if isSignedIn() &&
         isValidId(requestId) &&
         isValidUrgentRequest(incoming()) &&
-        (existing().userId == request.auth.uid || isAdmin()) &&
+        (existing().userId == request.auth.uid || canManageUrgentRequests()) &&
         incoming().userId == existing().userId &&
         incoming().diff(existing()).affectedKeys().hasOnly([
           'patientName', 'bloodType', 'unitsNeeded', 'hospital', 'contactName', 'contactPhone', 'urgencyLevel', 'status', 'notes', 'updatedAt'
@@ -169,40 +355,65 @@ service cloud.firestore {
 
       allow delete: if isSignedIn() &&
         isValidId(requestId) &&
-        (existing().userId == request.auth.uid || isAdmin());
+        (existing().userId == request.auth.uid || canManageUrgentRequests());
     }
 
-    // User Profiles
+    // 7. User Profiles (with Owner protection & strict no-self-escalation)
     match /users/{userId} {
-      allow get: if isSignedIn() && (request.auth.uid == userId || isAdmin());
-      allow list: if isAdmin();
+      allow get: if isSignedIn() && (
+        request.auth.uid == userId ||
+        canManageSupervisors() ||
+        canManageUsersRecovery() ||
+        canManageSupportChat()
+      );
+      allow list: if canManageSupervisors() || canManageUsersRecovery();
 
       allow create: if isSignedIn() &&
         isValidId(userId) &&
         request.auth.uid == userId &&
-        (incoming().role == 'user' ||
-         (((request.auth.token.email == 'ziadalsyyadi@gmail.com' && request.auth.token.email_verified == true) ||
-           request.auth.token.email == 'user_967773633918_v1@qataba-blood.app') && incoming().role == 'admin')) &&
-        incoming().displayName is string && incoming().displayName.size() <= 100;
+        (incoming().role == 'user' || (isOwner() && incoming().role == 'admin')) &&
+        incoming().displayName is string && incoming().displayName.size() <= 100 &&
+        (!('email' in incoming()) || (
+          incoming().email is string &&
+          incoming().email.size() <= 160 &&
+          (!('email' in request.auth.token) || incoming().email == request.auth.token.email)
+        ));
 
-      allow update: if isSignedIn() &&
-        isValidId(userId) &&
-        request.auth.uid == userId &&
-        (incoming().role == existing().role ||
-         (((request.auth.token.email == 'ziadalsyyadi@gmail.com' && request.auth.token.email_verified == true) ||
-           request.auth.token.email == 'user_967773633918_v1@qataba-blood.app') && incoming().role in ['user', 'admin'])) &&
-        incoming().diff(existing()).affectedKeys().hasOnly([
-          'displayName', 'phone', 'phoneVerified', 'role', 'recoveredFromUid', 'recoveredGrantId', 'updatedAt'
-        ]);
+      allow update: if isValidId(userId) && (
+        (
+          isSignedIn() &&
+          request.auth.uid == userId &&
+          (incoming().role == existing().role || (isOwner() && incoming().role in ['user', 'admin'])) &&
+          (!('email' in incoming()) || (
+            incoming().email is string &&
+            incoming().email.size() <= 160 &&
+            (incoming().email == existing().get('email', '') ||
+             ('email' in request.auth.token && incoming().email == request.auth.token.email))
+          )) &&
+          incoming().diff(existing()).affectedKeys().hasOnly([
+            'displayName', 'phone', 'phoneVerified', 'email', 'fcmToken', 'role', 'recoveredFromUid', 'recoveredGrantId', 'updatedAt'
+          ])
+        ) ||
+        (
+          isOwner() &&
+          request.auth.uid != userId &&
+          !isProtectedOwnerDoc(existing()) &&
+          incoming().role in ['user', 'admin'] &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['role', 'updatedAt'])
+        )
+      );
 
-      allow delete: if isAdmin();
+      allow delete: if isValidId(userId) &&
+        !isProtectedOwnerDoc(existing()) && (
+          isOwner() ||
+          (canManageUsersRecovery() && existing().role != 'admin' && !exists(supervisorPath(userId)))
+        );
     }
 
-    // Phone Auth Records: a phone can be claimed by its authenticated UID,
-    // or updated atomically when consuming an admin-issued recovery grant.
+    // 8. Phone Auth Records
     match /phone_auth/{phone} {
       allow get: if isSignedIn();
-      allow list: if isAdmin();
+      allow list: if canManageSupervisors() || canManageUsersRecovery();
 
       allow create: if isSignedIn() &&
         isValidId(phone) &&
@@ -217,7 +428,8 @@ service cloud.firestore {
         incoming().userId == request.auth.uid;
 
       allow update: if (
-        isAdmin() &&
+        (canManageUsersRecovery() || canManageSupervisors()) &&
+        phone != '773633918' &&
         incoming().keys().hasAll(['phone', 'version', 'userId']) &&
         incoming().phone == phone &&
         incoming().userId is string && incoming().userId.size() <= 128 &&
@@ -238,19 +450,18 @@ service cloud.firestore {
         get(/databases/$(database)/documents/recovery_grants/$(incoming().grantId)).data.previousUid == existing().userId
       );
 
-      allow delete: if isAdmin();
+      allow delete: if (canManageUsersRecovery() || canManageSupervisors()) && phone != '773633918';
     }
 
-    // Account Recovery Requests: guests can submit requests (no auth yet);
-    // only admins can read/manage requests, or a user atomically marks their approved request used.
+    // 9. Account Recovery Requests
     match /account_recovery_requests/{requestId} {
-      allow read: if isAdmin();
+      allow read: if canManageUsersRecovery();
 
       allow create: if isValidId(requestId) &&
         isValidAccountRecoveryCreate(incoming());
 
       allow update: if (
-        isAdmin() &&
+        canManageUsersRecovery() &&
         isValidId(requestId) &&
         incoming().diff(existing()).affectedKeys().hasOnly(['status', 'grantId', 'nextVersion', 'matchedUid', 'approvedAt', 'revokedAt', 'usedAt', 'updatedAt']) &&
         incoming().status in ['pending', 'approved', 'used', 'revoked']
@@ -266,22 +477,21 @@ service cloud.firestore {
         isClaimingGrantAfter(existing().grantId)
       );
 
-      allow delete: if isAdmin() && isValidId(requestId);
+      allow delete: if canManageUsersRecovery() && isValidId(requestId);
     }
 
-    // Recovery Grants: keyed by SHA-256(phone + code) without PII.
-    // Cannot be listed by non-admins; single doc lookup requires exact unguessable hash ID.
+    // 10. Recovery Grants
     match /recovery_grants/{grantId} {
-      allow get: if isAdmin() || (isValidId(grantId) && grantId.matches('^[a-f0-9]{64}$'));
-      allow list: if isAdmin();
+      allow get: if canManageUsersRecovery() || (isValidId(grantId) && grantId.matches('^[a-f0-9]{64}$'));
+      allow list: if canManageUsersRecovery();
 
-      allow create: if isAdmin() &&
+      allow create: if canManageUsersRecovery() &&
         isValidId(grantId) &&
         grantId.matches('^[a-f0-9]{64}$') &&
         isValidRecoveryGrantCreate(incoming());
 
       allow update: if isValidId(grantId) && isValidRecoveryGrantUpdate(incoming()) && (
-        isAdmin() || (
+        canManageUsersRecovery() || (
           isSignedIn() &&
           existing().status == 'active' &&
           incoming().status == 'used' &&
@@ -291,52 +501,74 @@ service cloud.firestore {
         )
       );
 
-      allow delete: if isAdmin() && isValidId(grantId);
+      allow delete: if canManageUsersRecovery() && isValidId(grantId);
     }
 
-    // App Settings
+    // 11. App Settings (tiered: settings managers write announcements; donor managers can only append deletedDonors tombstones)
     match /settings/{settingId} {
       allow read: if true;
-      allow write: if isAdmin() && isValidId(settingId);
+      allow create, delete: if canManageSettings() && isValidId(settingId);
+      allow update: if isValidId(settingId) && (
+        canManageSettings() ||
+        (
+          canManageDonors() &&
+          settingId == 'global' &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['deletedDonors', 'updatedAt']) &&
+          incoming().deletedDonors is list &&
+          incoming().deletedDonors.size() <= 5000 &&
+          incoming().updatedAt == request.time
+        )
+      );
     }
 
-    // Remote App Configuration (e.g. appConfig/websiteUrl)
+    // 12. Remote App Configuration (Owner exclusive)
     match /appConfig/{configId} {
       allow read: if true;
-      allow create: if isAdmin() &&
+      allow create: if canManageAppConfig() &&
         isValidId(configId) &&
         isValidWebsiteConfig(incoming()) &&
         incoming().updatedAt == request.time;
-      allow update: if isAdmin() &&
+      allow update: if canManageAppConfig() &&
         isValidId(configId) &&
         isValidWebsiteConfig(incoming()) &&
         incoming().diff(existing()).affectedKeys().hasOnly(['websiteUrl', 'updatedAt', 'updatedBy']) &&
         incoming().updatedAt == request.time;
-      allow delete: if isAdmin() && isValidId(configId);
+      allow delete: if canManageAppConfig() && isValidId(configId);
     }
 
-    // Hospitals Directory
+    // 13. Hospitals Directory
     match /hospitals/{hospitalId} {
       allow read: if true;
-      allow write: if isAdmin() && isValidId(hospitalId);
+      allow write: if canManageHospitals() && isValidId(hospitalId);
     }
 
-    // Locations / Regions
+    // 14. Locations / Regions
     match /locations/{locationId} {
       allow read: if true;
-      allow write: if isAdmin() && isValidId(locationId);
+      allow write: if canManageLocations() && isValidId(locationId);
     }
 
-    // Support Chat Conversations
+    // 15. Support Chat Conversations
     match /conversations/{userId} {
-      allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
-      allow write: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow read: if isSignedIn() && isValidId(userId) && (request.auth.uid == userId || canManageSupportChat());
+      allow create, update: if isSignedIn() &&
+        isValidId(userId) &&
+        (request.auth.uid == userId || canManageSupportChat()) &&
+        (!('userId' in incoming()) || incoming().userId == userId);
+      allow delete: if canManageSupportChat() && isValidId(userId);
 
-      // Chat Messages Subcollection
       match /messages/{messageId} {
-        allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
-        allow create: if isSignedIn() && (request.auth.uid == userId || isAdmin()) && isValidId(messageId);
-        allow update, delete: if isAdmin();
+        allow read: if isSignedIn() && (request.auth.uid == userId || canManageSupportChat());
+        allow create: if isSignedIn() &&
+          isValidId(messageId) &&
+          incoming().keys().hasAll(['senderId', 'text', 'isAdmin', 'createdAt']) &&
+          incoming().text is string && incoming().text.size() >= 1 && incoming().text.size() <= 2000 &&
+          incoming().senderId == request.auth.uid &&
+          (
+            (request.auth.uid == userId && incoming().isAdmin == false) ||
+            (canManageSupportChat() && incoming().isAdmin == true)
+          );
+        allow update, delete: if canManageSupportChat();
       }
     }
   }

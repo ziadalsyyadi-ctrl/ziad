@@ -1,4 +1,4 @@
-import { i as WebPlugin } from "./index-C6ZjGvyC.js";
+import { i as WebPlugin } from "./index-uCEFY8cS.js";
 // node_modules/@capawesome/capacitor-live-update/dist/esm/web.js
 var LiveUpdateWeb = class extends WebPlugin {
 	async clearBlockedBundles() {

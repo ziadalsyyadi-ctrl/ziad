@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import { 
@@ -30,12 +30,30 @@ import {
   runTransaction 
 } from 'firebase/firestore';
 import { auth, db, handleFirestoreError, OperationType } from '../firebase';
-import { UserProfile } from '../types';
+import {
+  AdminRoleLevel,
+  SupervisorPermissions,
+  SupervisorRecord,
+  UserProfile,
+} from '../types';
 import { sanitizePhone } from '../services/phoneVerificationService';
+import {
+  EMPTY_PERMISSIONS,
+  OWNER_PERMISSIONS,
+  SUPERVISOR_LEVEL_META,
+  isOwnerEmail,
+  sanitizeSupervisorPermissions,
+  subscribeToMySupervisorProfile,
+} from '../services/supervisorService';
 
 interface AuthContextType {
   currentUser: User | null;
   userProfile: UserProfile | null;
+  supervisorProfile: SupervisorRecord | null;
+  isOwner: boolean;
+  isAuthorizedAdmin: boolean;
+  adminLevel: AdminRoleLevel | null;
+  adminPermissions: SupervisorPermissions;
   isGuest: boolean;
   isLoading: boolean;
   loginWithPhone: (phone: string, pass: string) => Promise<void>;
@@ -62,6 +80,8 @@ export function getPhoneAuthEmail(cleanPhone: string, version: number = 1): stri
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [supervisorProfile, setSupervisorProfile] = useState<SupervisorRecord | null>(null);
+  const [supervisorLoaded, setSupervisorLoaded] = useState<boolean>(false);
   // Do not show the guest UI until Firebase has restored its persisted session.
   // A stale guest flag must never win the race against onAuthStateChanged.
   const [isGuest, setIsGuest] = useState<boolean>(false);
@@ -69,12 +89,88 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Never restore admin privileges from browser storage.
   const [activeRole, setActiveRole] = useState<'user' | 'admin'>('user');
 
+  const isOwner = useMemo(() => {
+    if (!currentUser?.email || !isOwnerEmail(currentUser.email)) return false;
+    if (currentUser.email.toLowerCase() === 'user_967773633918_v1@qataba-blood.app') return true;
+    return currentUser.emailVerified === true;
+  }, [currentUser]);
+
+  const { isAuthorizedAdmin, adminLevel, adminPermissions } = useMemo(() => {
+    if (isOwner) {
+      return {
+        isAuthorizedAdmin: true,
+        adminLevel: 'owner' as AdminRoleLevel,
+        adminPermissions: OWNER_PERMISSIONS,
+      };
+    }
+
+    if (supervisorProfile) {
+      if (supervisorProfile.isActive) {
+        return {
+          isAuthorizedAdmin: true,
+          adminLevel: supervisorProfile.level as AdminRoleLevel,
+          adminPermissions: sanitizeSupervisorPermissions(supervisorProfile.permissions),
+        };
+      }
+      // Explicitly disabled supervisor loses all administrative capabilities immediately
+      return {
+        isAuthorizedAdmin: false,
+        adminLevel: null,
+        adminPermissions: EMPTY_PERMISSIONS,
+      };
+    }
+
+    if (supervisorLoaded && userProfile?.role === 'admin') {
+      return {
+        isAuthorizedAdmin: true,
+        adminLevel: 'legacy_admin' as AdminRoleLevel,
+        adminPermissions: { ...SUPERVISOR_LEVEL_META.general_admin.defaultPermissions },
+      };
+    }
+
+    return {
+      isAuthorizedAdmin: false,
+      adminLevel: null,
+      adminPermissions: EMPTY_PERMISSIONS,
+    };
+  }, [isOwner, supervisorProfile, supervisorLoaded, userProfile]);
+
+  // Subscribe in real time to the authenticated user's supervisor assignment
+  useEffect(() => {
+    if (!currentUser?.uid) {
+      setSupervisorProfile(null);
+      setSupervisorLoaded(false);
+      return;
+    }
+
+    setSupervisorLoaded(false);
+    const unsub = subscribeToMySupervisorProfile(
+      currentUser.uid,
+      (record) => {
+        setSupervisorProfile(record);
+        setSupervisorLoaded(true);
+      },
+      (err) => {
+        console.warn('Supervisor assignment listener warning:', err);
+        setSupervisorProfile(null);
+        setSupervisorLoaded(true);
+      }
+    );
+
+    return () => unsub();
+  }, [currentUser?.uid]);
+
+  // Real-time security guard: exit admin mode immediately if supervisor is disabled or removed
+  useEffect(() => {
+    if (!isAuthorizedAdmin && activeRole === 'admin') {
+      setActiveRole('user');
+      localStorage.setItem('blood_app_active_role', 'user');
+    }
+  }, [isAuthorizedAdmin, activeRole]);
+
   // The selected UI mode is never an authorization source. Only a trusted
-  // admin profile or the designated master account may enter admin mode.
+  // supervisor assignment or the designated owner account may enter admin mode.
   const switchActiveRole = (role: 'user' | 'admin') => {
-    const isMasterAdmin = currentUser?.email === 'ziadalsyyadi@gmail.com' ||
-      currentUser?.email === 'user_967773633918_v1@qataba-blood.app';
-    const isAuthorizedAdmin = userProfile?.role === 'admin' || isMasterAdmin;
     const nextRole = role === 'admin' && isAuthorizedAdmin ? 'admin' : 'user';
     setActiveRole(nextRole);
     localStorage.setItem('blood_app_active_role', nextRole);
@@ -86,14 +182,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const userDocRef = doc(db, 'users', user.uid);
     try {
       const snap = await getDoc(userDocRef);
-      const isAdminEmail = user.email === 'ziadalsyyadi@gmail.com' || user.email === 'user_967773633918_v1@qataba-blood.app';
+      const isAdminEmail = isOwnerEmail(user.email) && (
+        user.email?.toLowerCase() === 'user_967773633918_v1@qataba-blood.app' ||
+        user.emailVerified === true
+      );
 
       if (snap.exists()) {
         const data = snap.data();
-        
-        // Force admin role in Firestore if it's the master admin email but role is different
+        const updates: Record<string, any> = {};
+
+        // Force admin role in Firestore if it's the master owner email
         if (isAdminEmail && data.role !== 'admin') {
-          await updateDoc(userDocRef, { role: 'admin' });
+          updates.role = 'admin';
+        }
+        // Keep normalized Auth email synced on users/{uid} for supervisor lookup
+        if (user.email && data.email !== user.email) {
+          updates.email = user.email;
+        }
+        if (Object.keys(updates).length > 0) {
+          updates.updatedAt = serverTimestamp();
+          await updateDoc(userDocRef, updates).catch((e) =>
+            console.warn('Could not sync user metadata updates:', e)
+          );
         }
 
         setUserProfile({
@@ -101,6 +211,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           displayName: data.displayName || user.displayName || 'مستخدم',
           phone: data.phone || '',
           phoneVerified: data.phoneVerified ?? Boolean(user.phoneNumber),
+          email: data.email || user.email || '',
           role: isAdminEmail ? 'admin' : (data.role || 'user'),
           createdAt: data.createdAt,
         });
@@ -118,12 +229,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           displayName: user.displayName || (extractedPhone ? `مستخدم ${extractedPhone}` : 'فاعل خير'),
           phone: extractedPhone,
           phoneVerified: Boolean(user.phoneNumber),
+          email: user.email || '',
           role: isAdminEmail ? 'admin' : 'user',
         };
         await setDoc(userDocRef, {
           displayName: newProfile.displayName,
           phone: extractedPhone,
           phoneVerified: Boolean(user.phoneNumber),
+          ...(user.email ? { email: user.email } : {}),
           role: isAdminEmail ? 'admin' : 'user',
           createdAt: serverTimestamp(),
         }, { merge: true });
@@ -389,6 +502,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             displayName,
             phone: cleanPhone,
             phoneVerified: false,
+            email,
             role: 'user',
             createdAt: serverTimestamp(),
           });
@@ -624,6 +738,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         currentUser,
         userProfile,
+        supervisorProfile,
+        isOwner,
+        isAuthorizedAdmin,
+        adminLevel,
+        adminPermissions,
         isGuest,
         isLoading,
         loginWithPhone,

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { 
-  ShieldCheck, 
-  FileSpreadsheet, 
-  Settings, 
-  Upload, 
-  CheckCircle2, 
-  AlertTriangle, 
+import {
+  Clock,
+  Droplet,
+  ShieldCheck,
+  FileSpreadsheet,
+  Settings,
+  Upload,
+  CheckCircle2,
+  AlertTriangle,
   ArrowRight,
   Database,
   Trash2,
@@ -17,7 +19,6 @@ import {
   Phone,
   MapPin,
   Megaphone,
-  Bell,
   RefreshCw,
   Plus,
   X,
@@ -26,7 +27,7 @@ import {
   KeyRound,
   Copy,
   MessageCircle,
-  Globe
+  Globe,
 } from 'lucide-react';
 import { doc, getDoc, setDoc, deleteDoc, serverTimestamp, collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -35,10 +36,17 @@ import { Capacitor } from '@capacitor/core';
 import { Share } from '@capacitor/share';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { useAuth } from '../context/AuthContext';
-import { Donor, BloodType, BLOOD_TYPES, Hospital } from '../types';
+import { Donor, BloodType, BLOOD_TYPES, Hospital, UrgentRequest } from '../types';
 import { BloodDonationEducationalInfo } from './BloodDonationEducationalInfo';
 import { subscribeToHospitals, saveHospital, deleteHospital, seedHospitals } from '../services/hospitalService';
 import { subscribeToLocations, saveLocation, deleteLocation } from '../services/locationService';
+import { updateRequestStatus, deleteUrgentRequest } from '../services/donorService';
+import {
+  ALL_SUPERVISOR_LEVEL_LABELS,
+  isOwnerEmail,
+  logAdminAction,
+  subscribeToAllSupervisors,
+} from '../services/supervisorService';
 import { Hospital as HospitalIcon, MessageSquare } from 'lucide-react';
 import AdminChatManager from './AdminChatManager';
 import {
@@ -63,25 +71,64 @@ import {
   subscribeToWebsiteConfig,
   validateWebsiteUrl,
 } from '../services/websiteConfigService';
+import { useRegisterBackHandler } from '../utils/backNavigation';
 
 interface AdminDashboardProps {
   onBack: () => void;
   donors?: Donor[];
+  urgentRequests?: UrgentRequest[];
   onEditDonor?: (donorId: string) => void;
   onDeleteDonor?: (donorId: string, phone?: string) => Promise<void>;
   onGlobalRefresh?: () => Promise<void>;
+  onOpenSupervisors?: () => void;
   isRefreshing?: boolean;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ 
   onBack,
   donors = [],
+  urgentRequests = [],
   onEditDonor,
   onDeleteDonor,
   onGlobalRefresh,
+  onOpenSupervisors,
   isRefreshing = false,
 }) => {
-  const { userProfile, currentUser, activeRole, switchActiveRole, loginWithGoogle } = useAuth();
+  const {
+    userProfile,
+    currentUser,
+    switchActiveRole,
+    isOwner,
+    isAuthorizedAdmin,
+    adminLevel,
+    adminPermissions,
+  } = useAuth();
+
+  const canManageDonors = isAuthorizedAdmin && adminPermissions.manageDonors;
+  const canManageUrgent = isAuthorizedAdmin && adminPermissions.manageUrgentRequests;
+  const canManageSupport = isAuthorizedAdmin && adminPermissions.manageSupportChat;
+  const canManageHospitals = isAuthorizedAdmin && adminPermissions.manageHospitals;
+  const canManageLocations = isAuthorizedAdmin && adminPermissions.manageLocations;
+  const canManageSettings = isAuthorizedAdmin && adminPermissions.manageSettings;
+  const canManageUsersRecovery = isAuthorizedAdmin && adminPermissions.manageUsersRecovery;
+
+  const writeAudit = (
+    actionType: string,
+    targetId?: string,
+    targetLabel?: string,
+    details?: string
+  ) => {
+    if (!currentUser?.uid) return;
+    void logAdminAction({
+      actorUid: currentUser.uid,
+      actorName: userProfile?.displayName || currentUser.displayName || 'مسؤول',
+      actorLevel: adminLevel || 'legacy_admin',
+      actionType,
+      targetId,
+      targetLabel,
+      details,
+    });
+  };
   const [importText, setImportText] = useState('');
   const [announcement, setAnnouncement] = useState('');
   const [announcementType, setAnnouncementType] = useState<'general' | 'urgent' | 'campaign'>('general');
@@ -115,6 +162,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [hospitalLoading, setHospitalLoading] = useState(false);
   const [showChatManager, setShowChatManager] = useState(false);
 
+  useRegisterBackHandler(isHospitalFormOpen, () => setIsHospitalFormOpen(false));
+  useRegisterBackHandler(showChatManager, () => setShowChatManager(false));
+  useRegisterBackHandler(Boolean(adminDonorToDelete), () => {
+    if (!adminIsDeleting) {
+      setAdminDonorToDelete(null);
+      setAdminDeleteError(null);
+    }
+  });
+
   // Subscribe to hospitals
   React.useEffect(() => {
     const unsub = subscribeToHospitals((data) => {
@@ -127,6 +183,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [totalUsersCount, setTotalUsersCount] = useState<number>(0);
   const [todaySignupsCount, setTodaySignupsCount] = useState<number>(0);
   const [adminsCount, setAdminsCount] = useState<number>(0);
+  const [supervisorsCount, setSupervisorsCount] = useState<number>(0);
   const [adminsList, setAdminsList] = useState<any[]>([]);
   const [allUsersList, setAllUsersList] = useState<any[]>([]);
   const [isCleaningUp, setIsCleaningUp] = useState(false);
@@ -142,6 +199,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [issuingDirectRecovery, setIssuingDirectRecovery] = useState(false);
   const [copiedRecoveryCode, setCopiedRecoveryCode] = useState(false);
 
+  // Urgent requests management states
+  const [urgentFilter, setUrgentFilter] = useState<'all' | 'open' | 'fulfilled'>('all');
+  const [busyUrgentId, setBusyUrgentId] = useState<string | null>(null);
+
   // Locations management states
   const [locations, setLocations] = useState<any[]>([]);
   const [showLocationsSection, setShowLocationsSection] = useState(false);
@@ -156,6 +217,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [websiteSaveResult, setWebsiteSaveResult] = useState<{ success: boolean; message: string } | null>(null);
 
   const fetchUserStats = async () => {
+    if (!isOwner && !canManageUsersRecovery) return;
     try {
       let authUsers: any[] = [];
       try { authUsers = await listAppUsers(); }
@@ -180,7 +242,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         else allUsers.push(userWithId);
         
         // Admin check
-        if (data.role === 'admin' || data.email === 'ziadalsyyadi@gmail.com') {
+        if (data.role === 'admin' || isOwnerEmail(data.email)) {
           admins.push(userWithId);
         }
 
@@ -205,6 +267,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   const refreshRecoveryRequests = async () => {
+    if (!canManageUsersRecovery) return;
     try { setRecoveryRequests(await listAccountRecoveryRequests()); }
     catch (error) { console.warn('Could not load recovery requests:', error); }
   };
@@ -225,6 +288,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       const issued = await approveAccountRecovery(requestId);
       setIssuedRecoveryCode(issued);
       await refreshRecoveryRequests();
+      writeAudit('اعتماد استعادة حساب', requestId, issued.phone, `إصدار رمز استعادة للرقم ${issued.phone}`);
       setResult({ success: true, message: `تم إصدار رمز الاستعادة للرقم ${issued.phone} بنجاح.` });
     } catch (error: any) {
       setResult({ success: false, message: error?.message || 'تعذر إصدار رمز الاستعادة.' });
@@ -243,6 +307,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       setDirectRecoveryPhone('');
       setDirectRecoveryName('');
       await refreshRecoveryRequests();
+      writeAudit('إصدار رمز استعادة مباشر', issued.requestId, issued.phone, `الاسم: ${issued.fullName}`);
       setResult({ success: true, message: `تم إصدار رمز استعادة مباشر للرقم ${issued.phone}.` });
     } catch (error: any) {
       setResult({ success: false, message: error?.message || 'تعذر إصدار رمز الاستعادة المباشر.' });
@@ -255,6 +320,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       await revokeAccountRecovery(requestId);
       setIssuedRecoveryCode(current => current?.requestId === requestId ? null : current);
       await refreshRecoveryRequests();
+      writeAudit('إلغاء رمز استعادة', requestId, requestId);
       setResult({ success: true, message: 'تم إلغاء الرمز بنجاح. يمكن للمستخدم طلب رمز جديد.' });
     } catch (error: any) {
       setResult({ success: false, message: error?.message || 'تعذر إلغاء رمز الاستعادة.' });
@@ -267,6 +333,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       await deleteAccountRecoveryRequest(requestId);
       setRecoveryRequests(prev => prev.filter(r => r.id !== requestId));
       setIssuedRecoveryCode(current => current?.requestId === requestId ? null : current);
+      writeAudit('حذف سجل طلب استعادة', requestId, requestId);
       setResult({ success: true, message: 'تم حذف سجل طلب الاستعادة.' });
     } catch (error: any) {
       setResult({ success: false, message: error?.message || 'تعذر حذف سجل الطلب.' });
@@ -274,13 +341,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   const handleDeleteAppUser = async (uid: string) => {
-    if (!window.confirm('سيتم حذف حساب المستخدم من Firebase Auth وملفه وسجلاته المرتبطة. هل تريد المتابعة؟')) return;
+    if (!window.confirm('سيتم حذف حساب المستخدم وملفه من قاعدة البيانات. هل تريد المتابعة؟')) return;
     setDeletingUserId(uid);
     try {
       await deleteAppUser(uid);
       setAllUsersList(prev => prev.filter((item: any) => (item.uid || item.id) !== uid));
       setTotalUsersCount(prev => Math.max(0, prev - 1));
-      setResult({ success: true, message: 'تم حذف حساب المستخدم وسجلاته المرتبطة.' });
+      writeAudit('حذف ملف مستخدم', uid, uid);
+      setResult({ success: true, message: 'تم حذف ملف المستخدم بنجاح.' });
     } catch (error: any) {
       setResult({ success: false, message: error?.message || 'تعذر حذف حساب المستخدم.' });
     } finally { setDeletingUserId(null); }
@@ -295,9 +363,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   }, []);
 
   React.useEffect(() => {
-    fetchUserStats();
-    refreshRecoveryRequests();
-  }, [donors.length]);
+    if (isOwner || canManageUsersRecovery) {
+      void fetchUserStats();
+    }
+    if (canManageUsersRecovery) {
+      void refreshRecoveryRequests();
+    }
+  }, [donors.length, isOwner, canManageUsersRecovery]);
+
+  React.useEffect(() => {
+    if (!isOwner) {
+      setSupervisorsCount(0);
+      return;
+    }
+    const unsub = subscribeToAllSupervisors(
+      (records) => {
+        setSupervisorsCount(records.filter((r) => r.isActive).length);
+      },
+      () => {}
+    );
+    return () => unsub();
+  }, [isOwner]);
 
   // Filtered donors in admin panel
   const filteredDonors = React.useMemo(() => {
@@ -314,6 +400,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       return true;
     });
   }, [donors, adminBloodFilter, adminSearchQuery]);
+
+  const filteredUrgentRequests = React.useMemo(() => {
+    return urgentRequests.filter((req) => {
+      if (urgentFilter === 'open') return req.status === 'open';
+      if (urgentFilter === 'fulfilled') return req.status === 'fulfilled';
+      return true;
+    });
+  }, [urgentRequests, urgentFilter]);
 
   // Load existing settings
   React.useEffect(() => {
@@ -343,14 +437,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   }, [websiteInputDirty]);
 
   React.useEffect(() => {
-    const isAdminAccount =
-      userProfile?.role === 'admin' ||
-      currentUser?.email === 'ziadalsyyadi@gmail.com' ||
-      currentUser?.email === 'user_967773633918_v1@qataba-blood.app';
-    if (isAdminAccount) {
+    if (isOwner) {
       void ensureWebsiteConfigSeededForAdmin();
     }
-  }, [currentUser, userProfile?.role]);
+  }, [isOwner]);
 
   const handlePinLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -482,19 +572,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   // Client-side display guard. Firestore rules remain the authority for data access.
-  const isAuthorizedAdmin =
-    userProfile?.role === 'admin' ||
-    currentUser?.email === 'ziadalsyyadi@gmail.com' ||
-    currentUser?.email === 'user_967773633918_v1@qataba-blood.app';
-
   if (!isAuthorizedAdmin) {
     return (
       <div className="max-w-md mx-auto my-8 p-6 rounded-3xl bg-white border border-slate-200 shadow-xl space-y-4 text-right">
         <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
           <Lock className="w-7 h-7" />
         </div>
-        <h2 className="text-lg font-black text-center text-slate-900">الدخول للمسؤول فقط</h2>
-        <p className="text-xs text-center text-slate-600">سجّل الدخول بحساب المسؤول المعتمد. لا يمكن فتح لوحة الإدارة باستخدام رمز PIN أو وضع المستخدم.</p>
+        <h2 className="text-lg font-black text-center text-slate-900">الدخول للمسؤول أو المشرف المعتمد فقط</h2>
+        <p className="text-xs text-center text-slate-600">سجّل الدخول بحساب المالك أو بحساب مشرف مفعّل في قاعدة البيانات.</p>
         <button type="button" onClick={onBack}
           className="w-full py-3 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs">
           العودة
@@ -517,6 +602,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         updatedAt: serverTimestamp(),
         updatedBy: currentUser.uid
       }, { merge: true });
+      writeAudit('نشر تعميم عام', 'settings/global', announcementType, announcement.trim().slice(0, 120));
       setResult({ 
         success: true, 
         message: announcement.trim() 
@@ -543,6 +629,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         updatedBy: currentUser.uid
       }, { merge: true });
       setAnnouncement('');
+      writeAudit('مسح التعميم العام', 'settings/global', 'announcement');
       setResult({ success: true, message: 'تم إلغاء ومسح الرسالة من إشعارات جميع المشتركين بنجاح. ✓' });
     } catch (err: any) {
       setResult({ success: false, message: `فشل المسح: ${err.message}` });
@@ -568,6 +655,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       const savedUrl = await saveRemoteWebsiteUrl(valid);
       setWebsiteUrlInput(savedUrl);
       setWebsiteInputDirty(false);
+      writeAudit('تحديث رابط الموقع الرسمي', WEBSITE_CONFIG_PATH, savedUrl);
       setWebsiteSaveResult({
         success: true,
         message: 'تم حفظ وتحديث رابط الموقع في Firebase بنجاح وسيتحدث تلقائياً لدى جميع المستخدمين! ✓',
@@ -589,6 +677,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     try {
       const res = await importRawDonors(importText);
       if (res.success) {
+        writeAudit('استيراد متبرعين نصي', undefined, `${res.count} متبرع`);
         setResult({ 
           success: true, 
           message: `تم استيراد ${res.count} متبرعاً بنجاح إلى قاعدة البيانات!` 
@@ -628,6 +717,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         // Automatically trigger import
         const res = await importRawDonors(text);
         if (res.success) {
+          writeAudit('استيراد ملف متبرعين', undefined, file.name, `تم استيراد ${res.count} متبرع`);
           setResult({ 
             success: true, 
             message: `تم اختيار الملف (${file.name}) واستيراد ${res.count} متبرعاً بنجاح إلى قاعدة البيانات!` 
@@ -657,6 +747,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   const handleCleanupUsers = async () => {
+    if (!isOwner) return;
     if (!window.confirm('هل أنت متأكد من حذف كافة المستخدمين التجريبيين؟ سيتم الإبقاء على حسابك وحسابات المسؤولين الموثقة فقط.')) return;
     setIsCleaningUp(true);
     setResult(null);
@@ -668,15 +759,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         const email = data.email || '';
         
         // Protection: Don't delete main admin or anyone with admin role or current user
-        if (email === 'ziadalsyyadi@gmail.com' || email === 'user_967773633918_v1@qataba-blood.app' || data.role === 'admin' || userDoc.id === currentUser?.uid) {
+        if (isOwnerEmail(email) || data.role === 'admin' || userDoc.id === currentUser?.uid) {
           continue;
         }
         
         await deleteDoc(doc(db, 'users', userDoc.id));
         deletedCount++;
       }
+      writeAudit('تنظيف الحسابات التجريبية', 'users', `${deletedCount} حساب`);
       setResult({ success: true, message: `تم تنظيف قاعدة البيانات وحذف ${deletedCount} مستخدم تجريبي بنجاح.` });
-      fetchUserStats(); 
+      void fetchUserStats(); 
     } catch (e: any) {
       setResult({ success: false, message: `فشل التنظيف: ${e.message}` });
     } finally {
@@ -702,17 +794,32 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <ShieldCheck className="w-6 h-6" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <h1 className="text-lg font-black text-slate-900">لوحة تحكم المسؤول</h1>
-              <span className="text-[10px] bg-amber-500 text-white font-bold px-2 py-0.5 rounded-full">
-                صلاحيات كاملة ✓
+              <span className="text-[10px] bg-amber-500 text-white font-bold px-2.5 py-0.5 rounded-full">
+                {adminLevel ? ALL_SUPERVISOR_LEVEL_LABELS[adminLevel] : 'مسؤول'} ✓
               </span>
             </div>
-            <p className="text-xs text-slate-600 font-medium">إدارة السجل، الإعلانات، المزامنة، وصلاحيات التعديل</p>
+            <p className="text-xs text-slate-600 font-medium">
+              {isOwner
+                ? 'صلاحيات المالك الكاملة وإدارة المشرفين والنظام'
+                : 'الأقسام المتاحة حسب صلاحيات الإشراف المعتمدة في قاعدة البيانات'}
+            </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {isOwner && onOpenSupervisors && (
+            <button
+              type="button"
+              onClick={onOpenSupervisors}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 text-amber-300 hover:bg-slate-800 transition-colors text-xs font-black shadow-xs cursor-pointer"
+            >
+              <Users className="w-3.5 h-3.5" />
+              <span>إدارة المشرفين</span>
+            </button>
+          )}
+
           {onGlobalRefresh && (
             <button
               onClick={onGlobalRefresh}
@@ -745,7 +852,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </div>
       </div>
 
-      {showChatManager && (
+      {result && (
+        <div className={`p-3 rounded-2xl flex items-center gap-2 text-xs font-bold ${
+          result.success ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200'
+        }`}>
+          {result.success ? <CheckCircle2 className="w-4 h-4 shrink-0" /> : <AlertTriangle className="w-4 h-4 shrink-0" />}
+          <span>{result.message}</span>
+        </div>
+      )}
+
+      {showChatManager && canManageSupport && (
         <div className="fixed inset-0 z-50 bg-white lg:bg-black/50 lg:backdrop-blur-sm lg:p-4 flex items-center justify-center animate-in fade-in zoom-in duration-200">
           <div className="w-full h-full lg:max-w-6xl lg:h-[90vh] relative">
             <button 
@@ -761,49 +877,70 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* Live User Statistics Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <div className="p-4 rounded-3xl bg-linear-to-br from-amber-500 to-amber-600 text-white shadow-md shadow-amber-200 flex flex-col items-center justify-center text-center space-y-1">
-          <div className="p-2 rounded-2xl bg-white/20 backdrop-blur-xs">
-            <Users className="w-5 h-5 text-white" />
-          </div>
-          <div className="text-xl font-black">{totalUsersCount}</div>
-          <div className="text-[10px] font-extrabold text-amber-100">إجمالي مستخدمي التطبيق</div>
-        </div>
+        {(isOwner || canManageUsersRecovery) && (
+          <>
+            <div className="p-4 rounded-3xl bg-linear-to-br from-amber-500 to-amber-600 text-white shadow-md shadow-amber-200 flex flex-col items-center justify-center text-center space-y-1">
+              <div className="p-2 rounded-2xl bg-white/20 backdrop-blur-xs">
+                <Users className="w-5 h-5 text-white" />
+              </div>
+              <div className="text-xl font-black">{totalUsersCount}</div>
+              <div className="text-[10px] font-extrabold text-amber-100">إجمالي مستخدمي التطبيق</div>
+            </div>
 
-        <div className="p-4 rounded-3xl bg-linear-to-br from-emerald-500 to-emerald-600 text-white shadow-md shadow-emerald-200 flex flex-col items-center justify-center text-center space-y-1">
-          <div className="p-2 rounded-2xl bg-white/20 backdrop-blur-xs">
-            <UserPlus className="w-5 h-5 text-white" />
-          </div>
-          <div className="text-xl font-black">+{todaySignupsCount}</div>
-          <div className="text-[10px] font-extrabold text-emerald-100">المنضمين الجدد اليوم</div>
-        </div>
+            <div className="p-4 rounded-3xl bg-linear-to-br from-emerald-500 to-emerald-600 text-white shadow-md shadow-emerald-200 flex flex-col items-center justify-center text-center space-y-1">
+              <div className="p-2 rounded-2xl bg-white/20 backdrop-blur-xs">
+                <UserPlus className="w-5 h-5 text-white" />
+              </div>
+              <div className="text-xl font-black">+{todaySignupsCount}</div>
+              <div className="text-[10px] font-extrabold text-emerald-100">المنضمين الجدد اليوم</div>
+            </div>
+          </>
+        )}
 
-        <div className="p-4 rounded-3xl bg-linear-to-br from-red-600 to-red-700 text-white shadow-md shadow-red-200 flex flex-col items-center justify-center text-center space-y-1">
-          <div className="p-2 rounded-2xl bg-white/20 backdrop-blur-xs">
-            <Database className="w-5 h-5 text-white" />
+        {canManageDonors && (
+          <div className="p-4 rounded-3xl bg-linear-to-br from-red-600 to-red-700 text-white shadow-md shadow-red-200 flex flex-col items-center justify-center text-center space-y-1">
+            <div className="p-2 rounded-2xl bg-white/20 backdrop-blur-xs">
+              <Database className="w-5 h-5 text-white" />
+            </div>
+            <div className="text-xl font-black">{donors.length}</div>
+            <div className="text-[10px] font-extrabold text-red-100">إجمالي المتبرعين المسجلين</div>
           </div>
-          <div className="text-xl font-black">{donors.length}</div>
-          <div className="text-[10px] font-extrabold text-red-100">إجمالي المتبرعين المسجلين</div>
-        </div>
+        )}
 
-        <div className="p-4 rounded-3xl bg-linear-to-br from-blue-600 to-blue-700 text-white shadow-md shadow-blue-200 flex flex-col items-center justify-center text-center space-y-1">
-          <div className="p-2 rounded-2xl bg-white/20 backdrop-blur-xs">
-            <ShieldCheck className="w-5 h-5 text-white" />
+        {canManageUrgent && (
+          <div className="p-4 rounded-3xl bg-linear-to-br from-rose-600 to-rose-700 text-white shadow-md shadow-rose-200 flex flex-col items-center justify-center text-center space-y-1">
+            <div className="p-2 rounded-2xl bg-white/20 backdrop-blur-xs">
+              <Droplet className="w-5 h-5 text-white" />
+            </div>
+            <div className="text-xl font-black">{urgentRequests.filter((r) => r.status === 'open').length}</div>
+            <div className="text-[10px] font-extrabold text-rose-100">طلبات دم عاجلة مفتوحة</div>
           </div>
-          <div className="text-xl font-black">{adminsCount}</div>
-          <div className="text-[10px] font-extrabold text-blue-100">المسؤولين (Admins)</div>
-        </div>
+        )}
 
-        <div className="p-4 rounded-3xl bg-linear-to-br from-slate-800 to-slate-900 text-white shadow-md shadow-slate-200 flex flex-col items-center justify-center text-center space-y-1">
-          <div className="p-2 rounded-2xl bg-white/20 backdrop-blur-xs">
-            <HospitalIcon className="w-5 h-5 text-white" />
+        {isOwner && (
+          <div className="p-4 rounded-3xl bg-linear-to-br from-blue-600 to-blue-700 text-white shadow-md shadow-blue-200 flex flex-col items-center justify-center text-center space-y-1">
+            <div className="p-2 rounded-2xl bg-white/20 backdrop-blur-xs">
+              <ShieldCheck className="w-5 h-5 text-white" />
+            </div>
+            <div className="text-xl font-black">{supervisorsCount}</div>
+            <div className="text-[10px] font-extrabold text-blue-100">المشرفون المفعّلون</div>
           </div>
-          <div className="text-xl font-black">{hospitals.length}</div>
-          <div className="text-[10px] font-extrabold text-slate-300">المستشفيات والمراكز</div>
-        </div>
+        )}
+
+        {canManageHospitals && (
+          <div className="p-4 rounded-3xl bg-linear-to-br from-slate-800 to-slate-900 text-white shadow-md shadow-slate-200 flex flex-col items-center justify-center text-center space-y-1">
+            <div className="p-2 rounded-2xl bg-white/20 backdrop-blur-xs">
+              <HospitalIcon className="w-5 h-5 text-white" />
+            </div>
+            <div className="text-xl font-black">{hospitals.length}</div>
+            <div className="text-[10px] font-extrabold text-slate-300">المستشفيات والمراكز</div>
+          </div>
+        )}
       </div>
 
       {/* Admin Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {canManageDonors && (
         <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
           <div className="flex items-center gap-2 text-red-600">
             <FileSpreadsheet className="w-5 h-5" />
@@ -869,7 +1006,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
           )}
         </div>
+        )}
 
+        {canManageSettings && (
         <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-slate-900">
@@ -979,6 +1118,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             )}
           </div>
 
+          {(canManageDonors || isOwner) && (
           <div className="pt-2 border-t border-slate-100">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[10px] font-bold text-slate-400">روابط الربط والتحكم</span>
@@ -1025,9 +1165,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </div>
             </div>
           </div>
+          )}
         </div>
+        )}
 
-        {/* Remote Website URL Card (appConfig/websiteUrl) */}
+        {/* Remote Website URL Card (appConfig/websiteUrl) - Owner Only */}
+        {isOwner && (
         <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 text-slate-900">
@@ -1131,8 +1274,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             )}
           </form>
         </div>
+        )}
 
         {/* Message Center Card */}
+        {canManageSupport && (
         <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-xs flex flex-col items-center justify-center gap-4 text-center">
           <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center text-red-600 shadow-inner">
             <MessageSquare className="w-8 h-8" />
@@ -1149,16 +1294,159 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <span>فتح مركز الرسائل</span>
           </button>
         </div>
+        )}
 
-        {/* Cleanup & Admin Management Card */}
+        {/* Urgent Requests Management Card */}
+        {canManageUrgent && (
+        <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4 sm:col-span-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-slate-900">
+              <Droplet className="w-5 h-5 text-rose-600" />
+              <h2 className="text-sm font-black">إدارة طلبات الدم العاجلة ({urgentRequests.length})</h2>
+            </div>
+            <div className="flex items-center gap-1.5">
+              {(['all', 'open', 'fulfilled'] as const).map((statusKey) => (
+                <button
+                  key={statusKey}
+                  type="button"
+                  onClick={() => setUrgentFilter(statusKey)}
+                  className={`px-2.5 py-1 rounded-lg text-[10px] font-black cursor-pointer transition-colors ${
+                    urgentFilter === statusKey
+                      ? 'bg-rose-600 text-white'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  {statusKey === 'all' ? 'الكل' : statusKey === 'open' ? 'مفتوحة' : 'مكتملة'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-2.5 max-h-[340px] overflow-y-auto pr-1">
+            {filteredUrgentRequests.length === 0 ? (
+              <div className="p-6 text-center rounded-2xl bg-slate-50 border border-dashed border-slate-200 text-xs text-slate-500">
+                لا توجد طلبات دم مطابقة للتصفية الحالية.
+              </div>
+            ) : (
+              filteredUrgentRequests.map((req) => (
+                <div
+                  key={req.id}
+                  className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3"
+                >
+                  <div className="space-y-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="px-2 py-0.5 rounded-lg bg-rose-600 text-white text-xs font-black">
+                        {req.bloodType}
+                      </span>
+                      <span className="text-xs font-black text-slate-900">{req.patientName}</span>
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                          req.status === 'fulfilled'
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : 'bg-amber-100 text-amber-800'
+                        }`}
+                      >
+                        {req.status === 'fulfilled' ? 'مكتمل ✓' : 'مفتوح'}
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-slate-600 flex flex-wrap items-center gap-3">
+                      <span>المستشفى: {req.hospital}</span>
+                      <span className="font-mono" dir="ltr">{req.contactPhone}</span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-slate-400" />
+                        {req.unitsNeeded} وحدة
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      disabled={busyUrgentId === req.id}
+                      onClick={async () => {
+                        const nextStatus = req.status === 'fulfilled' ? 'open' : 'fulfilled';
+                        setBusyUrgentId(req.id);
+                        try {
+                          await updateRequestStatus(req.id, nextStatus);
+                          writeAudit(
+                            nextStatus === 'fulfilled' ? 'إغلاق طلب دم عاجل' : 'إعادة فتح طلب دم عاجل',
+                            req.id,
+                            req.patientName,
+                            `الفصيلة: ${req.bloodType} | المستشفى: ${req.hospital}`
+                          );
+                          setResult({
+                            success: true,
+                            message:
+                              nextStatus === 'fulfilled'
+                                ? `تم تحديث حالة طلب (${req.patientName}) إلى مكتمل.`
+                                : `تمت إعادة فتح طلب (${req.patientName}).`,
+                          });
+                        } catch (err: any) {
+                          setResult({ success: false, message: err?.message || 'تعذر تحديث الطلب.' });
+                        } finally {
+                          setBusyUrgentId(null);
+                        }
+                      }}
+                      className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-[11px] font-black transition-colors disabled:opacity-50 cursor-pointer"
+                    >
+                      {req.status === 'fulfilled' ? 'إعادة فتح' : 'تم توفير الدم'}
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={busyUrgentId === req.id}
+                      onClick={async () => {
+                        if (!window.confirm(`هل تريد حذف طلب (${req.patientName}) نهائياً؟`)) return;
+                        setBusyUrgentId(req.id);
+                        try {
+                          await deleteUrgentRequest(req.id);
+                          writeAudit('حذف طلب دم عاجل', req.id, req.patientName, `الفصيلة: ${req.bloodType}`);
+                          setResult({ success: true, message: `تم حذف طلب (${req.patientName}) بنجاح.` });
+                        } catch (err: any) {
+                          setResult({ success: false, message: err?.message || 'تعذر حذف الطلب.' });
+                        } finally {
+                          setBusyUrgentId(null);
+                        }
+                      }}
+                      className="p-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 disabled:opacity-50 cursor-pointer"
+                      title="حذف الطلب"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+        )}
+
+        {/* Cleanup & Supervisor Management Card - Owner Only */}
+        {isOwner && (
         <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
-          <div className="flex items-center gap-2 text-slate-900">
-            <ShieldCheck className="w-5 h-5 text-blue-600" />
-            <h2 className="text-sm font-black">إدارة النظام والتنظيف</h2>
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-slate-900">
+              <ShieldCheck className="w-5 h-5 text-blue-600" />
+              <h2 className="text-sm font-black">إدارة النظام والمشرفين</h2>
+            </div>
+            <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-900 text-amber-300">
+              المالك فقط
+            </span>
           </div>
           <p className="text-xs text-slate-600 leading-relaxed">
-            يمكنك تنظيف قاعدة البيانات من الحسابات التجريبية أو إدارة صلاحيات المسؤولين. سيتم الحفاظ على حسابك الأساسي فقط.
+            يمكنك إضافة أو تعديل أو تعطيل المشرفين ومراجعة سجل العمليات الإدارية، أو تنظيف الحسابات التجريبية.
           </p>
+
+          {onOpenSupervisors && (
+            <button
+              type="button"
+              onClick={onOpenSupervisors}
+              className="w-full py-3 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs shadow-md transition-all flex items-center justify-center gap-2 active:scale-98 cursor-pointer"
+            >
+              <Users className="w-4 h-4" />
+              <span>إدارة المشرفين وصلاحياتهم ({supervisorsCount})</span>
+            </button>
+          )}
 
           <button
             onClick={handleCleanupUsers}
@@ -1174,7 +1462,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </button>
 
           <div className="pt-3 border-t border-slate-100">
-             <h3 className="text-[10px] font-black text-slate-400 mb-2 uppercase">المسؤولون الحاليون ({adminsCount}):</h3>
+             <h3 className="text-[10px] font-black text-slate-400 mb-2 uppercase">حسابات الإدارة ({adminsCount}):</h3>
              <div className="space-y-1.5 max-h-[120px] overflow-y-auto pr-1">
                {adminsList.map(admin => (
                  <div key={admin.id} className="flex items-center justify-between p-2 rounded-lg bg-blue-50/50 border border-blue-100/50">
@@ -1182,14 +1470,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       <span className="text-[11px] font-bold text-slate-800">{admin.displayName || admin.fullName || 'بدون اسم'}</span>
                       <span className="text-[9px] text-slate-500 font-mono truncate max-w-[120px]">{admin.email || admin.phone || admin.id}</span>
                     </div>
-                    <span className="text-[8px] bg-blue-600 text-white px-1.5 py-0.5 rounded-full font-bold">مسؤول</span>
+                    <span className="text-[8px] bg-blue-600 text-white px-1.5 py-0.5 rounded-full font-bold">
+                      {isOwnerEmail(admin.email) ? 'المالك' : 'مشرف'}
+                    </span>
                  </div>
                ))}
              </div>
           </div>
         </div>
+        )}
 
         {/* Users Management Card */}
+        {canManageUsersRecovery && (
         <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-slate-900">
@@ -1203,34 +1495,43 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               {showUsersSection ? 'إخفاء القائمة' : 'عرض كافة المستخدمين'}
             </button>
           </div>
-          <p className="text-xs text-slate-500 leading-relaxed font-medium">عرض أسماء وبيانات كافة المسجلين في التطبيق.</p>
+          <p className="text-xs text-slate-500 leading-relaxed font-medium">عرض أسماء وبيانات المسجلين في التطبيق (يُستثنى المالك والمشرفون من الحذف).</p>
           
           {showUsersSection && (
             <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1 pt-2 border-t border-slate-50">
-              {allUsersList.map(u => (
-                <div key={u.uid || u.id} className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between gap-2">
+              {allUsersList.map(u => {
+                const targetUid = u.uid || u.id;
+                const isProtected =
+                  isOwnerEmail(u.email) || u.role === 'admin' || targetUid === currentUser?.uid;
+                return (
+                <div key={targetUid} className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between gap-2">
                   <div className="flex flex-col">
                     <span className="text-xs font-black text-slate-900">{u.displayName || u.fullName || 'مستخدم غير معروف'}</span>
                     <span className="text-[10px] text-slate-500 font-mono">{u.phone || u.email || 'بدون هاتف'}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {u.role === 'admin' && (
-                      <span className="text-[8px] bg-amber-500 text-white px-1.5 py-0.5 rounded-full font-bold">مسؤول</span>
+                    {(isOwnerEmail(u.email) || u.role === 'admin') && (
+                      <span className="text-[8px] bg-amber-500 text-white px-1.5 py-0.5 rounded-full font-bold">
+                        {isOwnerEmail(u.email) ? 'المالك' : 'مشرف'}
+                      </span>
                     )}
-                    {u.role !== 'admin' && (u.uid || u.id) !== currentUser?.uid && (
-                      <button type="button" onClick={() => handleDeleteAppUser(u.uid || u.id)} disabled={deletingUserId === (u.uid || u.id)}
+                    {!isProtected && (
+                      <button type="button" onClick={() => handleDeleteAppUser(targetUid)} disabled={deletingUserId === targetUid}
                         className="p-1.5 rounded-lg bg-red-50 text-red-600 disabled:opacity-40" title="حذف الحساب">
-                        {deletingUserId === (u.uid || u.id) ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
+                        {deletingUserId === targetUid ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
                       </button>
                     )}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
+        )}
 
         {/* Account Recovery Requests & Direct Recovery Code Issuance */}
+        {canManageUsersRecovery && (
         <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-slate-900">
@@ -1434,8 +1735,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
           )}
         </div>
+        )}
 
         {/* Locations Management Card */}
+        {canManageLocations && (
         <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-slate-900">
@@ -1464,7 +1767,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <button 
                   onClick={async () => {
                     if (!locationNameInput.trim()) return;
-                    await saveLocation(locationNameInput, editingLocationId || undefined);
+                    const trimmedLoc = locationNameInput.trim();
+                    await saveLocation(trimmedLoc, editingLocationId || undefined);
+                    writeAudit(
+                      editingLocationId ? 'تعديل منطقة سكنية' : 'إضافة منطقة سكنية',
+                      editingLocationId || undefined,
+                      trimmedLoc
+                    );
                     setLocationLocationNameInput('');
                     setEditingLocationId(null);
                     setResult({ success: true, message: 'تم حفظ المنطقة بنجاح! ✓' });
@@ -1493,6 +1802,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         onClick={async () => {
                           if (window.confirm(`هل أنت متأكد من حذف منطقة "${loc.name}"؟`)) {
                             await deleteLocation(loc.id);
+                            writeAudit('حذف منطقة سكنية', loc.id, loc.name);
                             setResult({ success: true, message: 'تم حذف المنطقة بنجاح.' });
                           }
                         }}
@@ -1507,9 +1817,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
           )}
         </div>
+        )}
       </div>
 
       {/* System Stats & Detailed Management */}
+      {canManageDonors && (
       <div className="space-y-4">
         <h2 className="text-sm font-black text-slate-900 flex items-center gap-2">
           <Database className="w-4 h-4 text-red-600" />
@@ -1556,6 +1868,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       if (onGlobalRefresh) {
                         await onGlobalRefresh();
                       }
+                      writeAudit('مزامنة من Google Sheets', undefined, `${data.count || 0} سجل`);
                       setResult({ success: true, message: `تم مزامنة ${data.count || 0} اسماً من الأرشيف (Sheets ➔ App) بنجاح!` });
                     } else {
                       setResult({ success: false, message: data.error || 'فشل المزامنة' });
@@ -1600,6 +1913,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                     const res = await pushAllDonorsToSheets(donors);
                     if (res.success) {
+                      writeAudit('تحديث جدول Google Sheets', undefined, `${res.count} متبرع`);
                       setResult({ success: true, message: `تم تحديث جدول البيانات بـ ${res.count} متبرع من التطبيق بنجاح! ✓` });
                     } else {
                       setResult({ success: false, message: res.error || 'فشل تحديث جدول البيانات. تأكد من صلاحية Anyone في Apps Script.' });
@@ -1627,9 +1941,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
         </div>
       </div>
+      )}
 
       {/* Interactive Donors Management Panel (Edit & Delete any donor) */}
-      {showDonorsSection && (
+      {canManageDonors && showDonorsSection && (
         <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2">
@@ -1782,6 +2097,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* Hospital Management Section */}
+      {canManageHospitals && (
       <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2 text-slate-900">
@@ -1802,6 +2118,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   setResult(null);
                   try {
                     await seedHospitals();
+                    writeAudit('تهيئة دليل المستشفيات');
                     setResult({ success: true, message: 'تم إدراج البيانات الأولية للمستشفيات بنجاح! ✓' });
                   } catch (err: any) {
                     console.error('Seed hospitals error:', err);
@@ -1882,6 +2199,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       onClick={async () => {
                         if (window.confirm(`هل أنت متأكد من حذف ${h.name} من الدليل؟`)) {
                           await deleteHospital(h.id);
+                          writeAudit('حذف مرفق طبي', h.id, h.name);
                           setResult({ success: true, message: 'تم حذف المستشفى بنجاح' });
                         }
                       }}
@@ -1901,9 +2219,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
         )}
       </div>
+      )}
 
       {/* Hospital Form Modal */}
-      {isHospitalFormOpen && (
+      {isHospitalFormOpen && canManageHospitals && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 text-right">
           <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150 overflow-y-auto max-h-[90vh]">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -1922,13 +2241,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 setResult(null);
                 try {
                   await saveHospital(hospitalForm, editingHospital?.id);
+                  writeAudit(
+                    editingHospital ? 'تعديل مرفق طبي' : 'إضافة مرفق طبي',
+                    editingHospital?.id,
+                    hospitalForm.name
+                  );
                   setResult({ success: true, message: editingHospital ? 'تم تحديث بيانات المستشفى بنجاح! ✓' : 'تم إضافة المستشفى الجديد بنجاح! ✓' });
                   setIsHospitalFormOpen(false);
                 } catch (err: any) {
                   console.error('Hospital save error:', err);
                   setResult({ 
                     success: false, 
-                    message: `فشل حفظ البيانات: ${err.message?.includes('Permission denied') ? 'عذراً، لا تمتلك صلاحيات كافية (Admin) للقيام بهذا الإجراء.' : 'حدث خطأ تقني أثناء الحفظ.'}` 
+                    message: `فشل حفظ البيانات: ${err.message?.includes('Permission denied') ? 'عذراً، لا تمتلك صلاحيات كافية للقيام بهذا الإجراء.' : 'حدث خطأ تقني أثناء الحفظ.'}` 
                   });
                 } finally {
                   setHospitalLoading(false);
@@ -2036,11 +2360,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   if (!adminDonorToDelete || !onDeleteDonor) return;
                   setAdminIsDeleting(true);
                   setAdminDeleteError(null);
-                  try {
-                    await onDeleteDonor(adminDonorToDelete.id, adminDonorToDelete.phone);
-                    setResult({ success: true, message: `تم حذف بيانات المتبرع (${adminDonorToDelete.fullName}) بنجاح! ✓` });
-                    setAdminDonorToDelete(null);
-                  } catch (err: any) {
+                    try {
+                      await onDeleteDonor(adminDonorToDelete.id, adminDonorToDelete.phone);
+                      writeAudit('حذف متبرع', adminDonorToDelete.id, adminDonorToDelete.fullName, `الفصيلة: ${adminDonorToDelete.bloodType}`);
+                      setResult({ success: true, message: `تم حذف بيانات المتبرع (${adminDonorToDelete.fullName}) بنجاح! ✓` });
+                      setAdminDonorToDelete(null);
+                    } catch (err: any) {
                     setAdminDeleteError(err.message || 'حدث خطأ أثناء محاولة الحذف');
                   } finally {
                     setAdminIsDeleting(false);
@@ -2076,6 +2401,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* Stats Summary */}
+      {canManageDonors && (
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
           { label: 'إجمالي المتبرعين', value: donors.length.toString(), icon: Database, color: 'blue' },
@@ -2090,6 +2416,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
         ))}
       </div>
+      )}
       <BloodDonationEducationalInfo />
     </div>
   );

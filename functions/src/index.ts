@@ -24,11 +24,26 @@ function normalizePhone(value: unknown): string {
   return digits.slice(-9);
 }
 
-async function requireAdmin(request: CallableRequest<unknown>): Promise<string> {
+async function requireAdmin(
+  request: CallableRequest<unknown>,
+  requiredPerm: 'manageUsersRecovery' = 'manageUsersRecovery'
+): Promise<string> {
   const uid = request.auth?.uid;
   if (!uid) throw new HttpsError('unauthenticated', 'يجب تسجيل الدخول بحساب المسؤول.');
   const email = String(request.auth?.token.email || '').toLowerCase();
-  if (MASTER_EMAILS.has(email)) return uid;
+  const isVerifiedGmailOwner = email === 'ziadalsyyadi@gmail.com' && request.auth?.token.email_verified === true;
+  if (isVerifiedGmailOwner || email === 'user_967773633918_v1@qataba-blood.app') return uid;
+
+  const supSnap = await db.collection('supervisors').doc(uid).get();
+  if (supSnap.exists) {
+    const supData = supSnap.data();
+    const hasPerm = Boolean(supData?.isActive && supData?.permissions?.[requiredPerm] === true);
+    if (!hasPerm) {
+      throw new HttpsError('permission-denied', 'ليست لديك صلاحية لإدارة المستخدمين أو الاستعادة.');
+    }
+    return uid;
+  }
+
   const profile = await db.collection('users').doc(uid).get();
   if (!profile.exists || profile.data()?.role !== 'admin') {
     throw new HttpsError('permission-denied', 'هذه العملية متاحة للمسؤول فقط.');
@@ -319,9 +334,12 @@ export const deleteAppUser = onCall({ region: REGION }, async (request) => {
   if (target && MASTER_EMAILS.has(String(target.email || '').toLowerCase())) {
     throw new HttpsError('permission-denied', 'لا يمكن حذف حساب المسؤول الأساسي.');
   }
-  const targetProfile = await db.collection('users').doc(targetUid).get();
-  if (targetProfile.data()?.role === 'admin') {
-    throw new HttpsError('permission-denied', 'لا يمكن حذف حساب مسؤول من هذه الواجهة.');
+  const [targetProfile, targetSupervisor] = await Promise.all([
+    db.collection('users').doc(targetUid).get(),
+    db.collection('supervisors').doc(targetUid).get(),
+  ]);
+  if (targetProfile.data()?.role === 'admin' || targetSupervisor.exists) {
+    throw new HttpsError('permission-denied', 'لا يمكن حذف حساب مسؤول أو مشرف من هذه الواجهة.');
   }
 
   // Clean up related records first. If Auth deletion fails, retrying remains safe.

@@ -17,7 +17,8 @@ import {
   Info,
   Mail,
   ShieldCheck,
-  ExternalLink
+  ExternalLink,
+  Users
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Donor, DonationRecord, Conversation } from '../types';
@@ -28,6 +29,7 @@ import { PrivacyPolicyModal } from './PrivacyPolicyModal';
 import { APP_VERSION } from '../version';
 import { getWhatsAppUrl, openWhatsAppChat } from '../utils/whatsapp';
 import { shareData } from '../utils/shareUtils';
+import { useRegisterBackHandler } from '../utils/backNavigation';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -35,6 +37,7 @@ interface SidebarProps {
   donors: Donor[];
   onOpenExitConfirm: () => void;
   onOpenWebsite?: () => void;
+  onOpenSupervisors?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps & { onOpenChat: () => void }> = ({
@@ -43,9 +46,10 @@ export const Sidebar: React.FC<SidebarProps & { onOpenChat: () => void }> = ({
   donors,
   onOpenExitConfirm,
   onOpenChat,
-  onOpenWebsite
+  onOpenWebsite,
+  onOpenSupervisors
 }) => {
-  const { currentUser, userProfile, logout, deleteAccount } = useAuth();
+  const { currentUser, userProfile, isOwner, isAuthorizedAdmin, logout, deleteAccount } = useAuth();
   const [isEditing, setIsSidebarEditing] = useState(false);
   const [editName, setEditName] = useState(userProfile?.displayName || '');
   const [editPhone, setEditPhone] = useState(userProfile?.phone || '');
@@ -63,12 +67,24 @@ export const Sidebar: React.FC<SidebarProps & { onOpenChat: () => void }> = ({
   const [needsPassword, setNeedsPassword] = useState(false);
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
+  useRegisterBackHandler(showAboutModal, () => setShowAboutModal(false));
+  useRegisterBackHandler(showPrivacyModal, () => setShowPrivacyModal(false));
+  useRegisterBackHandler(showLogoutConfirm, () => setShowLogoutConfirm(false));
+  useRegisterBackHandler(showDeleteAccountConfirm, () => {
+    if (!isDeletingAccount) {
+      setShowDeleteAccountConfirm(false);
+      setNeedsPassword(false);
+      setDeletePassword('');
+      setDeleteError(null);
+    }
+  });
+
   useEffect(() => {
-    if (!currentUser || userProfile?.role === 'admin') return;
+    if (!currentUser || isAuthorizedAdmin) return;
 
     const unsubscribe = subscribeToConversation(currentUser.uid, setConversation);
     return () => unsubscribe();
-  }, [currentUser, userProfile?.role]);
+  }, [currentUser, isAuthorizedAdmin]);
 
   // Find user's donor profile if it exists
   const myDonorProfile = donors.find(d => d.userId === currentUser?.uid);
@@ -453,6 +469,30 @@ export const Sidebar: React.FC<SidebarProps & { onOpenChat: () => void }> = ({
                 </div>
 
                 <div className="space-y-2">
+                  {isOwner && onOpenSupervisors && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onOpenSupervisors();
+                        onClose();
+                      }}
+                      className="w-full flex items-center justify-between gap-3 p-3 bg-slate-900 text-white border border-slate-800 rounded-2xl hover:bg-slate-800 transition-colors text-right cursor-pointer shadow-2xs"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center">
+                          <Users className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <span className="text-xs font-black block">إدارة المشرفين</span>
+                          <span className="text-[10px] text-slate-300 font-bold block">الصلاحيات وسجل العمليات</span>
+                        </div>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-lg bg-amber-400/20 text-amber-200 text-[9px] font-black">
+                        المالك فقط
+                      </span>
+                    </button>
+                  )}
+
                   <button 
                     onClick={() => setShowLogoutConfirm(true)}
                     className="w-full flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-2xl text-slate-700 hover:bg-slate-50 transition-colors text-right cursor-pointer shadow-2xs"

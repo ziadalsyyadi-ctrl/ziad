@@ -43,16 +43,26 @@ import { DonorRegistration } from './components/DonorRegistration';
 import { BloodDonationEducationalInfo } from './components/BloodDonationEducationalInfo';
 import { QaetabahHospitalsDirectory } from './components/QaetabahHospitalsDirectory';
 import { AdminDashboard } from './components/AdminDashboard';
+import { SupervisorManagement } from './components/SupervisorManagement';
 import ChatSupport from './components/ChatSupport';
 import { AuthModal } from './components/AuthModal';
 import { VisitorRestrictionModal } from './components/VisitorRestrictionModal';
 import { AndroidInstallModal } from './components/AndroidInstallModal';
 import { BloodCompatibilityModal } from './components/BloodCompatibilityModal';
 import { ConfirmExitModal } from './components/ConfirmExitModal';
+import { AppExitConfirmModal } from './components/AppExitConfirmModal';
+import { SubpageBackBar } from './components/SubpageBackBar';
 import { RoleSelectionModal } from './components/RoleSelectionModal';
 import { NotificationsModal } from './components/NotificationsModal';
 import { UrgentAlertModal } from './components/UrgentAlertModal';
 import { subscribeToConversation } from './services/chatService';
+import { logAdminAction } from './services/supervisorService';
+import {
+  addNativeBackButtonListener,
+  dispatchRegisteredBackHandlers,
+  exitApplication,
+  isNativeBackPluginAvailable,
+} from './utils/backNavigation';
 import {
   UrgentAlertPayload,
   dispatchUrgentAlert,
@@ -74,7 +84,19 @@ import {
 } from './services/websiteConfigService';
 
 function AppContent() {
-  const { currentUser, userProfile, activeRole, switchActiveRole, isLoading, logout, isGuest } = useAuth();
+  const {
+    currentUser,
+    userProfile,
+    activeRole,
+    switchActiveRole,
+    isOwner,
+    isAuthorizedAdmin,
+    adminLevel,
+    adminPermissions,
+    isLoading,
+    logout,
+    isGuest,
+  } = useAuth();
 
   const [activeTab, setActiveTab] = useState<ActiveTab>('home');
   const [searchInitialBloodType, setSearchInitialBloodType] = useState<BloodType | 'ALL'>('ALL');
@@ -163,12 +185,35 @@ function AppContent() {
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
   const [isCompatibilityOpen, setIsCompatibilityOpen] = useState(false);
   const [isExitConfirmOpen, setIsExitConfirmOpen] = useState(false);
+  const [isAppExitModalOpen, setIsAppExitModalOpen] = useState(false);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isHospitalsModalOpen, setIsHospitalsModalOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [editingDonorId, setEditingDonorId] = useState<string | null>(null);
   const [isVisitorRestrictionOpen, setIsVisitorRestrictionOpen] = useState(false);
+
+  const navigateToHome = () => {
+    setActiveTab('home');
+    setEditingDonorId(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openSupervisorsTab = () => {
+    if (!isOwner) return;
+    setActiveTab('supervisors');
+    setEditingDonorId(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (activeTab === 'supervisors' && !isOwner) {
+      setActiveTab('home');
+    } else if (activeTab === 'admin' && !isAuthorizedAdmin) {
+      setActiveTab('home');
+    }
+  }, [activeTab, isLoading, isOwner, isAuthorizedAdmin]);
 
   const handleEditDonor = (donorId?: string) => {
     setEditingDonorId(donorId || null);
@@ -227,7 +272,7 @@ function AppContent() {
   }, [announcement]);
 
   const handleSaveAnnouncement = async () => {
-    if (!currentUser) return;
+    if (!currentUser || !adminPermissions.manageSettings) return;
     setIsSavingAnnouncement(true);
     justSavedAnnouncementAtRef.current = Date.now();
     try {
@@ -244,6 +289,15 @@ function AppContent() {
         },
         { merge: true }
       );
+      void logAdminAction({
+        actorUid: currentUser.uid,
+        actorName: userProfile?.displayName || currentUser.displayName || 'مسؤول',
+        actorLevel: adminLevel || 'legacy_admin',
+        actionType: 'نشر تعميم من الرئيسية',
+        targetId: 'settings/global',
+        targetLabel: draftAnnouncementType,
+        details: draftAnnouncement.trim().slice(0, 120),
+      });
       setToastMessage('تم نشر وتحديث التعميم بنجاح لتظهر فوراً لدى جميع المستخدمين! ✓');
       setTimeout(() => setToastMessage(null), 4000);
     } catch (err: any) {
@@ -256,7 +310,7 @@ function AppContent() {
   };
 
   const handleClearAnnouncement = async () => {
-    if (!currentUser) return;
+    if (!currentUser || !adminPermissions.manageSettings) return;
     setIsSavingAnnouncement(true);
     try {
       await setDoc(
@@ -271,6 +325,13 @@ function AppContent() {
         { merge: true }
       );
       setDraftAnnouncement('');
+      void logAdminAction({
+        actorUid: currentUser.uid,
+        actorName: userProfile?.displayName || currentUser.displayName || 'مسؤول',
+        actorLevel: adminLevel || 'legacy_admin',
+        actionType: 'مسح التعميم من الرئيسية',
+        targetId: 'settings/global',
+      });
       setToastMessage('تم مسح التعميم بنجاح! ✓');
       setTimeout(() => setToastMessage(null), 3000);
     } catch (err) {
@@ -612,15 +673,11 @@ function AppContent() {
   useEffect(() => {
     if (currentUser) {
       void initializePushNotifications(currentUser.uid);
-      const isAdminAccount =
-        userProfile?.role === 'admin' ||
-        currentUser.email === 'ziadalsyyadi@gmail.com' ||
-        currentUser.email === 'user_967773633918_v1@qataba-blood.app';
-      if (isAdminAccount) {
+      if (isOwner) {
         void ensureWebsiteConfigSeededForAdmin();
       }
     }
-  }, [currentUser, userProfile?.role]);
+  }, [currentUser, isOwner]);
 
   useEffect(() => {
     if (!currentUser || currentUser.isAnonymous) return;
@@ -655,6 +712,146 @@ function AppContent() {
   const hasLoggedOut = typeof window !== 'undefined' && localStorage.getItem('has_logged_out') === 'true';
   const showInitialAuth = !currentUser && (!isGuest || hasLoggedOut);
 
+  const handleBackPressRef = useRef<() => void>(() => {});
+  handleBackPressRef.current = () => {
+    if (isAppExitModalOpen) {
+      setIsAppExitModalOpen(false);
+      return;
+    }
+
+    if (dispatchRegisteredBackHandlers()) {
+      return;
+    }
+
+    if (pendingAlerts.length > 0) {
+      setPendingAlerts((prev) => prev.slice(1));
+      return;
+    }
+
+    if (isHospitalsModalOpen) {
+      setIsHospitalsModalOpen(false);
+      return;
+    }
+
+    if (isNotificationsOpen) {
+      setIsNotificationsOpen(false);
+      return;
+    }
+
+    if (isRoleModalOpen) {
+      setIsRoleModalOpen(false);
+      return;
+    }
+
+    if (isExitConfirmOpen) {
+      setIsExitConfirmOpen(false);
+      return;
+    }
+
+    if (isCompatibilityOpen) {
+      setIsCompatibilityOpen(false);
+      return;
+    }
+
+    if (isInstallModalOpen) {
+      setIsInstallModalOpen(false);
+      return;
+    }
+
+    if (isVisitorRestrictionOpen) {
+      setIsVisitorRestrictionOpen(false);
+      return;
+    }
+
+    if (isAuthModalOpen && !showInitialAuth) {
+      setIsAuthModalOpen(false);
+      return;
+    }
+
+    if (isSidebarOpen) {
+      setIsSidebarOpen(false);
+      return;
+    }
+
+    if (showInitialAuth) {
+      setIsAppExitModalOpen(true);
+      return;
+    }
+
+    if (activeTab !== 'home') {
+      navigateToHome();
+      return;
+    }
+
+    setIsAppExitModalOpen(true);
+  };
+
+  const handleConfirmAppExit = async () => {
+    const result = await exitApplication();
+    if (result === 'browser_fallback') {
+      setIsAppExitModalOpen(false);
+      setToastMessage('تم تأكيد الخروج — يمكنك إغلاق علامة تبويب المتصفح بأمان.');
+      setTimeout(() => setToastMessage(null), 3500);
+    }
+  };
+
+  useEffect(() => {
+    let removeNativeListener: (() => void) | null = null;
+    let disposed = false;
+
+    const useNativeBack = isNativeBackPluginAvailable();
+
+    if (useNativeBack) {
+      void addNativeBackButtonListener(() => {
+        handleBackPressRef.current();
+      }).then((cleanup) => {
+        if (disposed) {
+          cleanup?.();
+        } else {
+          removeNativeListener = cleanup;
+        }
+      });
+
+      return () => {
+        disposed = true;
+        removeNativeListener?.();
+      };
+    }
+
+    const ensureGuardHistoryEntry = () => {
+      try {
+        if (!window.history.state?.__qatabaBackGuard) {
+          window.history.replaceState(
+            { ...(window.history.state || {}), __qatabaBase: true },
+            ''
+          );
+          window.history.pushState({ __qatabaBackGuard: true }, '');
+        }
+      } catch {
+        // Ignore restricted history APIs
+      }
+    };
+
+    ensureGuardHistoryEntry();
+
+    const handlePopState = () => {
+      handleBackPressRef.current();
+      try {
+        if (!window.history.state?.__qatabaBackGuard) {
+          window.history.pushState({ __qatabaBackGuard: true }, '');
+        }
+      } catch {
+        // Ignore restricted history APIs
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      disposed = true;
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-linear-to-b from-slate-950 via-red-950 to-slate-950 flex flex-col items-center justify-center p-6 text-white text-center font-['Cairo',sans-serif]">
@@ -684,6 +881,11 @@ function AppContent() {
     return (
       <div className="min-h-screen bg-linear-to-b from-slate-950 via-red-950 to-slate-950 font-['Cairo',sans-serif]">
         <AuthModal isOpen={true} isInitialScreen={true} onClose={() => {}} />
+        <AppExitConfirmModal
+          isOpen={isAppExitModalOpen}
+          onCancel={() => setIsAppExitModalOpen(false)}
+          onConfirm={handleConfirmAppExit}
+        />
       </div>
     );
   }
@@ -709,6 +911,7 @@ function AppContent() {
         onOpenExitConfirm={() => setIsExitConfirmOpen(true)}
         onOpenChat={() => setActiveTab('chat')}
         onOpenWebsite={handleOpenOfficialWebsite}
+        onOpenSupervisors={isOwner ? openSupervisorsTab : undefined}
       />
 
       {toastMessage && (
@@ -795,7 +998,7 @@ function AppContent() {
 
           {activeTab === 'home' && (
             <div className="space-y-6">
-              {activeRole === 'admin' && (
+              {activeRole === 'admin' && isAuthorizedAdmin && adminPermissions.manageSettings && (
                 <div className="bg-linear-to-r from-amber-600 via-amber-700 to-rose-700 text-white rounded-2xl p-4 shadow-md space-y-3">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                     <div className="flex items-center gap-2">
@@ -901,6 +1104,7 @@ function AppContent() {
           {activeTab === 'search' && (
             <DonorSearch
               donors={donors}
+              onBack={navigateToHome}
               onNavigateToRegister={() => {
                 if (currentUser) setActiveTab('register');
                 else setIsVisitorRestrictionOpen(true);
@@ -917,12 +1121,14 @@ function AppContent() {
           {activeTab === 'urgent' && (
             <UrgentRequests
               urgentRequests={urgentRequests}
+              onBack={navigateToHome}
               onOpenAuth={() => setIsAuthModalOpen(true)}
             />
           )}
 
           {activeTab === 'register' && (
             <DonorRegistration
+              onBack={navigateToHome}
               onSuccessNavigate={() => {
                 setActiveTab('search');
                 setEditingDonorId(null);
@@ -934,10 +1140,16 @@ function AppContent() {
             />
           )}
 
-          {activeTab === 'info' && <BloodDonationEducationalInfo />}
+          {activeTab === 'info' && (
+            <BloodDonationEducationalInfo onBack={navigateToHome} />
+          )}
 
           {activeTab === 'hospitals' && (
             <div className="w-full max-w-4xl mx-auto space-y-4">
+              <SubpageBackBar
+                title="دليل المستشفيات والنقاط الطبية"
+                onBack={navigateToHome}
+              />
               <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-200/90 text-center">
                 <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-inner">
                   <Hospital className="w-7 h-7 sm:w-8 sm:h-8" />
@@ -945,23 +1157,41 @@ function AppContent() {
                 <h2 className="text-lg sm:text-xl font-black text-slate-900">دليل المستشفيات والنقاط الطبية</h2>
                 <p className="text-xs sm:text-sm text-slate-500 font-bold mt-1">مديرية قعطبة - الضالع</p>
               </div>
-              <QaetabahHospitalsDirectory isOpen={true} isEmbedded={true} onClose={() => setActiveTab('home')} />
+              <QaetabahHospitalsDirectory isOpen={true} isEmbedded={true} onClose={navigateToHome} />
             </div>
           )}
 
           {activeTab === 'admin' && (
             <AdminDashboard
-              onBack={() => setActiveTab('home')}
+              onBack={navigateToHome}
               donors={donors}
+              urgentRequests={urgentRequests}
               onEditDonor={handleEditDonor}
               onDeleteDonor={handleDeleteDonor}
               onGlobalRefresh={handleGlobalRefresh}
+              onOpenSupervisors={isOwner ? openSupervisorsTab : undefined}
               isRefreshing={isRefreshing}
             />
           )}
 
+          {activeTab === 'supervisors' && isOwner && (
+            <div className="space-y-4">
+              <SubpageBackBar
+                title="إدارة المشرفين"
+                onBack={navigateToHome}
+              />
+              <SupervisorManagement
+                onBackToAdmin={() => {
+                  switchActiveRole('admin');
+                  setActiveTab('admin');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
+            </div>
+          )}
+
           {activeTab === 'chat' && (
-            <ChatSupport userProfile={userProfile} onBack={() => setActiveTab('home')} />
+            <ChatSupport userProfile={userProfile} onBack={navigateToHome} />
           )}
         </>
       </main>
@@ -1015,6 +1245,7 @@ function AppContent() {
           setActiveTab(role === 'admin' ? 'admin' : 'home');
         }}
         onOpenAdminAuth={() => setIsAuthModalOpen(true)}
+        onOpenSupervisors={isOwner ? openSupervisorsTab : undefined}
       />
 
       <NotificationsModal
@@ -1053,6 +1284,12 @@ function AppContent() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }
         }}
+      />
+
+      <AppExitConfirmModal
+        isOpen={isAppExitModalOpen}
+        onCancel={() => setIsAppExitModalOpen(false)}
+        onConfirm={handleConfirmAppExit}
       />
     </div>
   );
