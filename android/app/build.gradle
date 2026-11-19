@@ -29,14 +29,36 @@ android {
             def releaseRequested = gradle.startParameter.taskNames.any {
                 it.toLowerCase().contains("release")
             }
-            def keystorePath = System.getenv("KEYSTORE_FILE")
-            def storePass = System.getenv("KEYSTORE_PASSWORD")
-            def aliasName = System.getenv("KEY_ALIAS")
-            def keyPass = System.getenv("KEY_PASSWORD")
+            def keystorePath = System.getenv("KEYSTORE_FILE") ?: (project.hasProperty('KEYSTORE_FILE') ? project.property('KEYSTORE_FILE') : null)
+            def storePass = System.getenv("KEYSTORE_PASSWORD") ?: (project.hasProperty('KEYSTORE_PASSWORD') ? project.property('KEYSTORE_PASSWORD') : null)
+            def aliasName = System.getenv("KEY_ALIAS") ?: (project.hasProperty('KEY_ALIAS') ? project.property('KEY_ALIAS') : null)
+            def keyPass = System.getenv("KEY_PASSWORD") ?: (project.hasProperty('KEY_PASSWORD') ? project.property('KEY_PASSWORD') : null)
 
             if (releaseRequested) {
+                def releaseKeystore = null
+                if (keystorePath) {
+                    def candidate = file(keystorePath)
+                    if (candidate.exists() && candidate.isFile()) {
+                        releaseKeystore = candidate
+                    }
+                }
+                if (releaseKeystore == null) {
+                    def candidates = [
+                        file("release-keystore.jks"),
+                        file("../release-keystore.jks"),
+                        file("../../release-keystore.jks")
+                    ]
+                    for (def c : candidates) {
+                        if (c.exists() && c.isFile()) {
+                            releaseKeystore = c
+                            keystorePath = c.absolutePath
+                            break
+                        }
+                    }
+                }
+
                 def missing = []
-                if (!keystorePath) missing.add("KEYSTORE_FILE")
+                if (!keystorePath && releaseKeystore == null) missing.add("KEYSTORE_FILE")
                 if (!storePass) missing.add("KEYSTORE_PASSWORD")
                 if (!aliasName) missing.add("KEY_ALIAS")
                 if (!keyPass) missing.add("KEY_PASSWORD")
@@ -44,8 +66,7 @@ android {
                     throw new GradleException("Release signing configuration is incomplete. Missing: " + missing.join(", "))
                 }
 
-                def releaseKeystore = file(keystorePath)
-                if (!releaseKeystore.exists() || !releaseKeystore.isFile()) {
+                if (releaseKeystore == null || !releaseKeystore.exists() || !releaseKeystore.isFile()) {
                     throw new GradleException("Release keystore file does not exist: " + keystorePath)
                 }
 

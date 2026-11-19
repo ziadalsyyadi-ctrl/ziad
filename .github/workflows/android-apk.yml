@@ -99,12 +99,7 @@ jobs:
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          if [ ! -d "android" ]; then
-            npx cap add android
-          fi
-          npx cap sync android
-          # Android's official Firebase configuration belongs in android/app/.
-          # Accept a root copy, uploaded asset copy, or GOOGLE_SERVICES_JSON secret when absent.
+          mkdir -p android/app
           if [ ! -s "android/app/google-services.json" ] && [ -s "google-services.json" ]; then
             cp google-services.json android/app/google-services.json
           fi
@@ -117,6 +112,14 @@ jobs:
             else
               printf '%s' "$GOOGLE_SERVICES_JSON" | base64 --decode > android/app/google-services.json
             fi
+          fi
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
+          npx cap sync android
+          # Re-verify android/app/google-services.json remains populated
+          if [ ! -s "android/app/google-services.json" ] && [ -s "google-services.json" ]; then
+            cp google-services.json android/app/google-services.json
           fi
 
       - name: "Verify Firebase Android configuration"
@@ -163,6 +166,8 @@ jobs:
 
           KEYSTORE_PATH="$GITHUB_WORKSPACE/android/app/release-keystore.jks"
           printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE_PATH"
+          cp "$KEYSTORE_PATH" "$GITHUB_WORKSPACE/android/release-keystore.jks" 2>/dev/null || true
+          cp "$KEYSTORE_PATH" "$GITHUB_WORKSPACE/release-keystore.jks" 2>/dev/null || true
 
           if [ ! -s "$KEYSTORE_PATH" ]; then
             echo "::error::The decoded release keystore is empty."
@@ -213,16 +218,46 @@ jobs:
           echo "Original release keystore and both certificate fingerprints verified."
 
       - name: "Build Google Play AAB"
+        env:
+          KEYSTORE_FILE: ${{ env.KEYSTORE_FILE || format('{0}/android/app/release-keystore.jks', github.workspace) }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          ANDROID_VERSION_CODE: ${{ env.ANDROID_VERSION_CODE }}
+          ANDROID_VERSION_NAME: ${{ env.ANDROID_VERSION_NAME }}
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew bundleRelease --no-daemon
+          ./gradlew bundleRelease --no-daemon --stacktrace 2>&1 | tee ../gradle_bundle.log || {
+            STATUS=$?
+            echo "::error::Gradle bundleRelease failed with exit code $STATUS"
+            echo "### ❌ Gradle bundleRelease Failed" >> "$GITHUB_STEP_SUMMARY"
+            echo '```text' >> "$GITHUB_STEP_SUMMARY"
+            tail -n 120 ../gradle_bundle.log >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            exit $STATUS
+          }
           cd ..
 
       - name: "Build release APK"
+        env:
+          KEYSTORE_FILE: ${{ env.KEYSTORE_FILE || format('{0}/android/app/release-keystore.jks', github.workspace) }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          ANDROID_VERSION_CODE: ${{ env.ANDROID_VERSION_CODE }}
+          ANDROID_VERSION_NAME: ${{ env.ANDROID_VERSION_NAME }}
         run: |
           cd android
-          ./gradlew assembleRelease --no-daemon
+          ./gradlew assembleRelease --no-daemon --stacktrace 2>&1 | tee ../gradle_assemble.log || {
+            STATUS=$?
+            echo "::error::Gradle assembleRelease failed with exit code $STATUS"
+            echo "### ❌ Gradle assembleRelease Failed" >> "$GITHUB_STEP_SUMMARY"
+            echo '```text' >> "$GITHUB_STEP_SUMMARY"
+            tail -n 120 ../gradle_assemble.log >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            exit $STATUS
+          }
           cd ..
 
       - name: "Collect release files"
