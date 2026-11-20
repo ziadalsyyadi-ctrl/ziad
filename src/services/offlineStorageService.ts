@@ -1,4 +1,5 @@
 import { Donor, UrgentRequest } from '../types';
+import { INITIAL_SEED_DONORS } from '../data/initialData';
 
 /**
  * نظام التخزين المحلي الدائم (Offline-First) لبنك الدم - قعطبة
@@ -106,9 +107,19 @@ export function getInstantLocalDonorsSync(): Donor[] {
     console.warn('تعذر قراءة الكاش المتزامن للمتبرعين:', err);
   }
 
-  // Never invent fallback donor rows: seed data can inflate counts and
-  // resurrect records that have already been deleted from the live database.
-  return [];
+  return INITIAL_SEED_DONORS.map((d, idx) => ({
+    id: `seed_${idx + 1}`,
+    userId: `seed_user_${idx + 1}`,
+    fullName: d.fullName,
+    bloodType: d.bloodType,
+    phone: d.phone,
+    phoneVerified: true,
+    residence: d.residence,
+    notes: d.notes,
+    isAvailable: d.isAvailable,
+    allowContact: true,
+    source: 'firestore'
+  }));
 }
 
 /**
