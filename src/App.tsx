@@ -1141,7 +1141,7 @@ function AppContent() {
           )}
 
           {activeTab === 'info' && (
-            <BloodDonationEducationalInfo onBack={navigateToHome} />
+            <BloodDonationEducationalInfo onBack={navigateToHome} showSponsorCard={true} />
           )}
 
           {activeTab === 'hospitals' && (

@@ -4,10 +4,12 @@ import { SubpageBackBar } from './SubpageBackBar';
 
 interface BloodDonationEducationalInfoProps {
   onBack?: () => void;
+  showSponsorCard?: boolean;
 }
 
 export const BloodDonationEducationalInfo: React.FC<BloodDonationEducationalInfoProps> = ({
   onBack,
+  showSponsorCard = false,
 }) => {
   const posterImagePath = '/assets/images/blood_benefits_poster.jpg';
 
@@ -87,6 +89,31 @@ export const BloodDonationEducationalInfo: React.FC<BloodDonationEducationalInfo
           </div>
         </div>
       </div>
+
+      {/* بطاقة رعاية نادي جيشان - تظهر فقط في تبويب فوائد التبرع */}
+      {showSponsorCard && (
+        <div
+          dir="rtl"
+          className="flex items-center justify-start gap-3 bg-white rounded-2xl px-4 py-3.5 my-3.5 shadow-sm border border-gray-100"
+        >
+          <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 flex items-center justify-center bg-[#fdf8f8] border border-[#f3e5e5]">
+            <img
+              src="/assets/aistudio/1794594460673_53a90780.jpg"
+              alt="شعار نادي جيشان"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <div className="flex flex-col text-right">
+            <p className="text-[15px] font-bold text-gray-800 leading-snug m-0">
+              برعاية نادي جيشان الرياضي الثقافي الاجتماعي
+            </p>
+            <p className="text-[13px] font-medium text-gray-500 leading-snug mt-1 mb-0">
+              مديرية قعطبة - محافظة الضالع
+            </p>
+          </div>
+        </div>
+      )}
 
     </div>
   );
