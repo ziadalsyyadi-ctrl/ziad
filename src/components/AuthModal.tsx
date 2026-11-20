@@ -237,48 +237,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isInitial
           </button>
         )}
 
-        {/* Modal Branding Header - Pixel Match with Attached Design */}
+        {/* Modal Branding Header */}
         <div className="text-center space-y-2 pt-1 flex flex-col items-center">
-          {/* Glossy Red Blood Drop Emblem with White Person Figure */}
-          <div className="relative w-20 h-20 sm:w-22 sm:h-22 flex items-center justify-center drop-shadow-md mb-1">
-            <svg viewBox="0 0 100 120" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <radialGradient id="authDropGrad" cx="35%" cy="30%" r="70%">
-                  <stop offset="0%" stopColor="#ff4b6b" />
-                  <stop offset="40%" stopColor="#e50914" />
-                  <stop offset="85%" stopColor="#a8000b" />
-                  <stop offset="100%" stopColor="#6e0007" />
-                </radialGradient>
-                <linearGradient id="authHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.8" />
-                  <stop offset="60%" stopColor="#ffffff" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              {/* Drop Body */}
-              <path
-                d="M50 4 C50 4 12 48 12 76 C12 97 29 114 50 114 C71 114 88 97 88 76 C88 48 50 4 50 4 Z"
-                fill="url(#authDropGrad)"
-              />
-              {/* Gloss Highlight */}
-              <path
-                d="M46 16 C42 24 24 52 24 73 C24 80 26 86 30 90 C27 84 28 72 32 60 C36 48 48 28 46 16 Z"
-                fill="url(#authHighlight)"
-                opacity="0.6"
-              />
-              {/* White Human figure holding heart inside droplet */}
-              <g fill="#ffffff" transform="translate(25, 45) scale(0.5)">
-                <circle cx="50" cy="20" r="12" />
-                <path d="M 50,38 C 30,38 18,52 18,68 C 18,72 22,76 26,76 C 30,76 34,70 38,62 L 38,94 C 38,98 42,102 46,102 L 54,102 C 58,102 62,98 62,94 L 62,62 C 66,70 70,76 74,76 C 78,76 82,72 82,68 C 82,52 70,38 50,38 Z" />
-                <path d="M 50,60 C 44,52 34,56 34,65 C 34,74 50,86 50,86 C 50,86 66,74 66,65 C 66,56 56,52 50,60 Z" fill="#e50914" />
-              </g>
-            </svg>
+          <div className="relative w-22 h-22 sm:w-24 sm:h-24 rounded-2xl overflow-hidden flex items-center justify-center shadow-md border border-red-100 bg-white mb-1">
+            <img
+              src="/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.png"
+              alt="شعار أنقذني - بنك الدم قعطبه"
+              className="w-full h-full object-cover"
+            />
           </div>
 
-          <h2 className="text-2xl sm:text-[26px] font-extrabold text-[#d3101c] tracking-tight leading-none">
-            قطرة دم تنقذ حياة إنسان
+          <h2 className="text-3xl sm:text-[32px] font-black text-[#d3101c] tracking-tight leading-none">
+            أنقذني
           </h2>
           <p className="text-xs sm:text-sm font-extrabold text-slate-700">
-            بنك الدم - مديرية قعطبه
+            بنك الدم - قعطبه
           </p>
 
           <div className="pt-0.5">

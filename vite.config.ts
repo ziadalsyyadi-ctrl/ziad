@@ -32,8 +32,8 @@ export default defineConfig(() => {
         ],
         manifest: ({
           id: '/',
-          name: 'قطرة دم تنقذ حياة إنسان - قعطبة',
-          short_name: 'قطرة دم',
+          name: 'أنقذني - بنك الدم - قعطبه',
+          short_name: 'بنك الدم - قعطبه',
           description: 'تطبيق سجل المتبرعين بالدم بمديرية قعطبة - محافظة الضالع',
           theme_color: '#dc2626',
           background_color: '#ffffff',

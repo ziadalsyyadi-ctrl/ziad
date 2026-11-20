@@ -1,5 +1,5 @@
-// Service Worker for "قطرة دم تنقذ حياة إنسان - قعطبة" PWA
-const CACHE_NAME = 'qataba-blood-pwa-v2';
+// Service Worker for "أنقذني - بنك الدم - قعطبه" PWA
+const CACHE_NAME = 'qataba-blood-pwa-v3';
 const OFFLINE_URL = '/offline.html';
 
 const PRECACHE_ASSETS = [

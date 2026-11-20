@@ -36,8 +36,8 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({
 
   const handleShareApp = async () => {
     await shareData({
-      title: 'قطرة دم تنقذ حياة - بنك الدم في مديرية قعطبة',
-      text: 'رابط تطبيق قطرة دم تنقذ حياة، بنك الدم بمديرية قعطبة للبحث والتبرع وإنقاذ الحالات الحرجة:',
+      title: 'أنقذني - بنك الدم - قعطبه',
+      text: 'رابط تطبيق أنقذني (بنك الدم - قعطبه) للبحث والتبرع وإنقاذ الحالات الحرجة:',
       url: appUrl,
     });
   };
@@ -100,7 +100,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({
             <li>افتح الرابط في متصفح <span className="font-bold">Google Chrome</span> على هاتفك.</li>
             <li>اضغط على زر الخيارات (الثلاث نقاط <span className="font-bold font-mono">⋮</span> أعلى يسار أو يمين الشاشة).</li>
             <li>اختر <span className="font-bold text-red-700">«تثبيت التطبيق»</span> أو <span className="font-bold text-red-700">«إضافة إلى الشاشة الرئيسية»</span>.</li>
-            <li>ستظهر أيقونة «قطرة دم» على شاشة هاتفك الرئيسية وتفتح كشاشة كاملة دون شريط متصفح وبسرعة فائقة!</li>
+            <li>ستظهر أيقونة «بنك الدم - قعطبه» (أنقذني) على شاشة هاتفك الرئيسية وتفتح كشاشة كاملة دون شريط متصفح وبسرعة فائقة!</li>
           </ol>
         </div>
 

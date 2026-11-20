@@ -824,11 +824,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <button
               onClick={onGlobalRefresh}
               disabled={isRefreshing}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white transition-colors text-xs font-bold shadow-xs active:scale-95 disabled:opacity-50"
-              title="تحديث شامل للتطبيق وسحب أي إضافات وتعديلات جديدة فوراً"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white transition-colors text-xs font-black shadow-xs active:scale-95 disabled:opacity-50 cursor-pointer"
+              title="تحديث شامل ومزامنة فورية لكل البيانات وحزم OTA (التحديث يتم تلقائياً دائماً وهذا الزر عامل مساعد)"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
-              <span>{isRefreshing ? 'جارٍ التحديث...' : 'تحديث شامل للتطبيق'}</span>
+              <span>{isRefreshing ? 'جارٍ التحديث الشامل...' : 'تحديث شامل (بيانات + OTA)'}</span>
             </button>
           )}
 
@@ -1109,11 +1109,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   type="button"
                   onClick={onGlobalRefresh}
                   disabled={isRefreshing}
-                  className="w-full py-2.5 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-extrabold text-xs transition-all flex items-center justify-center gap-2 shadow-2xs active:scale-98"
+                  className="w-full py-3 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-900 font-black text-xs transition-all flex items-center justify-center gap-2 shadow-xs active:scale-98 cursor-pointer"
                 >
                   <RefreshCw className={`w-4 h-4 text-emerald-600 ${isRefreshing ? 'animate-spin' : ''}`} />
-                  <span>{isRefreshing ? 'جارٍ التحديث الشامل...' : '🔄 زر التحديث الشامل للتطبيق وسحب أي إضافة جديدة'}</span>
+                  <span>{isRefreshing ? 'جارٍ التحديث الشامل ومزامنة البيانات وتحديثات OTA...' : '🔄 زر التحديث الشامل للتطبيق (مزامنة البيانات + فحص تحديثات OTA)'}</span>
                 </button>
+                <p className="text-[10px] text-slate-500 font-medium text-center mt-1.5 leading-relaxed">
+                  * ملاحظة: يتم تحديث البيانات وتحديثات OTA تلقائياً باستمرار في الخلفية وعند توفر الإنترنت، وهذا الزر عامل مساعد لإجراء المزامنة الفورية الشاملة بضغطة واحدة.
+                </p>
               </div>
             )}
           </div>

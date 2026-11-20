@@ -132,7 +132,7 @@ export const sendMessage = async (
         // Notify the user
         const userSnap = await getDoc(doc(db, 'users', userId));
         targetToken = userSnap.exists() ? userSnap.data().fcmToken : null;
-        title = 'رد من إدارة تطبيق قطرة دم';
+        title = 'رد من إدارة تطبيق بنك الدم - قعطبه';
       } else {
         // Notify admins (simplified to first admin found for this demo)
         const adminsQuery = query(collection(db, 'users'), where('role', '==', 'admin'), limit(1));

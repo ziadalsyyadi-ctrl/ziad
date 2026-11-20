@@ -139,6 +139,17 @@ function AppContent() {
   const justSavedAnnouncementAtRef = useRef(0);
   const [websiteConfig, setWebsiteConfig] = useState<WebsiteConfigState>(() => getInitialWebsiteConfig());
 
+  // 5-second maximum cap for initial splash screen to guarantee fast entry
+  const [initTimeoutExceeded, setInitTimeoutExceeded] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setInitTimeoutExceeded(true);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const isInitializing = isLoading && !initTimeoutExceeded;
+
   useEffect(() => {
     activeTabRef.current = activeTab;
   }, [activeTab]);
@@ -636,16 +647,16 @@ function AppContent() {
       }
       const [sheetsList, otaResult, latestWebsiteConfig] = await Promise.all([
         loadSheetsDonors(),
-        checkForLiveUpdate(),
+        checkForLiveUpdate({ force: true }),
         refreshWebsiteConfigFromServer(),
       ]);
       setWebsiteConfig(latestWebsiteConfig);
       mergeAndSaveDonors(firestoreDonorsRef.current, sheetsList);
       const count = donors.length;
       if (otaResult.status === 'downloaded' || otaResult.status === 'pending') {
-        setToastMessage(`تم تحديث البيانات (${count} متبرع) وتجهيز تحديث جديد للتطبيق! أعد فتح التطبيق لتطبيقه.`);
+        setToastMessage(`تم تحديث البيانات (${count} متبرع) وتنزيل حزمة تحديث جديدة للتطبيق (OTA) بنجاح! سيتم تطبيقها تلقائياً عند إعادة فتح التطبيق.`);
       } else {
-        setToastMessage(`تم التحديث الشامل بنجاح! الإجمالي المتوفر: ${count} متبرع.`);
+        setToastMessage(`تم التحديث الشامل بنجاح! تم مزامنة ${count} متبرع وتأكيد أحدث إصدار متاح.`);
       }
       setTimeout(() => setToastMessage(null), 4000);
     } catch {
@@ -852,22 +863,23 @@ function AppContent() {
     };
   }, []);
 
-  if (isLoading) {
+  if (isInitializing) {
     return (
       <div className="min-h-screen bg-linear-to-b from-slate-950 via-red-950 to-slate-950 flex flex-col items-center justify-center p-6 text-white text-center font-['Cairo',sans-serif]">
         <div className="relative mb-6">
-          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-linear-to-tr from-red-600 to-rose-500 flex items-center justify-center shadow-2xl shadow-red-600/50 animate-pulse">
-            <Droplet className="w-10 h-10 sm:w-12 sm:h-12 fill-white text-white" />
-          </div>
-          <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-white text-red-600 rounded-full flex items-center justify-center shadow-md">
-            <Heart className="w-4 h-4 fill-red-600 text-red-600" />
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-white p-1 flex items-center justify-center shadow-2xl shadow-red-600/50 overflow-hidden border-2 border-red-400/50">
+            <img
+              src="/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.png"
+              alt="شعار أنقذني - بنك الدم قعطبه"
+              className="w-full h-full object-cover rounded-2xl"
+            />
           </div>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-black tracking-tight mb-2">
-          قطرة دم تنقذ حياة إنسان
+        <h1 className="text-3xl sm:text-4xl font-black tracking-tight mb-2 text-white">
+          أنقذني
         </h1>
         <p className="text-xs sm:text-sm text-red-200/90 font-bold max-w-xs mb-8">
-          بنك الدم -مديرية قعطبه
+          بنك الدم - قعطبه
         </p>
         <div className="flex items-center gap-3 px-4 py-2.5 rounded-full bg-white/10 backdrop-blur-md text-red-100 text-xs font-bold border border-white/10">
           <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

@@ -175,8 +175,8 @@ export const Sidebar: React.FC<SidebarProps & { onOpenChat: () => void }> = ({
               <div className="w-12 h-12 rounded-2xl bg-white p-1 shadow-inner overflow-hidden border border-white/20 flex items-center justify-center relative">
                 <Droplet className="absolute w-6 h-6 text-red-600 fill-red-600 opacity-20" />
                 <img 
-                  src="/assets/images/app_logo_icon.jpg" 
-                  alt="Logo" 
+                  src="/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.png" 
+                  alt="شعار تطبيق أنقذني - بنك الدم قعطبه" 
                   className="relative z-10 w-full h-full object-cover rounded-xl"
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = 'none';
@@ -184,8 +184,8 @@ export const Sidebar: React.FC<SidebarProps & { onOpenChat: () => void }> = ({
                 />
               </div>
               <div>
-                <h2 className="text-base font-black leading-tight">قطرة دم تنقذ حياة إنسان</h2>
-                <p className="text-[10px] font-bold text-red-100">مديرية قعطبه - محافظة الضالع</p>
+                <h2 className="text-xl font-black leading-tight text-white">أنقذني</h2>
+                <p className="text-[11px] font-bold text-red-100">بنك الدم - قعطبه</p>
               </div>
             </div>
             <button onClick={onClose} className="p-1.5 hover:bg-white/20 rounded-xl transition-colors">
@@ -646,7 +646,7 @@ export const Sidebar: React.FC<SidebarProps & { onOpenChat: () => void }> = ({
         <div className="p-5 bg-slate-50 border-t border-slate-100 text-center space-y-1 shrink-0">
           <div className="flex items-center justify-center gap-1.5 text-[11px] font-black text-slate-800">
             <Heart className="w-3 h-3 text-red-500 fill-red-500" />
-            <span>قطرة دم تنقذ حياة إنسان</span>
+            <span>أنقذني • بنك الدم - قعطبه</span>
           </div>
           <p className="text-[10px] text-slate-400 font-bold">مديرية قعطبة • الإصدار {APP_VERSION}</p>
         </div>

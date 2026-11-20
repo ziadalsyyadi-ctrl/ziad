@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   unreadCount = 2,
 }) => {
   const { activeRole } = useAuth();
-  const iconPath = '/assets/images/app_logo_icon.jpg';
+  const iconPath = '/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.png';
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-xs">
@@ -57,11 +57,11 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             <div className="flex flex-col text-right">
-              <h1 className="text-[11px] sm:text-sm font-black text-slate-900 leading-none whitespace-nowrap">
-                قطرة دم تنقذ حياة إنسان
+              <h1 className="text-base sm:text-lg font-black text-[#d3101c] leading-none whitespace-nowrap">
+                أنقذني
               </h1>
-              <p className="text-[9px] text-slate-400 font-bold mt-1 whitespace-nowrap leading-none">
-                مديرية قعطبه - محافظة الضالع
+              <p className="text-[10px] sm:text-[11px] text-slate-600 font-bold mt-1 whitespace-nowrap leading-none">
+                بنك الدم - قعطبه
               </p>
             </div>
           </div>

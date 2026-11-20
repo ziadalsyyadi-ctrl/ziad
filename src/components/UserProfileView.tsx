@@ -576,7 +576,7 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({
           <div>
             <h3 className="text-base font-black">من نحن - عن المبادرة</h3>
             <p className="text-xs text-red-100 font-bold">
-              معلومات شاملة عن مبادرة «قطرة دم تنقذ حياة إنسان» بقعطبة
+              معلومات شاملة عن تطبيق «بنك الدم - قعطبه» وشعار «أنقذني»
             </p>
           </div>
         </div>
@@ -683,7 +683,7 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({
           </button>
         )}
         <p className="text-[10px] text-slate-400 text-center mt-2.5 font-bold">
-          قطرة دم تنقذ حياة • مديرية قعطبة • الإصدار {APP_VERSION}
+          أنقذني • بنك الدم - قعطبه • الإصدار {APP_VERSION}
         </p>
       </div>
 

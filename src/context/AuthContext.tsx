@@ -262,7 +262,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           timeoutId = setTimeout(() => {
             console.warn('Profile loading timed out; continuing with the authenticated session.');
             resolve();
-          }, 8000);
+          }, 3500);
         }),
       ]);
     } finally {
@@ -273,6 +273,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     let active = true;
     let authEventVersion = 0;
+
+    // Hard guarantee: Never keep startup loading screen beyond 5 seconds!
+    const hardTimeout = setTimeout(() => {
+      if (active) {
+        console.warn('Max startup initialization timeout (5s) reached. Releasing UI.');
+        setIsLoading(false);
+      }
+    }, 5000);
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       const eventVersion = ++authEventVersion;
       setCurrentUser(user);
@@ -294,7 +303,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       } finally {
         // Do not hold the startup screen open while the profile loads.
-        if (active && eventVersion === authEventVersion) setIsLoading(false);
+        if (active && eventVersion === authEventVersion) {
+          clearTimeout(hardTimeout);
+          setIsLoading(false);
+        }
       }
     });
 
@@ -311,6 +323,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     return () => {
       active = false;
+      clearTimeout(hardTimeout);
       unsubscribe();
       if (typeof window !== 'undefined') {
         window.removeEventListener('qataba-recovery-complete', handleRecoveryComplete);

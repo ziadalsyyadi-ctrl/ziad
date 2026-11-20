@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Heart, Droplet, Target, Eye, Compass, ShieldCheck } from 'lucide-react';
+import { X, Heart, Target, Eye, Compass, ShieldCheck } from 'lucide-react';
 
 interface AboutUsModalProps {
   isOpen: boolean;
@@ -18,12 +18,16 @@ export const AboutUsModal: React.FC<AboutUsModalProps> = ({ isOpen, onClose }) =
         {/* Header */}
         <div className="p-5 bg-linear-to-r from-red-600 to-rose-700 text-white flex items-center justify-between shrink-0 relative">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-white shrink-0 shadow-inner">
-              <Droplet className="w-6 h-6 fill-white" />
+            <div className="w-11 h-11 rounded-2xl bg-white p-0.5 flex items-center justify-center shrink-0 shadow-md overflow-hidden border border-white/40">
+              <img
+                src="/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.png"
+                alt="شعار أنقذني - بنك الدم قعطبه"
+                className="w-full h-full object-contain rounded-xl"
+              />
             </div>
             <div>
               <h2 className="text-base font-black">من نحن</h2>
-              <p className="text-[11px] text-red-100 font-bold">مبادرة «قطرة دم تنقذ حياة إنسان»</p>
+              <p className="text-[11px] text-red-100 font-bold">أنقذني • بنك الدم - قعطبه</p>
             </div>
           </div>
           <button 
@@ -42,18 +46,18 @@ export const AboutUsModal: React.FC<AboutUsModalProps> = ({ isOpen, onClose }) =
             <span className="inline-block px-3 py-1 bg-red-50 text-red-700 rounded-full text-xs font-black">
               مبادرة إنسانية خيرية
             </span>
-            <h1 className="text-xl font-black text-slate-900">
-              قطرة دم تنقذ حياة إنسان
+            <h1 className="text-2xl font-black text-red-600">
+              أنقذني
             </h1>
-            <h3 className="text-xs font-extrabold text-slate-600">
-              مبادرة إنسانية لخدمة أبناء مديرية قعطبة – محافظة الضالع
+            <h3 className="text-xs font-extrabold text-slate-700">
+              بنك الدم - قعطبه • مبادرة إنسانية لخدمة أبناء مديرية قعطبة – محافظة الضالع
             </h3>
           </div>
 
           {/* Description */}
           <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-2">
             <p className="text-xs sm:text-sm font-medium text-slate-700 leading-loose">
-              تطبيق <strong>«قطرة دم تنقذ حياة إنسان»</strong> هو مبادرة إنسانية وخيرية تهدف إلى تسهيل عملية التبرع بالدم، وربط المحتاجين إلى الدم بالمتبرعين في مديرية قعطبة والمناطق المجاورة، من خلال منصة إلكترونية تساعد على الوصول إلى المتبرع المناسب في الوقت المناسب.
+              تطبيق <strong>«بنك الدم - قعطبه»</strong> وشعاره <strong>«أنقذني»</strong> هو مبادرة إنسانية وخيرية تهدف إلى تسهيل عملية التبرع بالدم، وربط المحتاجين إلى الدم بالمتبرعين في مديرية قعطبة والمناطق المجاورة، من خلال منصة إلكترونية تساعد على الوصول إلى المتبرع المناسب في الوقت المناسب.
             </p>
             <p className="text-xs sm:text-sm font-medium text-slate-700 leading-loose">
               نسعى من خلال هذا التطبيق إلى بناء مجتمع متعاون ومتكاتف، تكون فيه قطرة الدم أملاً لمريض، وسبباً في إنقاذ حياة إنسان.
@@ -122,8 +126,8 @@ export const AboutUsModal: React.FC<AboutUsModalProps> = ({ isOpen, onClose }) =
               <Heart className="w-4 h-4 fill-white text-white" />
               <span>شعارنا</span>
             </div>
-            <p className="text-base font-black">
-              قطرة منك قد تعيد الحياة لإنسان.
+            <p className="text-lg font-black tracking-tight">
+              أنقذني — قطرة منك قد تعيد الحياة لإنسان
             </p>
           </div>
 

@@ -14,7 +14,6 @@ import {
   UserPlus,
   ExternalLink
 } from 'lucide-react';
-import regeneratedHeroImage from '../assets/images/regenerated_image_1793757211567.jpg';
 import { ActiveTab, Donor, UrgentRequest, BloodType } from '../types';
 
 interface HeroBannerProps {
@@ -67,7 +66,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   onOpenCompatibility,
   onOpenWebsite,
 }) => {
-  const heroImagePath = regeneratedHeroImage;
+  const heroImagePath = '/assets/aistudio/file_0000000095248211b993231fe2c26b0d_43df0429.png';
   const WHATSAPP_NUMBER = '773633918';
   const WHATSAPP_URL = `https://wa.me/967${WHATSAPP_NUMBER}`;
 
@@ -107,11 +106,11 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
       
       {/* 1. Hero Image Banner Header (Top Edge-to-Edge) */}
       <div className="w-full bg-white rounded-2xl sm:rounded-3xl p-1.5 sm:p-2 border border-slate-200 shadow-md relative overflow-hidden">
-        <div className="relative w-full rounded-xl sm:rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center">
+        <div className="relative w-full rounded-xl sm:rounded-2xl overflow-hidden bg-white flex items-center justify-center">
           <img
             src={heroImagePath}
-            alt="بنك الدم في مديرية قعطبة - قطرة دم تنقذ حياة"
-            className="w-full h-auto object-cover sm:object-contain rounded-xl sm:rounded-2xl shadow-xs pointer-events-none select-none max-h-[260px] sm:max-h-[360px]"
+            alt="بنك الدم في مديرية قعطبة - أنقذني"
+            className="w-full h-auto object-contain rounded-xl sm:rounded-2xl shadow-xs pointer-events-none select-none"
             loading="eager"
             draggable={false}
             onError={(e) => {
@@ -135,11 +134,11 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           </p>
         </div>
 
-        {/* Slogan with hearts */}
-        <div className="inline-flex items-center justify-center gap-1.5 px-4 sm:px-6 py-1.5 sm:py-2 bg-white/15 backdrop-blur-md rounded-full text-xs sm:text-base font-black text-white border border-white/20 shadow-inner relative z-10">
-          <span>❤️</span>
-          <span>قَطْرَةُ دَمٍ تُنْقِذُ حَيَاةَ إِنْسَان</span>
-          <span>❤️</span>
+        {/* Main Brand Slogan */}
+        <div className="inline-flex items-center justify-center gap-2.5 px-6 sm:px-9 py-2 sm:py-2.5 bg-white text-[#d3101c] rounded-2xl text-2xl sm:text-3xl font-black tracking-wide border-2 border-red-100 shadow-lg relative z-10">
+          <span className="text-lg sm:text-2xl">❤️</span>
+          <span>أنقذني</span>
+          <span className="text-lg sm:text-2xl">❤️</span>
         </div>
 
         {/* Subtext */}
