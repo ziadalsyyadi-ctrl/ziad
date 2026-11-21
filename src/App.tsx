@@ -27,6 +27,13 @@ import {
   getInstantLocalDonorsSync,
   getInstantLocalUrgentSync,
   getInstantSyncMetaSync,
+  getInstantCachedFirestoreDonorsSync,
+  getInstantCachedSheetsDonorsSync,
+  getInstantDeletedDonorsSync,
+  saveDeletedDonorsSync,
+  saveSourceDonorsToOfflineStorage,
+  mergeSourceDonors,
+  normalizePhoneKey,
   getDonorsFromOfflineStorage,
   getUrgentRequestsFromOfflineStorage,
   saveDonorsToOfflineStorage,
@@ -101,7 +108,7 @@ function AppContent() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('home');
   const [searchInitialBloodType, setSearchInitialBloodType] = useState<BloodType | 'ALL'>('ALL');
   const [rawDonors, setRawDonors] = useState<Donor[]>(() => getInstantLocalDonorsSync());
-  const [deletedDonors, setDeletedDonors] = useState<string[]>([]);
+  const [deletedDonors, setDeletedDonors] = useState<string[]>(() => getInstantDeletedDonorsSync());
   const [urgentRequests, setUrgentRequests] = useState<UrgentRequest[]>(() => getInstantLocalUrgentSync());
 
   const [announcement, setAnnouncement] = useState('');
@@ -115,20 +122,23 @@ function AppContent() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  const firestoreDonorsRef = useRef<Donor[]>(getInstantCachedFirestoreDonorsSync());
+  const sheetsDonorsRef = useRef<Donor[]>(getInstantCachedSheetsDonorsSync());
+
   const [syncStats, setSyncStats] = useState(() => {
     const meta = getInstantSyncMetaSync();
+    const initialList = getInstantLocalDonorsSync();
+    const initialSheets = sheetsDonorsRef.current.length;
+    const initialFirestore = firestoreDonorsRef.current.length;
     return {
-      firestoreCount: meta?.firestoreCount || 0,
-      sheetsCount: meta?.sheetsCount || 0,
+      firestoreCount: meta?.firestoreCount || initialFirestore,
+      sheetsCount: meta?.sheetsCount && meta.sheetsCount > 0 ? meta.sheetsCount : initialSheets,
       duplicateCount: 0,
       excludedCount: 0,
-      finalCount: meta?.donorCount || getInstantLocalDonorsSync().length,
+      finalCount: Math.max(meta?.donorCount || 0, initialList.length),
       lastSyncTime: meta?.lastSyncTime || 'محفوظ محلياً',
     };
   });
-
-  const firestoreDonorsRef = useRef<Donor[]>([]);
-  const sheetsDonorsRef = useRef<Donor[]>([]);
   const [pendingAlerts, setPendingAlerts] = useState<UrgentAlertPayload[]>([]);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => isAlertSoundEnabled());
   const activeTabRef = useRef<ActiveTab>(activeTab);
@@ -236,19 +246,26 @@ function AppContent() {
     try {
       await deleteDonorProfile(donorId, phone);
       await deleteDonorFromOfflineStorage(donorId, phone).catch(() => {});
-      const cleanPhone = phone ? phone.trim().replace(/\D/g, '') : '';
+      const cleanPhone = normalizePhoneKey(phone);
+      const rawDigits = phone ? phone.trim().replace(/\D/g, '') : '';
       const idsToExclude = [donorId];
       if (cleanPhone) idsToExclude.push(cleanPhone);
-      setDeletedDonors((prev) => [...prev, ...idsToExclude]);
-      setRawDonors((prev) =>
-        prev.filter(
-          (d) =>
-            !(
-              d.id === donorId ||
-              (cleanPhone && String(d.phone).replace(/\D/g, '') === cleanPhone)
-            )
-        )
-      );
+      if (rawDigits && rawDigits !== cleanPhone) idsToExclude.push(rawDigits);
+      const excludeSet = new Set(idsToExclude);
+      const matchesDeleted = (d: Donor) => {
+        if (excludeSet.has(d.id)) return true;
+        const dClean = normalizePhoneKey(d.phone);
+        const dDigits = d.phone ? String(d.phone).replace(/\D/g, '') : '';
+        return Boolean((dClean && excludeSet.has(dClean)) || (dDigits && excludeSet.has(dDigits)));
+      };
+      firestoreDonorsRef.current = firestoreDonorsRef.current.filter((d) => !matchesDeleted(d));
+      sheetsDonorsRef.current = sheetsDonorsRef.current.filter((d) => !matchesDeleted(d));
+      setDeletedDonors((prev) => {
+        const next = Array.from(new Set([...prev, ...idsToExclude]));
+        saveDeletedDonorsSync(next);
+        return next;
+      });
+      setRawDonors((prev) => prev.filter((d) => !matchesDeleted(d)));
     } catch (err) {
       console.error('Failed to delete donor:', err);
       throw err;
@@ -382,43 +399,39 @@ function AppContent() {
     return rawDonors.filter((d) => {
       if (deletedSet.has(d.id)) return false;
       const cleanPhone = normalizePhoneForDedupe(d.phone);
-      return !(cleanPhone && deletedSet.has(cleanPhone));
+      const rawDigits = d.phone ? String(d.phone).replace(/\D/g, '') : '';
+      return !(
+        (cleanPhone && deletedSet.has(cleanPhone)) ||
+        (rawDigits && deletedSet.has(rawDigits))
+      );
     });
   }, [rawDonors, deletedDonors]);
 
-  const mergeAndSaveDonors = (firestoreList: Donor[], sheetsList: Donor[]) => {
-    if (firestoreList.length === 0 && sheetsList.length === 0) return;
+  const mergeAndSaveDonors = (firestoreList: Donor[], sheetsList: Donor[]): number => {
+    const effectiveFirestoreList =
+      firestoreList.length > 0
+        ? firestoreList
+        : !navigator.onLine && firestoreDonorsRef.current.length > 0
+        ? firestoreDonorsRef.current
+        : firestoreList;
 
-    const seenPhones = new Set<string>();
-    const merged: Donor[] = [];
-    let duplicateCount = 0;
-    const excludedCount = 0;
+    const effectiveSheetsList =
+      sheetsList.length > 0 ? sheetsList : sheetsDonorsRef.current;
 
-    for (const d of firestoreList) {
-      const cleanPhone = normalizePhoneForDedupe(d.phone);
-      if (cleanPhone) seenPhones.add(cleanPhone);
-      merged.push({ ...d, source: d.source || 'firestore' });
+    if (effectiveFirestoreList.length === 0 && effectiveSheetsList.length === 0) {
+      return rawDonors.length;
     }
 
-    for (const d of sheetsList) {
-      const cleanPhone = normalizePhoneForDedupe(d.phone);
-      if (cleanPhone) {
-        if (seenPhones.has(cleanPhone)) {
-          duplicateCount++;
-        } else {
-          seenPhones.add(cleanPhone);
-          merged.push({ ...d, source: 'google_sheets' });
-        }
-      } else {
-        merged.push({ ...d, source: 'google_sheets' });
-      }
-    }
+    const { merged, duplicateCount } = mergeSourceDonors(
+      effectiveFirestoreList,
+      effectiveSheetsList
+    );
 
     const stats = {
-      firestoreCount: firestoreList.length,
-      sheetsCount: sheetsList.length,
+      firestoreCount: effectiveFirestoreList.length,
+      sheetsCount: effectiveSheetsList.length,
       duplicateCount,
-      excludedCount,
+      excludedCount: 0,
       finalCount: merged.length,
       lastSyncTime: new Date().toLocaleTimeString('ar-YE'),
     };
@@ -427,17 +440,30 @@ function AppContent() {
     setSyncStats(stats);
 
     setRawDonors((prev) => {
-      if (prev.length > merged.length && merged.length < 10) {
-        console.warn('Prevented replacing full donor list with partial result');
+      // Never wipe a fuller offline snapshot that contains Sheets donors with a smaller non-Sheets slice.
+      const prevHasSheets = prev.some((d) => d.source === 'google_sheets' || d.id.startsWith('sheet_'));
+      const nextHasSheets = merged.some((d) => d.source === 'google_sheets' || d.id.startsWith('sheet_'));
+      if (prevHasSheets && !nextHasSheets && prev.length > merged.length) {
+        console.warn('Prevented replacing full donor list with partial non-Sheets result');
         return prev;
       }
       return merged;
     });
 
+    if (effectiveFirestoreList.length > 0) {
+      saveSourceDonorsToOfflineStorage('firestore', effectiveFirestoreList);
+    }
+    if (effectiveSheetsList.length > 0) {
+      saveSourceDonorsToOfflineStorage('sheets', effectiveSheetsList);
+    }
+
     saveDonorsToOfflineStorage(merged, {
-      sheetsCount: sheetsList.length,
-      firestoreCount: firestoreList.length,
+      sheetsCount: effectiveSheetsList.length,
+      firestoreCount: effectiveFirestoreList.length,
+      forceOverwrite: effectiveSheetsList.length > 0,
     }).catch((err) => console.warn('Offline storage save warning:', err));
+
+    return merged.length;
   };
 
   const loadSheetsDonors = async (): Promise<Donor[]> => {
@@ -458,6 +484,7 @@ function AppContent() {
           source: 'google_sheets',
         }));
         sheetsDonorsRef.current = mapped;
+        saveSourceDonorsToOfflineStorage('sheets', mapped);
         return mapped;
       }
     } catch (err) {
@@ -480,6 +507,14 @@ function AppContent() {
 
     getDonorsFromOfflineStorage().then((cached) => {
       if (active && cached.length > 0) {
+        const cachedSheets = cached.filter((d) => d.source === 'google_sheets' || d.id.startsWith('sheet_'));
+        const cachedFirestore = cached.filter((d) => d.source !== 'google_sheets' && !d.id.startsWith('sheet_'));
+        if (cachedSheets.length > sheetsDonorsRef.current.length) {
+          sheetsDonorsRef.current = cachedSheets;
+        }
+        if (cachedFirestore.length > firestoreDonorsRef.current.length) {
+          firestoreDonorsRef.current = cachedFirestore;
+        }
         setRawDonors((prev) => (cached.length >= prev.length ? cached : prev));
       }
     });
@@ -497,9 +532,11 @@ function AppContent() {
     });
 
     const unsubDonors = subscribeToDonors((firestoreList) => {
-      firestoreDonorsRef.current = firestoreList;
+      if (firestoreList.length > 0 || navigator.onLine) {
+        firestoreDonorsRef.current = firestoreList;
+      }
       if (active) {
-        mergeAndSaveDonors(firestoreList, sheetsDonorsRef.current);
+        mergeAndSaveDonors(firestoreDonorsRef.current, sheetsDonorsRef.current);
       }
     });
 
@@ -573,7 +610,10 @@ function AppContent() {
         setAnnouncement(notice);
         setAnnouncementType(noticeType);
         if (noticeTime) setAnnouncementTime(noticeTime);
-        if (Array.isArray(data.deletedDonors)) setDeletedDonors(data.deletedDonors);
+        if (Array.isArray(data.deletedDonors)) {
+          setDeletedDonors(data.deletedDonors);
+          saveDeletedDonorsSync(data.deletedDonors);
+        }
 
         if (notice) {
           const annKey = `ann_${noticeTime}|${notice}`;
@@ -651,8 +691,7 @@ function AppContent() {
         refreshWebsiteConfigFromServer(),
       ]);
       setWebsiteConfig(latestWebsiteConfig);
-      mergeAndSaveDonors(firestoreDonorsRef.current, sheetsList);
-      const count = donors.length;
+      const count = mergeAndSaveDonors(firestoreDonorsRef.current, sheetsList);
       if (otaResult.status === 'downloaded' || otaResult.status === 'pending') {
         setToastMessage(`تم تحديث البيانات (${count} متبرع) وتنزيل حزمة تحديث جديدة للتطبيق (OTA) بنجاح! سيتم تطبيقها تلقائياً عند إعادة فتح التطبيق.`);
       } else {

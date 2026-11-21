@@ -57,11 +57,19 @@ export function subscribeToDonors(
     (error) => {
       console.warn('Subscription snapshot warning in subscribeToDonors (e.g. offline):', error);
       if (onError) onError(error);
-      const isOfflineError = error.message?.toLowerCase().includes('offline') || 
-                             error.message?.toLowerCase().includes('unavailable') || 
-                             error.message?.toLowerCase().includes('network');
-      if (!isOfflineError) {
-        handleFirestoreError(error, OperationType.LIST, DONORS_COLLECTION);
+      const msg = error.message?.toLowerCase() || '';
+      const isExpectedWarning =
+        msg.includes('offline') ||
+        msg.includes('unavailable') ||
+        msg.includes('network') ||
+        msg.includes('permission') ||
+        msg.includes('insufficient');
+      if (!isExpectedWarning) {
+        try {
+          handleFirestoreError(error, OperationType.LIST, DONORS_COLLECTION);
+        } catch {
+          // Logged via handleFirestoreError; prevent uncaught async callback crash
+        }
       }
     }
   );

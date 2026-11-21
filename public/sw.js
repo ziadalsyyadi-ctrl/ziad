@@ -1,5 +1,5 @@
 // Service Worker for "أنقذني - بنك الدم - قعطبه" PWA
-const CACHE_NAME = 'qataba-blood-pwa-v4';
+const CACHE_NAME = 'qataba-blood-pwa-v5';
 const OFFLINE_URL = '/offline.html';
 
 const PRECACHE_ASSETS = [

@@ -312,6 +312,7 @@ export function parseGoogleSheetsCsv(csvText: string): any[] {
   let bloodIdx = headerCols.findIndex(h => h.includes('فصيلة') || h.includes('دم') || h.toLowerCase().includes('blood'));
   let phoneIdx = headerCols.findIndex(h => h.includes('هاتف') || h.includes('رقم') || h.toLowerCase().includes('phone') || h.includes('جوال'));
   let residenceIdx = headerCols.findIndex(h => h.includes('سكن') || h.includes('عنوان') || h.toLowerCase().includes('address') || h.toLowerCase().includes('residence'));
+  let notesIdx = headerCols.findIndex(h => h.includes('ملاحظ') || h.toLowerCase().includes('note'));
   let dateIdx = headerCols.findIndex(h => h.includes('تاريخ') || h.toLowerCase().includes('date') || h.toLowerCase().includes('createdat') || h.toLowerCase().includes('created_at'));
   let idIdx = headerCols.findIndex(h => h.toLowerCase().includes('donorid') || h.toLowerCase().includes('id'));
 
@@ -329,17 +330,20 @@ export function parseGoogleSheetsCsv(csvText: string): any[] {
     const cols = parseCsvLine(lines[i]);
     const sheetId = idIdx >= 0 ? cols[idIdx] : '';
     const name = (cols[nameIdx] || '').trim();
-    const blood = (cols[bloodIdx] || 'O+').trim().toUpperCase();
+    const rawBlood = (cols[bloodIdx] || 'O+').replace(/[^ABO+-]/gi, '').trim().toUpperCase();
+    const blood = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].includes(rawBlood) ? rawBlood : 'O+';
     const phone = (cols[phoneIdx] || '').trim();
     const residence = (cols[residenceIdx] || 'قعطبة').trim();
+    const notes = notesIdx >= 0 ? (cols[notesIdx] || '').trim() : '';
     const date = dateIdx >= 0 ? (cols[dateIdx] || '').trim() : '';
 
     if (name && name.length >= 2) {
       donors.push({
         fullName: name,
-        bloodType: blood || 'O+',
+        bloodType: blood,
         phone: phone,
         residence: residence || 'قعطبة',
+        notes: notes || 'من سجل جدول غوغل',
         createdAt: date,
         source: 'google_sheets',
         donorId: sheetId || `row_${i}`
@@ -352,7 +356,7 @@ export function parseGoogleSheetsCsv(csvText: string): any[] {
 
 /**
  * جلب قائمة المتبرعين من جدول Google Sheets لمزامنتها في التطبيق
- * يدعم العمل في بيئة الويب وتطبيق Android APK مع مسار احتياطي مباشر لـ CSV
+ * يدعم العمل في بيئة الويب وتطبيق Android APK مع مسار CapacitorHttp الأصلي ومسار CSV المباشر
  */
 export async function fetchDonorsFromGoogleSheets(): Promise<{
   success: boolean;
@@ -361,28 +365,69 @@ export async function fetchDonorsFromGoogleSheets(): Promise<{
   error?: string;
   source?: string;
 }> {
-  // محاولة 1: عبر واجهة الخادم السريعة
-  try {
-    const res = await fetch('/api/sheets/donors');
-    if (res.ok) {
-      const data = await res.json();
-      if (data.success && Array.isArray(data.donors) && data.donors.length > 0) {
-        return {
-          success: true,
-          donors: data.donors,
-          count: data.donors.length,
-          source: data.source || 'proxy'
-        };
-      }
-    }
-  } catch {
-    // فشل محلي (مثل تطبيق Android الهجين بدون خادم Express)
+  if (typeof navigator !== 'undefined' && !navigator.onLine) {
+    return {
+      success: false,
+      error: 'الجهاز غير متصل بالإنترنت حالياً',
+      donors: [],
+    };
   }
 
-  // محاولة 2: الاتصال المباشر برابط تصدير CSV لجدول غوغل (يعمل 100% في Android وiOS والويب)
+  const csvUrl = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEETS_CONFIG.spreadsheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(GOOGLE_SHEETS_CONFIG.sheetName)}`;
+
+  // محاولة 1 (في بيئة الويب فقط): عبر واجهة الخادم السريعة
+  if (!Capacitor.isNativePlatform()) {
+    try {
+      const res = await fetch('/api/sheets/donors', { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.donors) && data.donors.length > 0) {
+          return {
+            success: true,
+            donors: data.donors,
+            count: data.donors.length,
+            source: data.source || 'proxy'
+          };
+        }
+      }
+    } catch {
+      // المتابعة إلى الجلب المباشر
+    }
+  } else {
+    // محاولة 1 (في تطبيق Android/iOS): استخدام CapacitorHttp الأصلي لتجاوز قيود WebView CORS والكاش
+    try {
+      const nativeRes = await CapacitorHttp.get({
+        url: csvUrl,
+        connectTimeout: 15000,
+        readTimeout: 20000,
+        responseType: 'text',
+      });
+      const text = typeof nativeRes.data === 'string' ? nativeRes.data : String(nativeRes.data || '');
+      if (nativeRes.status >= 200 && nativeRes.status < 300 && !text.includes('<!DOCTYPE html>') && text.length > 50) {
+        const parsed = parseGoogleSheetsCsv(text);
+        if (parsed.length > 0) {
+          return {
+            success: true,
+            donors: parsed,
+            count: parsed.length,
+            source: 'capacitor_csv_direct',
+          };
+        }
+      }
+    } catch (nativeCsvErr: any) {
+      console.warn('CapacitorHttp CSV fetch warning:', nativeCsvErr);
+    }
+  }
+
+  // محاولة 2: الاتصال المباشر برابط تصدير CSV لجدول غوغل
   try {
-    const csvUrl = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEETS_CONFIG.spreadsheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(GOOGLE_SHEETS_CONFIG.sheetName)}`;
-    const res = await fetch(csvUrl);
+    const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const timeoutId = controller ? setTimeout(() => controller.abort(), 15000) : null;
+    const res = await fetch(csvUrl, {
+      cache: 'no-store',
+      ...(controller ? { signal: controller.signal } : {}),
+    });
+    if (timeoutId) clearTimeout(timeoutId);
     if (res.ok) {
       const text = await res.text();
       if (!text.includes('<!DOCTYPE html>') && text.length > 50) {
