@@ -20,7 +20,7 @@ export const AboutUsModal: React.FC<AboutUsModalProps> = ({ isOpen, onClose }) =
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-2xl bg-white p-0.5 flex items-center justify-center shrink-0 shadow-md overflow-hidden border border-white/40">
               <img
-                src="/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.png"
+                src="/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.webp"
                 alt="شعار أنقذني - بنك الدم قعطبه"
                 className="w-full h-full object-contain rounded-xl"
               />

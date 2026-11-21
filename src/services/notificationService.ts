@@ -293,8 +293,8 @@ export async function sendSystemAlertNotification(payload: UrgentAlertPayload): 
   if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
     const options: NotificationOptions & { renotify?: boolean; vibrate?: number[] } = {
       body: payload.body,
-      icon: '/assets/images/app_logo_icon.jpg',
-      badge: '/assets/images/app_logo_icon.jpg',
+      icon: '/pwa-192x192.png',
+      badge: '/pwa-192x192.png',
       tag: payload.id,
       renotify: true,
       requireInteraction: payload.kind === 'urgent_request' || payload.kind === 'admin_urgent',

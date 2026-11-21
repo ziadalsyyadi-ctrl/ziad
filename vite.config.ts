@@ -20,14 +20,11 @@ export default defineConfig(() => {
       VitePWA({
         registerType: 'autoUpdate',
         includeAssets: [
-          'favicon.ico',
           'icon.svg',
           'pwa-192x192.png',
           'pwa-512x512.png',
           'pwa-maskable-512x512.png',
           'apple-touch-icon.png',
-          'screenshot-mobile.png',
-          'screenshot-desktop.png',
           'offline.html'
         ],
         manifest: ({
@@ -122,22 +119,6 @@ export default defineConfig(() => {
               sizes: '512x512',
               type: 'image/svg+xml',
               purpose: 'any'
-            }
-          ],
-          screenshots: [
-            {
-              src: '/screenshot-mobile.png',
-              sizes: '1053x2340',
-              type: 'image/png',
-              form_factor: 'narrow',
-              label: 'الواجهة الرئيسية للتطبيق وسجل المتبرعين بقعطبة'
-            },
-            {
-              src: '/screenshot-desktop.png',
-              sizes: '1279x720',
-              type: 'image/png',
-              form_factor: 'wide',
-              label: 'لوحة البحث والفرز بحسب فصائل الدم بقعطبة'
             }
           ],
           shortcuts: [

@@ -1,5 +1,5 @@
 // Service Worker for "أنقذني - بنك الدم - قعطبه" PWA
-const CACHE_NAME = 'qataba-blood-pwa-v3';
+const CACHE_NAME = 'qataba-blood-pwa-v4';
 const OFFLINE_URL = '/offline.html';
 
 const PRECACHE_ASSETS = [
@@ -12,8 +12,10 @@ const PRECACHE_ASSETS = [
   '/pwa-512x512.png',
   '/pwa-maskable-512x512.png',
   '/apple-touch-icon.png',
-  '/screenshot-mobile.png',
-  '/screenshot-desktop.png'
+  '/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.webp',
+  '/assets/aistudio/file_0000000095248211b993231fe2c26b0d_43df0429.webp',
+  '/assets/aistudio/file_0000000030cc821193cd25a471968ca3_9d4f13f6.webp',
+  '/assets/aistudio/1794594460673_53a90780.webp'
 ];
 
 // 1. تثبيت الـ Service Worker وحفظ الملفات في الكاش

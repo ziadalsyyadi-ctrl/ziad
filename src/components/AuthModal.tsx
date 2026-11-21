@@ -241,7 +241,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isInitial
         <div className="text-center space-y-2 pt-1 flex flex-col items-center">
           <div className="relative w-22 h-22 sm:w-24 sm:h-24 rounded-2xl overflow-hidden flex items-center justify-center shadow-md border border-red-100 bg-white mb-1">
             <img
-              src="/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.png"
+              src="/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.webp"
               alt="شعار أنقذني - بنك الدم قعطبه"
               className="w-full h-full object-cover"
             />

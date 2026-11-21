@@ -11,7 +11,7 @@ export const BloodDonationEducationalInfo: React.FC<BloodDonationEducationalInfo
   onBack,
   showSponsorCard = false,
 }) => {
-  const posterImagePath = '/assets/aistudio/file_0000000030cc821193cd25a471968ca3_9d4f13f6.png';
+  const posterImagePath = '/assets/aistudio/file_0000000030cc821193cd25a471968ca3_9d4f13f6.webp';
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-4 text-right font-['Cairo',sans-serif] select-none">
@@ -98,7 +98,7 @@ export const BloodDonationEducationalInfo: React.FC<BloodDonationEducationalInfo
         >
           <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 flex items-center justify-center bg-[#fdf8f8] border border-[#f3e5e5]">
             <img
-              src="/assets/aistudio/1794594460673_53a90780.jpg"
+              src="/assets/aistudio/1794594460673_53a90780.webp"
               alt="شعار نادي جيشان"
               className="w-full h-full object-cover"
             />

@@ -66,7 +66,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   onOpenCompatibility,
   onOpenWebsite,
 }) => {
-  const heroImagePath = '/assets/aistudio/file_0000000095248211b993231fe2c26b0d_43df0429.png';
+  const heroImagePath = '/assets/aistudio/file_0000000095248211b993231fe2c26b0d_43df0429.webp';
   const WHATSAPP_NUMBER = '773633918';
   const WHATSAPP_URL = `https://wa.me/967${WHATSAPP_NUMBER}`;
 

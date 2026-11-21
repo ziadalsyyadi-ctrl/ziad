@@ -869,7 +869,7 @@ function AppContent() {
         <div className="relative mb-6">
           <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-white p-1 flex items-center justify-center shadow-2xl shadow-red-600/50 overflow-hidden border-2 border-red-400/50">
             <img
-              src="/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.png"
+              src="/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.webp"
               alt="شعار أنقذني - بنك الدم قعطبه"
               className="w-full h-full object-cover rounded-2xl"
             />

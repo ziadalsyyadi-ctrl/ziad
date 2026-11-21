@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   unreadCount = 2,
 }) => {
   const { activeRole } = useAuth();
-  const iconPath = '/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.png';
+  const iconPath = '/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.webp';
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-xs">

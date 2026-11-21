@@ -175,7 +175,7 @@ export const Sidebar: React.FC<SidebarProps & { onOpenChat: () => void }> = ({
               <div className="w-12 h-12 rounded-2xl bg-white p-1 shadow-inner overflow-hidden border border-white/20 flex items-center justify-center relative">
                 <Droplet className="absolute w-6 h-6 text-red-600 fill-red-600 opacity-20" />
                 <img 
-                  src="/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.png" 
+                  src="/assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.webp" 
                   alt="شعار تطبيق أنقذني - بنك الدم قعطبه" 
                   className="relative z-10 w-full h-full object-cover rounded-xl"
                   onError={(e) => {

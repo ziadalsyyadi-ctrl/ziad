@@ -77,23 +77,17 @@ define(['./workbox-b1bafff1'], (function (workbox) { 'use strict';
    * See https://goo.gl/S9QRab
    */
   workbox.precacheAndRoute([{
-    "url": "screenshot-mobile.png",
-    "revision": "827b70fbc6ddfff1619098cadd324f77"
-  }, {
-    "url": "screenshot-desktop.png",
-    "revision": "2274f0b64214ba1cf465d8bc3d3c9e0c"
-  }, {
     "url": "registerSW.js",
     "revision": "1872c500de691dce40960bb85481de07"
   }, {
     "url": "pwa-maskable-512x512.png",
-    "revision": "ec20f594fbf417031a2e49fd92d2c5fe"
+    "revision": "5f7a2e92697da39d9b2f4c2f44bb7f88"
   }, {
     "url": "pwa-512x512.png",
-    "revision": "de81333e8253348f364a9ae500658dbe"
+    "revision": "7b203fdb7b190066dd6a504a1caf0233"
   }, {
     "url": "pwa-192x192.png",
-    "revision": "1c4ad7b23acabe49fa47f85555dd9b73"
+    "revision": "785575716e490f0098625300e5680212"
   }, {
     "url": "privacy.html",
     "revision": "81f6a121e50162890a04f8556319bf17"
@@ -102,30 +96,30 @@ define(['./workbox-b1bafff1'], (function (workbox) { 'use strict';
     "revision": "8ec4deea565882642a9bc613e2d2b37f"
   }, {
     "url": "index.html",
-    "revision": "6795dc266c7d46379c66e1450098ee7f"
+    "revision": "f3a12b0ac85cc4b9c67a98c62e11e1ac"
   }, {
     "url": "icon.svg",
     "revision": "696670265fd8899643c9d3ee8c53a0aa"
   }, {
     "url": "apple-touch-icon.png",
-    "revision": "17425b13dbf4e646e1511317a070edf0"
+    "revision": "e6c3ad82207c6bb64f84908f91bdf471"
   }, {
-    "url": "assets/web-zPI-_ZRj.js",
+    "url": "assets/web-qB7Lhi5T.js",
     "revision": null
   }, {
-    "url": "assets/web-eKNzkvri.js",
+    "url": "assets/web-DW2edK-a.js",
     "revision": null
   }, {
-    "url": "assets/web-DqN7Xjp1.js",
+    "url": "assets/web-DNBanYZs.js",
     "revision": null
   }, {
-    "url": "assets/web-D5mPOg8d.js",
+    "url": "assets/web-DH_b3SmV.js",
     "revision": null
   }, {
-    "url": "assets/web-CUdLaL6S.js",
+    "url": "assets/web-CEuu21Ev.js",
     "revision": null
   }, {
-    "url": "assets/web-Bvw7w9M2.js",
+    "url": "assets/web-BoPJGaLN.js",
     "revision": null
   }, {
     "url": "assets/rolldown-runtime-la_ZsWYt.js",
@@ -137,7 +131,7 @@ define(['./workbox-b1bafff1'], (function (workbox) { 'use strict';
     "url": "assets/index-SCqu5UgQ.css",
     "revision": null
   }, {
-    "url": "assets/index-D8cwYERl.js",
+    "url": "assets/index-B6gKtxV2.js",
     "revision": null
   }, {
     "url": "assets/icons-vendor-DWSVIP7f.js",
@@ -146,23 +140,20 @@ define(['./workbox-b1bafff1'], (function (workbox) { 'use strict';
     "url": "assets/firebase-vendor-CPyd0fqM.js",
     "revision": null
   }, {
-    "url": "assets/images/app_logo_icon.jpg",
+    "url": "assets/aistudio/file_0000000095248211b993231fe2c26b0d_43df0429.webp",
     "revision": null
   }, {
-    "url": "assets/aistudio/file_0000000095248211b993231fe2c26b0d_43df0429.png",
+    "url": "assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.webp",
     "revision": null
   }, {
-    "url": "assets/aistudio/file_0000000045e882119c7c9319efd48f08_cf9f259d.png",
+    "url": "assets/aistudio/file_0000000030cc821193cd25a471968ca3_9d4f13f6.webp",
     "revision": null
   }, {
-    "url": "assets/aistudio/file_0000000030cc821193cd25a471968ca3_9d4f13f6.png",
-    "revision": null
-  }, {
-    "url": "assets/aistudio/1794594460673_53a90780.jpg",
+    "url": "assets/aistudio/1794594460673_53a90780.webp",
     "revision": null
   }, {
     "url": "apple-touch-icon.png",
-    "revision": "17425b13dbf4e646e1511317a070edf0"
+    "revision": "e6c3ad82207c6bb64f84908f91bdf471"
   }, {
     "url": "icon.svg",
     "revision": "696670265fd8899643c9d3ee8c53a0aa"
@@ -171,22 +162,16 @@ define(['./workbox-b1bafff1'], (function (workbox) { 'use strict';
     "revision": "8ec4deea565882642a9bc613e2d2b37f"
   }, {
     "url": "pwa-192x192.png",
-    "revision": "1c4ad7b23acabe49fa47f85555dd9b73"
+    "revision": "785575716e490f0098625300e5680212"
   }, {
     "url": "pwa-512x512.png",
-    "revision": "de81333e8253348f364a9ae500658dbe"
+    "revision": "7b203fdb7b190066dd6a504a1caf0233"
   }, {
     "url": "pwa-maskable-512x512.png",
-    "revision": "ec20f594fbf417031a2e49fd92d2c5fe"
-  }, {
-    "url": "screenshot-desktop.png",
-    "revision": "2274f0b64214ba1cf465d8bc3d3c9e0c"
-  }, {
-    "url": "screenshot-mobile.png",
-    "revision": "827b70fbc6ddfff1619098cadd324f77"
+    "revision": "5f7a2e92697da39d9b2f4c2f44bb7f88"
   }, {
     "url": "manifest.webmanifest",
-    "revision": "f7204f909ab3065ca09c96a8165e8c52"
+    "revision": "c3453ca4a26e4356da9cc93f16e61b17"
   }], {});
   workbox.cleanupOutdatedCaches();
   workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("index.html")));

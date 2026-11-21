@@ -92,22 +92,6 @@
       "purpose": "any"
     }
   ],
-  "screenshots": [
-    {
-      "src": "/screenshot-mobile.png",
-      "sizes": "1053x2340",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "الواجهة الرئيسية للتطبيق وسجل المتبرعين بقعطبة"
-    },
-    {
-      "src": "/screenshot-desktop.png",
-      "sizes": "1279x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "لوحة البحث والفرز بحسب فصائل الدم بقعطبة"
-    }
-  ],
   "shortcuts": [
     {
       "name": "البحث عن متبرع",
@@ -168,13 +152,6 @@
       "ms_ac_template": "/widgets/template.json",
       "data": "/widgets/data.json",
       "type": "application/json",
-      "screenshots": [
-        {
-          "src": "/screenshot-mobile.png",
-          "sizes": "1053x2340",
-          "label": "ودجت متبرعي الدم"
-        }
-      ],
       "icons": [
         {
           "src": "/pwa-192x192.png",
